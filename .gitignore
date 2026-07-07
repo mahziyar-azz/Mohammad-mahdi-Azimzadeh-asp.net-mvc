@@ -33,4 +33,5 @@ packages/
 **/obj/
 
 ## RAW directory
-RAW/
+RAW/*
+!RAW/Ecommerce_Database_Schema_v2.sql
