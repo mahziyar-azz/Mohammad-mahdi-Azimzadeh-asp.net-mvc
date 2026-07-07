@@ -112,13 +112,12 @@
                                      <a class="add-cart" href="/Home/Cart" style="margin: 0; float: none; display: inline-block; vertical-align: middle;">افزودن به سبد خرید</a>
                                  </form>
                              </div>
-                            <div class="product-link">
-                                <ul class="list-inline">
-                                    <li><a href="/Home/Wishlist">افزودن به علاقه‌مندی‌ها</a></li>
-                                    <li><a href="/Home/Compare">افزودن به مقایسه</a></li>
-                                    <li><a href="#">اشتراک‌گذاری</a></li>
-                                </ul>
-                            </div>
+                             <div class="product-link">
+                                 <ul class="list-inline">
+                                     <li><a href="/Home/Wishlist">افزودن به علاقه‌مندی‌ها</a></li>
+                                     <li><a href="#">اشتراک‌گذاری</a></li>
+                                 </ul>
+                             </div>
                             <p class="ptb-20">@Model.ShortDescription</p>
                             
                             @if (Model.Tags != null && Model.Tags.Any())
@@ -257,7 +256,19 @@
                                 <!-- Reviews End -->
                             </div>
                         </div>
-                                      <!-- Realted Product Activation Start -->                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product Thumbnail Description End -->
+        <!-- Realted Product Start -->
+        <div class="related-product pb-30">
+            <div class="container">
+                <div class="related-box">
+                    <div class="group-title">
+                        <h2>محصولات مرتبط</h2>
+                    </div>
+                    <!-- Realted Product Activation Start -->                    
                     <div class="new-upsell-pro owl-carousel">
                         @if (ViewBag.RelatedProducts != null)
                         {
@@ -303,7 +314,6 @@
                                             <div class="actions-secondary">
                                                 <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
                                                 <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                                <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -317,19 +327,6 @@
                                 <!-- Single Product End -->
                             }
                         }
-                    </div>
-                    <!-- Realted Product Activation End -->ions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-32%</span>
-                        </div>
-                        <!-- Single Product End --> 
                     </div>
                     <!-- Realted Product Activation End -->
                 </div>
@@ -389,7 +386,6 @@
                                             <div class="actions-secondary">
                                                 <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
                                                 <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                                <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
                                             </div>
                                         </div>
                                     </div>

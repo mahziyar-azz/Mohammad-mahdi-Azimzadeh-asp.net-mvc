@@ -111,10 +111,7 @@ namespace Azimzadeh_MVC_project.Controllers
         {
             return View();
         }
-        public ActionResult Compare()
-        {
-            return View();
-        }
+
         public ActionResult Blog()
         {
             return View();
