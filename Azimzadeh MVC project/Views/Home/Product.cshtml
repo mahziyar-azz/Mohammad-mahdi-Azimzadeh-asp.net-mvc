@@ -23,7 +23,7 @@
             <div class="container">
                 <div class="row">
                     <!-- Main Thumbnail Image Start -->
-                    <div class="col-lg-5">
+                    <div class="col-lg-5" style="position: relative;">
                         <!-- Thumbnail Large Image start -->
                         <div class="tab-content">
                             @{
@@ -43,6 +43,11 @@
                             }
                         </div>
                         <!-- Thumbnail Large Image End -->
+                        @if (Model.DiscountPrice.HasValue)
+                        {
+                            var discountPercent = (int)Math.Round((double)(Model.Price - Model.DiscountPrice.Value) / (double)Model.Price * 100);
+                            <span class="sticker-new" style="position: absolute; top: 15px; right: 25px; background: #ff5e14; color: #fff; padding: 5px 10px; font-weight: bold; border-radius: 4px; z-index: 10; font-size: 13px;">-@discountPercent%</span>
+                        }
 
                         <!-- Thumbnail Image End -->
                         <div class="product-thumbnail">
@@ -101,12 +106,12 @@
                                     <span class="sku">شناسه محصول (SKU): @Model.SKU</span>
                                 </p>
                             </div>
-                            <div class="box-quantity">
-                                <form action="#">
-                                    <input class="number" id="numeric" type="number" min="1" value="1">
-                                    <a class="add-cart" href="/Home/Cart">افزودن به سبد خرید</a>
-                                </form>
-                            </div>
+                             <div class="box-quantity">
+                                 <form action="#" style="display: flex; align-items: center; gap: 15px;">
+                                     <input class="number" id="numeric" type="number" min="1" value="1" style="margin: 0;">
+                                     <a class="add-cart" href="/Home/Cart" style="margin: 0; float: none; display: inline-block; vertical-align: middle;">افزودن به سبد خرید</a>
+                                 </form>
+                             </div>
                             <div class="product-link">
                                 <ul class="list-inline">
                                     <li><a href="/Home/Wishlist">افزودن به علاقه‌مندی‌ها</a></li>
