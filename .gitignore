@@ -1,0 +1,36 @@
+## Ignore Visual Studio temporary files, build results, and NuGet packages
+.vs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Re]leases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Log]/
+[Log]s/
+
+## NuGet Packages
+packages/
+*.nuget.props
+*.nuget.targets
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Project-specific overrides
+[Aa]zimzadeh\ [Mm][Vv][Cc]\ [Pp]roject/bin/
+[Aa]zimzadeh\ [Mm][Vv][Cc]\ [Pp]roject/obj/
+**/bin/
+**/obj/
+
+## RAW directory
+RAW/

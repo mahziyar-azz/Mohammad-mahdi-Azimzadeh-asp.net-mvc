@@ -1,0 +1,1995 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AzimzadehStoreDbModels.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Banners">
+          <Key>
+            <PropertyRef Name="BannerId" />
+          </Key>
+          <Property Name="BannerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="300" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BlogCategories">
+          <Key>
+            <PropertyRef Name="BlogCategoryId" />
+          </Key>
+          <Property Name="BlogCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentCategoryId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BlogPosts">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BlogCategoryId" Type="int" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" />
+          <Property Name="ViewCount" Type="int" Nullable="false" />
+          <Property Name="IsPublished" Type="bit" Nullable="false" />
+          <Property Name="PublishedAt" Type="datetime2" Precision="7" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="BlogPostTags">
+          <Key>
+            <PropertyRef Name="PostId" />
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="TagId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Brands">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CartItems">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CartId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="VariantId" Type="int" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Carts">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="SessionId" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentCategoryId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ChildMenus">
+          <Key>
+            <PropertyRef Name="ChildMenuId" />
+          </Key>
+          <Property Name="ChildMenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentMenuId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="300" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TargetType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="TargetId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ParentCommentId" Type="int" />
+          <Property Name="Content" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Coupons">
+          <Key>
+            <PropertyRef Name="CouponId" />
+          </Key>
+          <Property Name="CouponId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DiscountType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DiscountValue" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="MinSpend" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="MaxDiscount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="ValidFrom" Type="datetime2" Precision="7" />
+          <Property Name="ValidUntil" Type="datetime2" Precision="7" />
+          <Property Name="UsageLimit" Type="int" />
+          <Property Name="UsedCount" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gallery">
+          <Key>
+            <PropertyRef Name="GalleryId" />
+          </Key>
+          <Property Name="GalleryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="AddressId" Type="int" Nullable="false" />
+          <Property Name="CouponId" Type="int" />
+          <Property Name="ItemsJson" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="DiscountAmount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ShippingCost" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="OrderStatus" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="PaymentStatus" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="ParentMenus">
+          <Key>
+            <PropertyRef Name="ParentMenuId" />
+          </Key>
+          <Property Name="ParentMenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="300" />
+          <Property Name="IconClass" Type="nvarchar" MaxLength="100" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TransactionId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PaidAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="ProductImages">
+          <Key>
+            <PropertyRef Name="ProductImageId" />
+          </Key>
+          <Property Name="ProductImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="IsMain" Type="bit" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="DiscountPrice" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="SKU" Type="nvarchar" MaxLength="100" />
+          <Property Name="ViewCount" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="ProductTags">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="TagId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductVariants">
+          <Key>
+            <PropertyRef Name="VariantId" />
+          </Key>
+          <Property Name="VariantId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="SKU" Type="nvarchar" MaxLength="100" />
+          <Property Name="AttributesJson" Type="nvarchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Reviews">
+          <Key>
+            <PropertyRef Name="ReviewId" />
+          </Key>
+          <Property Name="ReviewId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Rating" Type="tinyint" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="1000" />
+          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SiteSettings">
+          <Key>
+            <PropertyRef Name="SettingId" />
+          </Key>
+          <Property Name="SettingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SettingKey" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="SettingValue" Type="nvarchar(max)" />
+          <Property Name="ValueType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sliders">
+          <Key>
+            <PropertyRef Name="SliderId" />
+          </Key>
+          <Property Name="SliderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="Subtitle" Type="nvarchar" MaxLength="150" />
+          <Property Name="ButtonText" Type="nvarchar" MaxLength="50" />
+          <Property Name="ButtonLink" Type="nvarchar" MaxLength="300" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserAddresses">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="Province" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullAddress" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="LastLoginAt" Type="datetime2" Precision="7" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="WishlistId" />
+          </Key>
+          <Property Name="WishlistId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__BlogCateg__Paren__0C85DE4D">
+          <End Role="BlogCategories" Type="Self.BlogCategories" Multiplicity="0..1" />
+          <End Role="BlogCategories1" Type="Self.BlogCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogCategories">
+              <PropertyRef Name="BlogCategoryId" />
+            </Principal>
+            <Dependent Role="BlogCategories1">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__BlogC__123EB7A3">
+          <End Role="BlogCategories" Type="Self.BlogCategories" Multiplicity="0..1" />
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogCategories">
+              <PropertyRef Name="BlogCategoryId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="BlogCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__UserI__1332DBDC">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPostT__PostI__18EBB532">
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="1" />
+          <End Role="BlogPostTags" Type="Self.BlogPostTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPosts">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="BlogPostTags">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPostT__TagId__19DFD96B">
+          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
+          <End Role="BlogPostTags" Type="Self.BlogPostTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tags">
+              <PropertyRef Name="TagId" />
+            </Principal>
+            <Dependent Role="BlogPostTags">
+              <PropertyRef Name="TagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__CartI__37703C52">
+          <End Role="Carts" Type="Self.Carts" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carts">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__Produ__3864608B">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__Varia__395884C4">
+          <End Role="ProductVariants" Type="Self.ProductVariants" Multiplicity="0..1" />
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariants">
+              <PropertyRef Name="VariantId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="VariantId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Carts__UserId__339FAB6E">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Carts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Categorie__Paren__6EF57B66">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories1" Type="Self.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Categories1">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ChildMenu__Paren__5DCAEF64">
+          <End Role="ParentMenus" Type="Self.ParentMenus" Multiplicity="1" />
+          <End Role="ChildMenus" Type="Self.ChildMenus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParentMenus">
+              <PropertyRef Name="ParentMenuId" />
+            </Principal>
+            <Dependent Role="ChildMenus">
+              <PropertyRef Name="ParentMenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__Parent__1DB06A4F">
+          <End Role="Comments" Type="Self.Comments" Multiplicity="0..1" />
+          <End Role="Comments1" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comments">
+              <PropertyRef Name="CommentId" />
+            </Principal>
+            <Dependent Role="Comments1">
+              <PropertyRef Name="ParentCommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__UserId__1CBC4616">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__AddressI__43D61337">
+          <End Role="UserAddresses" Type="Self.UserAddresses" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAddresses">
+              <PropertyRef Name="AddressId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__CouponId__44CA3770">
+          <End Role="Coupons" Type="Self.Coupons" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Coupons">
+              <PropertyRef Name="CouponId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CouponId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__UserId__42E1EEFE">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payments__OrderI__4C6B5938">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductIm__Produ__7C4F7684">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductImages" Type="Self.ProductImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductImages">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__75A278F5">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductTa__Produ__07C12930">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductTags" Type="Self.ProductTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductTags">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductTa__TagId__08B54D69">
+          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
+          <End Role="ProductTags" Type="Self.ProductTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tags">
+              <PropertyRef Name="TagId" />
+            </Principal>
+            <Dependent Role="ProductTags">
+              <PropertyRef Name="TagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductVa__Produ__01142BA1">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductVariants" Type="Self.ProductVariants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductVariants">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__Product__2739D489">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__UserId__282DF8C2">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserAddre__UserI__5629CD9C">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserAddresses" Type="Self.UserAddresses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserAddresses">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__RoleI__534D60F1">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoles__UserI__52593CB8">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__Produc__2FCF1A8A">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__UserId__2EDAF651">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AzimzadehStoreDbModelsStoreContainer">
+          <EntitySet Name="Banners" EntityType="Self.Banners" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogCategories" EntityType="Self.BlogCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPosts" EntityType="Self.BlogPosts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPostTags" EntityType="Self.BlogPostTags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CartItems" EntityType="Self.CartItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChildMenus" EntityType="Self.ChildMenus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Coupons" EntityType="Self.Coupons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gallery" EntityType="Self.Gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParentMenus" EntityType="Self.ParentMenus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductImages" EntityType="Self.ProductImages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTags" EntityType="Self.ProductTags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductVariants" EntityType="Self.ProductVariants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reviews" EntityType="Self.Reviews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SiteSettings" EntityType="Self.SiteSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sliders" EntityType="Self.Sliders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAddresses" EntityType="Self.UserAddresses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__BlogCateg__Paren__0C85DE4D" Association="Self.FK__BlogCateg__Paren__0C85DE4D">
+            <End Role="BlogCategories" EntitySet="BlogCategories" />
+            <End Role="BlogCategories1" EntitySet="BlogCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__BlogC__123EB7A3" Association="Self.FK__BlogPosts__BlogC__123EB7A3">
+            <End Role="BlogCategories" EntitySet="BlogCategories" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__UserI__1332DBDC" Association="Self.FK__BlogPosts__UserI__1332DBDC">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPostT__PostI__18EBB532" Association="Self.FK__BlogPostT__PostI__18EBB532">
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+            <End Role="BlogPostTags" EntitySet="BlogPostTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPostT__TagId__19DFD96B" Association="Self.FK__BlogPostT__TagId__19DFD96B">
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="BlogPostTags" EntitySet="BlogPostTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__CartI__37703C52" Association="Self.FK__CartItems__CartI__37703C52">
+            <End Role="Carts" EntitySet="Carts" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__Produ__3864608B" Association="Self.FK__CartItems__Produ__3864608B">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__Varia__395884C4" Association="Self.FK__CartItems__Varia__395884C4">
+            <End Role="ProductVariants" EntitySet="ProductVariants" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Carts__UserId__339FAB6E" Association="Self.FK__Carts__UserId__339FAB6E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Carts" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Categorie__Paren__6EF57B66" Association="Self.FK__Categorie__Paren__6EF57B66">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ChildMenu__Paren__5DCAEF64" Association="Self.FK__ChildMenu__Paren__5DCAEF64">
+            <End Role="ParentMenus" EntitySet="ParentMenus" />
+            <End Role="ChildMenus" EntitySet="ChildMenus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__Parent__1DB06A4F" Association="Self.FK__Comments__Parent__1DB06A4F">
+            <End Role="Comments" EntitySet="Comments" />
+            <End Role="Comments1" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__UserId__1CBC4616" Association="Self.FK__Comments__UserId__1CBC4616">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__AddressI__43D61337" Association="Self.FK__Orders__AddressI__43D61337">
+            <End Role="UserAddresses" EntitySet="UserAddresses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__CouponId__44CA3770" Association="Self.FK__Orders__CouponId__44CA3770">
+            <End Role="Coupons" EntitySet="Coupons" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__UserId__42E1EEFE" Association="Self.FK__Orders__UserId__42E1EEFE">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payments__OrderI__4C6B5938" Association="Self.FK__Payments__OrderI__4C6B5938">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductIm__Produ__7C4F7684" Association="Self.FK__ProductIm__Produ__7C4F7684">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductImages" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__75A278F5" Association="Self.FK__Products__Catego__75A278F5">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductTa__Produ__07C12930" Association="Self.FK__ProductTa__Produ__07C12930">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductTags" EntitySet="ProductTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductTa__TagId__08B54D69" Association="Self.FK__ProductTa__TagId__08B54D69">
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="ProductTags" EntitySet="ProductTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductVa__Produ__01142BA1" Association="Self.FK__ProductVa__Produ__01142BA1">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductVariants" EntitySet="ProductVariants" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Product__2739D489" Association="Self.FK__Reviews__Product__2739D489">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__UserId__282DF8C2" Association="Self.FK__Reviews__UserId__282DF8C2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserAddre__UserI__5629CD9C" Association="Self.FK__UserAddre__UserI__5629CD9C">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserAddresses" EntitySet="UserAddresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__RoleI__534D60F1" Association="Self.FK__UserRoles__RoleI__534D60F1">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoles__UserI__52593CB8" Association="Self.FK__UserRoles__UserI__52593CB8">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__Produc__2FCF1A8A" Association="Self.FK__Wishlist__Produc__2FCF1A8A">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__UserId__2EDAF651" Association="Self.FK__Wishlist__UserId__2EDAF651">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AzimzadehStoreDbModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Banner">
+          <Key>
+            <PropertyRef Name="BannerId" />
+          </Key>
+          <Property Name="BannerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LinkUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BlogCategory">
+          <Key>
+            <PropertyRef Name="BlogCategoryId" />
+          </Key>
+          <Property Name="BlogCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentCategoryId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="BlogCategories1" Relationship="Self.FK__BlogCateg__Paren__0C85DE4D" FromRole="BlogCategories" ToRole="BlogCategories1" />
+          <NavigationProperty Name="BlogCategory1" Relationship="Self.FK__BlogCateg__Paren__0C85DE4D" FromRole="BlogCategories1" ToRole="BlogCategories" />
+          <NavigationProperty Name="BlogPosts" Relationship="Self.FK__BlogPosts__BlogC__123EB7A3" FromRole="BlogCategories" ToRole="BlogPosts" />
+        </EntityType>
+        <EntityType Name="BlogPost">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlogCategoryId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ViewCount" Type="Int32" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="PublishedAt" Type="DateTime" Precision="7" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="BlogCategory" Relationship="Self.FK__BlogPosts__BlogC__123EB7A3" FromRole="BlogPosts" ToRole="BlogCategories" />
+          <NavigationProperty Name="User" Relationship="Self.FK__BlogPosts__UserI__1332DBDC" FromRole="BlogPosts" ToRole="Users" />
+          <NavigationProperty Name="Tags" Relationship="Self.BlogPostTags" FromRole="BlogPosts" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CartItem">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CartId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="VariantId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="Self.FK__CartItems__CartI__37703C52" FromRole="CartItems" ToRole="Carts" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__CartItems__Produ__3864608B" FromRole="CartItems" ToRole="Products" />
+          <NavigationProperty Name="ProductVariant" Relationship="Self.FK__CartItems__Varia__395884C4" FromRole="CartItems" ToRole="ProductVariants" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="SessionId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="CartItems" Relationship="Self.FK__CartItems__CartI__37703C52" FromRole="Carts" ToRole="CartItems" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Carts__UserId__339FAB6E" FromRole="Carts" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentCategoryId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Categories1" Relationship="Self.FK__Categorie__Paren__6EF57B66" FromRole="Categories" ToRole="Categories1" />
+          <NavigationProperty Name="Category1" Relationship="Self.FK__Categorie__Paren__6EF57B66" FromRole="Categories1" ToRole="Categories" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__75A278F5" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="ChildMenu">
+          <Key>
+            <PropertyRef Name="ChildMenuId" />
+          </Key>
+          <Property Name="ChildMenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentMenuId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ParentMenu" Relationship="Self.FK__ChildMenu__Paren__5DCAEF64" FromRole="ChildMenus" ToRole="ParentMenus" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TargetType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TargetId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ParentCommentId" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Comments1" Relationship="Self.FK__Comments__Parent__1DB06A4F" FromRole="Comments" ToRole="Comments1" />
+          <NavigationProperty Name="Comment1" Relationship="Self.FK__Comments__Parent__1DB06A4F" FromRole="Comments1" ToRole="Comments" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Comments__UserId__1CBC4616" FromRole="Comments" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Coupon">
+          <Key>
+            <PropertyRef Name="CouponId" />
+          </Key>
+          <Property Name="CouponId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DiscountType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DiscountValue" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="MinSpend" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="MaxDiscount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="ValidFrom" Type="DateTime" Precision="7" />
+          <Property Name="ValidUntil" Type="DateTime" Precision="7" />
+          <Property Name="UsageLimit" Type="Int32" />
+          <Property Name="UsedCount" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__CouponId__44CA3770" FromRole="Coupons" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Gallery">
+          <Key>
+            <PropertyRef Name="GalleryId" />
+          </Key>
+          <Property Name="GalleryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" />
+          <Property Name="CouponId" Type="Int32" />
+          <Property Name="ItemsJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Subtotal" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="DiscountAmount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="OrderStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PaymentStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Coupon" Relationship="Self.FK__Orders__CouponId__44CA3770" FromRole="Orders" ToRole="Coupons" />
+          <NavigationProperty Name="UserAddress" Relationship="Self.FK__Orders__AddressI__43D61337" FromRole="Orders" ToRole="UserAddresses" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Orders__UserId__42E1EEFE" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK__Payments__OrderI__4C6B5938" FromRole="Orders" ToRole="Payments" />
+        </EntityType>
+        <EntityType Name="ParentMenu">
+          <Key>
+            <PropertyRef Name="ParentMenuId" />
+          </Key>
+          <Property Name="ParentMenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="IconClass" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ChildMenus" Relationship="Self.FK__ChildMenu__Paren__5DCAEF64" FromRole="ParentMenus" ToRole="ChildMenus" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TransactionId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PaidAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Payments__OrderI__4C6B5938" FromRole="Payments" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="ProductImageId" />
+          </Key>
+          <Property Name="ProductImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsMain" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__ProductIm__Produ__7C4F7684" FromRole="ProductImages" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="DiscountPrice" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="SKU" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ViewCount" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="CartItems" Relationship="Self.FK__CartItems__Produ__3864608B" FromRole="Products" ToRole="CartItems" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Products__Catego__75A278F5" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="ProductImages" Relationship="Self.FK__ProductIm__Produ__7C4F7684" FromRole="Products" ToRole="ProductImages" />
+          <NavigationProperty Name="ProductVariants" Relationship="Self.FK__ProductVa__Produ__01142BA1" FromRole="Products" ToRole="ProductVariants" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Product__2739D489" FromRole="Products" ToRole="Reviews" />
+          <NavigationProperty Name="Wishlists" Relationship="Self.FK__Wishlist__Produc__2FCF1A8A" FromRole="Products" ToRole="Wishlist" />
+          <NavigationProperty Name="Tags" Relationship="Self.ProductTags" FromRole="Products" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="ProductVariant">
+          <Key>
+            <PropertyRef Name="VariantId" />
+          </Key>
+          <Property Name="VariantId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="SKU" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AttributesJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CartItems" Relationship="Self.FK__CartItems__Varia__395884C4" FromRole="ProductVariants" ToRole="CartItems" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__ProductVa__Produ__01142BA1" FromRole="ProductVariants" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Review">
+          <Key>
+            <PropertyRef Name="ReviewId" />
+          </Key>
+          <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Rating" Type="Byte" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Reviews__Product__2739D489" FromRole="Reviews" ToRole="Products" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Reviews__UserId__282DF8C2" FromRole="Reviews" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.UserRoles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="SiteSetting">
+          <Key>
+            <PropertyRef Name="SettingId" />
+          </Key>
+          <Property Name="SettingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SettingKey" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SettingValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ValueType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Slider">
+          <Key>
+            <PropertyRef Name="SliderId" />
+          </Key>
+          <Property Name="SliderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Subtitle" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonLink" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BlogPosts" Relationship="Self.BlogPostTags" FromRole="Tags" ToRole="BlogPosts" />
+          <NavigationProperty Name="Products" Relationship="Self.ProductTags" FromRole="Tags" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="UserAddress">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__AddressI__43D61337" FromRole="UserAddresses" ToRole="Orders" />
+          <NavigationProperty Name="User" Relationship="Self.FK__UserAddre__UserI__5629CD9C" FromRole="UserAddresses" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="LastLoginAt" Type="DateTime" Precision="7" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="BlogPosts" Relationship="Self.FK__BlogPosts__UserI__1332DBDC" FromRole="Users" ToRole="BlogPosts" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK__Carts__UserId__339FAB6E" FromRole="Users" ToRole="Carts" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK__Comments__UserId__1CBC4616" FromRole="Users" ToRole="Comments" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__UserId__42E1EEFE" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__UserId__282DF8C2" FromRole="Users" ToRole="Reviews" />
+          <NavigationProperty Name="UserAddresses" Relationship="Self.FK__UserAddre__UserI__5629CD9C" FromRole="Users" ToRole="UserAddresses" />
+          <NavigationProperty Name="Wishlists" Relationship="Self.FK__Wishlist__UserId__2EDAF651" FromRole="Users" ToRole="Wishlist" />
+          <NavigationProperty Name="Roles" Relationship="Self.UserRoles" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="WishlistId" />
+          </Key>
+          <Property Name="WishlistId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Wishlist__Produc__2FCF1A8A" FromRole="Wishlist" ToRole="Products" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Wishlist__UserId__2EDAF651" FromRole="Wishlist" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK__BlogCateg__Paren__0C85DE4D">
+          <End Role="BlogCategories" Type="Self.BlogCategory" Multiplicity="0..1" />
+          <End Role="BlogCategories1" Type="Self.BlogCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogCategories">
+              <PropertyRef Name="BlogCategoryId" />
+            </Principal>
+            <Dependent Role="BlogCategories1">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__BlogC__123EB7A3">
+          <End Role="BlogCategories" Type="Self.BlogCategory" Multiplicity="0..1" />
+          <End Role="BlogPosts" Type="Self.BlogPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogCategories">
+              <PropertyRef Name="BlogCategoryId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="BlogCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__UserI__1332DBDC">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="BlogPosts" Type="Self.BlogPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__CartI__37703C52">
+          <End Role="Carts" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carts">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__Produ__3864608B">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CartItems__Varia__395884C4">
+          <End Role="ProductVariants" Type="Self.ProductVariant" Multiplicity="0..1" />
+          <End Role="CartItems" Type="Self.CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductVariants">
+              <PropertyRef Name="VariantId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="VariantId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Carts__UserId__339FAB6E">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Carts" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Carts">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Categorie__Paren__6EF57B66">
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Categories1" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Categories1">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__75A278F5">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ChildMenu__Paren__5DCAEF64">
+          <End Role="ParentMenus" Type="Self.ParentMenu" Multiplicity="1" />
+          <End Role="ChildMenus" Type="Self.ChildMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParentMenus">
+              <PropertyRef Name="ParentMenuId" />
+            </Principal>
+            <Dependent Role="ChildMenus">
+              <PropertyRef Name="ParentMenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__Parent__1DB06A4F">
+          <End Role="Comments" Type="Self.Comment" Multiplicity="0..1" />
+          <End Role="Comments1" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comments">
+              <PropertyRef Name="CommentId" />
+            </Principal>
+            <Dependent Role="Comments1">
+              <PropertyRef Name="ParentCommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comments__UserId__1CBC4616">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__CouponId__44CA3770">
+          <End Role="Coupons" Type="Self.Coupon" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Coupons">
+              <PropertyRef Name="CouponId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CouponId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__AddressI__43D61337">
+          <End Role="UserAddresses" Type="Self.UserAddress" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAddresses">
+              <PropertyRef Name="AddressId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__UserId__42E1EEFE">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payments__OrderI__4C6B5938">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductIm__Produ__7C4F7684">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="ProductImages" Type="Self.ProductImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductImages">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductVa__Produ__01142BA1">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="ProductVariants" Type="Self.ProductVariant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="ProductVariants">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__Product__2739D489">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__Produc__2FCF1A8A">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__UserId__282DF8C2">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserAddre__UserI__5629CD9C">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="UserAddresses" Type="Self.UserAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserAddresses">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__UserId__2EDAF651">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BlogPostTags">
+          <End Role="BlogPosts" Type="Self.BlogPost" Multiplicity="*" />
+          <End Role="Tags" Type="Self.Tag" Multiplicity="*" />
+        </Association>
+        <Association Name="ProductTags">
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <End Role="Tags" Type="Self.Tag" Multiplicity="*" />
+        </Association>
+        <Association Name="UserRoles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="*" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="AzimzadehStoreDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Banners" EntityType="Self.Banner" />
+          <EntitySet Name="BlogCategories" EntityType="Self.BlogCategory" />
+          <EntitySet Name="BlogPosts" EntityType="Self.BlogPost" />
+          <EntitySet Name="Brands" EntityType="Self.Brand" />
+          <EntitySet Name="CartItems" EntityType="Self.CartItem" />
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="ChildMenus" EntityType="Self.ChildMenu" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Coupons" EntityType="Self.Coupon" />
+          <EntitySet Name="Galleries" EntityType="Self.Gallery" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="ParentMenus" EntityType="Self.ParentMenu" />
+          <EntitySet Name="Payments" EntityType="Self.Payment" />
+          <EntitySet Name="ProductImages" EntityType="Self.ProductImage" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="ProductVariants" EntityType="Self.ProductVariant" />
+          <EntitySet Name="Reviews" EntityType="Self.Review" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="SiteSettings" EntityType="Self.SiteSetting" />
+          <EntitySet Name="Sliders" EntityType="Self.Slider" />
+          <EntitySet Name="Tags" EntityType="Self.Tag" />
+          <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
+          <AssociationSet Name="FK__BlogCateg__Paren__0C85DE4D" Association="Self.FK__BlogCateg__Paren__0C85DE4D">
+            <End Role="BlogCategories" EntitySet="BlogCategories" />
+            <End Role="BlogCategories1" EntitySet="BlogCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__BlogC__123EB7A3" Association="Self.FK__BlogPosts__BlogC__123EB7A3">
+            <End Role="BlogCategories" EntitySet="BlogCategories" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__UserI__1332DBDC" Association="Self.FK__BlogPosts__UserI__1332DBDC">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__CartI__37703C52" Association="Self.FK__CartItems__CartI__37703C52">
+            <End Role="Carts" EntitySet="Carts" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__Produ__3864608B" Association="Self.FK__CartItems__Produ__3864608B">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CartItems__Varia__395884C4" Association="Self.FK__CartItems__Varia__395884C4">
+            <End Role="ProductVariants" EntitySet="ProductVariants" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Carts__UserId__339FAB6E" Association="Self.FK__Carts__UserId__339FAB6E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Carts" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Categorie__Paren__6EF57B66" Association="Self.FK__Categorie__Paren__6EF57B66">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__75A278F5" Association="Self.FK__Products__Catego__75A278F5">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ChildMenu__Paren__5DCAEF64" Association="Self.FK__ChildMenu__Paren__5DCAEF64">
+            <End Role="ParentMenus" EntitySet="ParentMenus" />
+            <End Role="ChildMenus" EntitySet="ChildMenus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__Parent__1DB06A4F" Association="Self.FK__Comments__Parent__1DB06A4F">
+            <End Role="Comments" EntitySet="Comments" />
+            <End Role="Comments1" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comments__UserId__1CBC4616" Association="Self.FK__Comments__UserId__1CBC4616">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__CouponId__44CA3770" Association="Self.FK__Orders__CouponId__44CA3770">
+            <End Role="Coupons" EntitySet="Coupons" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__AddressI__43D61337" Association="Self.FK__Orders__AddressI__43D61337">
+            <End Role="UserAddresses" EntitySet="UserAddresses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__UserId__42E1EEFE" Association="Self.FK__Orders__UserId__42E1EEFE">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payments__OrderI__4C6B5938" Association="Self.FK__Payments__OrderI__4C6B5938">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductIm__Produ__7C4F7684" Association="Self.FK__ProductIm__Produ__7C4F7684">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductImages" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductVa__Produ__01142BA1" Association="Self.FK__ProductVa__Produ__01142BA1">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductVariants" EntitySet="ProductVariants" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Product__2739D489" Association="Self.FK__Reviews__Product__2739D489">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__Produc__2FCF1A8A" Association="Self.FK__Wishlist__Produc__2FCF1A8A">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Wishlist" EntitySet="Wishlists" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__UserId__282DF8C2" Association="Self.FK__Reviews__UserId__282DF8C2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserAddre__UserI__5629CD9C" Association="Self.FK__UserAddre__UserI__5629CD9C">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserAddresses" EntitySet="UserAddresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__UserId__2EDAF651" Association="Self.FK__Wishlist__UserId__2EDAF651">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Wishlist" EntitySet="Wishlists" />
+          </AssociationSet>
+          <AssociationSet Name="BlogPostTags" Association="Self.BlogPostTags">
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="ProductTags" Association="Self.ProductTags">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="UserRoles" Association="Self.UserRoles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AzimzadehStoreDbModelsStoreContainer" CdmEntityContainer="AzimzadehStoreDbEntities">
+          <EntitySetMapping Name="Banners">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Banner">
+              <MappingFragment StoreEntitySet="Banners">
+                <ScalarProperty Name="BannerId" ColumnName="BannerId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogCategories">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.BlogCategory">
+              <MappingFragment StoreEntitySet="BlogCategories">
+                <ScalarProperty Name="BlogCategoryId" ColumnName="BlogCategoryId" />
+                <ScalarProperty Name="ParentCategoryId" ColumnName="ParentCategoryId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogPosts">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.BlogPost">
+              <MappingFragment StoreEntitySet="BlogPosts">
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="BlogCategoryId" ColumnName="BlogCategoryId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ViewCount" ColumnName="ViewCount" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="PublishedAt" ColumnName="PublishedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Brand">
+              <MappingFragment StoreEntitySet="Brands">
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartItems">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.CartItem">
+              <MappingFragment StoreEntitySet="CartItems">
+                <ScalarProperty Name="CartItemId" ColumnName="CartItemId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Cart">
+              <MappingFragment StoreEntitySet="Carts">
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ParentCategoryId" ColumnName="ParentCategoryId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChildMenus">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.ChildMenu">
+              <MappingFragment StoreEntitySet="ChildMenus">
+                <ScalarProperty Name="ChildMenuId" ColumnName="ChildMenuId" />
+                <ScalarProperty Name="ParentMenuId" ColumnName="ParentMenuId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="TargetType" ColumnName="TargetType" />
+                <ScalarProperty Name="TargetId" ColumnName="TargetId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ParentCommentId" ColumnName="ParentCommentId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Coupons">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Coupon">
+              <MappingFragment StoreEntitySet="Coupons">
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
+                <ScalarProperty Name="DiscountValue" ColumnName="DiscountValue" />
+                <ScalarProperty Name="MinSpend" ColumnName="MinSpend" />
+                <ScalarProperty Name="MaxDiscount" ColumnName="MaxDiscount" />
+                <ScalarProperty Name="ValidFrom" ColumnName="ValidFrom" />
+                <ScalarProperty Name="ValidUntil" ColumnName="ValidUntil" />
+                <ScalarProperty Name="UsageLimit" ColumnName="UsageLimit" />
+                <ScalarProperty Name="UsedCount" ColumnName="UsedCount" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Galleries">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Gallery">
+              <MappingFragment StoreEntitySet="Gallery">
+                <ScalarProperty Name="GalleryId" ColumnName="GalleryId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="ItemsJson" ColumnName="ItemsJson" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParentMenus">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.ParentMenu">
+              <MappingFragment StoreEntitySet="ParentMenus">
+                <ScalarProperty Name="ParentMenuId" ColumnName="ParentMenuId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="IconClass" ColumnName="IconClass" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Payment">
+              <MappingFragment StoreEntitySet="Payments">
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PaidAt" ColumnName="PaidAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.ProductImage">
+              <MappingFragment StoreEntitySet="ProductImages">
+                <ScalarProperty Name="ProductImageId" ColumnName="ProductImageId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="IsMain" ColumnName="IsMain" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="ViewCount" ColumnName="ViewCount" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductVariants">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.ProductVariant">
+              <MappingFragment StoreEntitySet="ProductVariants">
+                <ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="AttributesJson" ColumnName="AttributesJson" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reviews">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Review">
+              <MappingFragment StoreEntitySet="Reviews">
+                <ScalarProperty Name="ReviewId" ColumnName="ReviewId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SiteSettings">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.SiteSetting">
+              <MappingFragment StoreEntitySet="SiteSettings">
+                <ScalarProperty Name="SettingId" ColumnName="SettingId" />
+                <ScalarProperty Name="SettingKey" ColumnName="SettingKey" />
+                <ScalarProperty Name="SettingValue" ColumnName="SettingValue" />
+                <ScalarProperty Name="ValueType" ColumnName="ValueType" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sliders">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Slider">
+              <MappingFragment StoreEntitySet="Sliders">
+                <ScalarProperty Name="SliderId" ColumnName="SliderId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+                <ScalarProperty Name="ButtonText" ColumnName="ButtonText" />
+                <ScalarProperty Name="ButtonLink" ColumnName="ButtonLink" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Tag">
+              <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAddresses">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.UserAddress">
+              <MappingFragment StoreEntitySet="UserAddresses">
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="FullAddress" ColumnName="FullAddress" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LastLoginAt" ColumnName="LastLoginAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wishlists">
+            <EntityTypeMapping TypeName="AzimzadehStoreDbModels.Wishlist">
+              <MappingFragment StoreEntitySet="Wishlist">
+                <ScalarProperty Name="WishlistId" ColumnName="WishlistId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="BlogPostTags" TypeName="AzimzadehStoreDbModels.BlogPostTags" StoreEntitySet="BlogPostTags">
+            <EndProperty Name="BlogPosts">
+              <ScalarProperty Name="PostId" ColumnName="PostId" />
+            </EndProperty>
+            <EndProperty Name="Tags">
+              <ScalarProperty Name="TagId" ColumnName="TagId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ProductTags" TypeName="AzimzadehStoreDbModels.ProductTags" StoreEntitySet="ProductTags">
+            <EndProperty Name="Products">
+              <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="Tags">
+              <ScalarProperty Name="TagId" ColumnName="TagId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserRoles" TypeName="AzimzadehStoreDbModels.UserRoles" StoreEntitySet="UserRoles">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="Users">
+              <ScalarProperty Name="UserId" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

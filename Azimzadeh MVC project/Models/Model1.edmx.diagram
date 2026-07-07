@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="970298f8867f489c887d2050e22d8f51" Name="Diagram1">
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Banner" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.BlogCategory" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.BlogPost" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Brand" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.CartItem" Width="1.5" PointX="7.5" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Cart" Width="1.5" PointX="5.25" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Category" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.ChildMenu" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Comment" Width="1.5" PointX="5.25" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Coupon" Width="1.5" PointX="5.25" PointY="35.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Gallery" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Order" Width="1.5" PointX="7.5" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.ParentMenu" Width="1.5" PointX="7.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Payment" Width="1.5" PointX="9.75" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.ProductImage" Width="1.5" PointX="7.5" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Product" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.ProductVariant" Width="1.5" PointX="5.25" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Review" Width="1.5" PointX="8.25" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Role" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.SiteSetting" Width="1.5" PointX="11.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Slider" Width="1.5" PointX="11.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Tag" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.UserAddress" Width="1.5" PointX="5.25" PointY="31.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.User" Width="1.5" PointX="3" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AzimzadehStoreDbModels.Wishlist" Width="1.5" PointX="10.25" PointY="15.5" IsExpanded="true" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__BlogCateg__Paren__0C85DE4D" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__BlogPosts__BlogC__123EB7A3" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__BlogPosts__UserI__1332DBDC" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__CartItems__CartI__37703C52" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__CartItems__Produ__3864608B" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__CartItems__Varia__395884C4" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Carts__UserId__339FAB6E" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Categorie__Paren__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Products__Catego__75A278F5" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__ChildMenu__Paren__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Comments__Parent__1DB06A4F" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Comments__UserId__1CBC4616" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Orders__CouponId__44CA3770" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Orders__AddressI__43D61337" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Orders__UserId__42E1EEFE" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Payments__OrderI__4C6B5938" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__ProductIm__Produ__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__ProductVa__Produ__01142BA1" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Reviews__Product__2739D489" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Wishlist__Produc__2FCF1A8A" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Reviews__UserId__282DF8C2" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__UserAddre__UserI__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.FK__Wishlist__UserId__2EDAF651" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.BlogPostTags" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.ProductTags" ManuallyRouted="false" />
+        <AssociationConnector Association="AzimzadehStoreDbModels.UserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

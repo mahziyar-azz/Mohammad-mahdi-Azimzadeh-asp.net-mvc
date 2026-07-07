@@ -1,0 +1,395 @@
+﻿      
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-area pt-60 pb-55 pt-sm-30 pb-sm-20">
+            <div class="container">
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li class="active"><a href="/Home/Checkout">تسویه حساب</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Container End -->
+        </div>
+        <!-- Breadcrumb End -->
+        <!-- coupon-area start -->
+        <div class="coupon-area">
+            <div class="container">
+               <!-- Section Title Start -->
+                <div class="section-title mb-20">
+                    <h2>تسویه حساب</h2>
+                </div>
+                <!-- Section Title Start End -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="coupon-accordion">
+                            <!-- ACCORDION START -->
+                            <h3>مشتری قدیمی هستید؟ <span id="showlogin">برای ورود اینجا کلیک کنید</span></h3>
+                            <div id="checkout-login" class="coupon-content">
+                                <div class="coupon-info">
+                                    <p class="coupon-text">اگر قبلاً از ما خرید کرده‌اید، لطفاً اطلاعات خود را در کادرهای زیر وارد کنید. اگر مشتری جدید هستید، لطفاً به بخش پرداخت و صورت‌حساب بروید.</p>
+                                    <form action="#">
+                                        <p class="form-row-first">
+                                            <label>نام کاربری یا ایمیل <span class="required">*</span></label>
+                                            <input type="text" />
+                                        </p>
+                                        <p class="form-row-last">
+                                            <label>رمز عبور <span class="required">*</span></label>
+                                            <input type="password" />
+                                        </p>
+                                        <p class="form-row">
+                                            <input type="submit" value="ورود" />
+                                            <label>
+                                            <input type="checkbox" />
+                                             مرا به خاطر بسپار 
+                                        </label>
+                                        </p>
+                                        <p class="lost-password">
+                                            <a href="/Home/ForgotPassword">رمز عبور خود را فراموش کرده‌اید؟</a>
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- ACCORDION END -->
+                            <!-- ACCORDION START -->
+                            <h3>کد تخفیف دارید؟ <span id="showcoupon">برای وارد کردن کد خود اینجا کلیک کنید</span></h3>
+                            <div id="checkout_coupon" class="coupon-checkout-content">
+                                <div class="coupon-info">
+                                    <form action="#">
+                                        <p class="checkout-coupon">
+                                            <input type="text" class="code" placeholder="کد تخفیف" />
+                                            <input type="submit" value="اعمال کد تخفیف" />
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- ACCORDION END -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- coupon-area end -->
+        <!-- checkout-area start -->
+        <div class="checkout-area pt-30  pb-60">
+            <div class="container">
+                <form action="#">                
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="checkbox-form">
+                                <h3>جزئیات پرداخت</h3>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="country-select mb-30">
+                                            <label>کشور <span class="required">*</span></label>
+                                            <select>
+                                                <option value="IR">ایران</option>
+                                                <option value="volvo">ترکیه</option>
+                                                <option value="saab">عراق</option>
+                                                <option value="mercedes">امارات</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list">
+                                            <label>نام <span class="required">*</span></label>
+                                            <input type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>نام خانوادگی <span class="required">*</span></label>
+                                            <input type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>نام شرکت (اختیاری)</label>
+                                            <input type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkout-form-list">
+                                            <label>آدرس <span class="required">*</span></label>
+                                            <input type="text" placeholder="آدرس خیابان، کوچه، پلاک" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkout-form-list mtb-30">
+                                            <input type="text" placeholder="آپارتمان، واحد، سوئیت و غیره (اختیاری)" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>شهر <span class="required">*</span></label>
+                                            <input type="text" placeholder="شهر" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>استان <span class="required">*</span></label>
+                                            <input type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>کد پستی <span class="required">*</span></label>
+                                            <input type="text" placeholder="کد پستی" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>آدرس ایمیل <span class="required">*</span></label>
+                                            <input type="email" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="checkout-form-list mb-30">
+                                            <label>تلفن تماس <span class="required">*</span></label>
+                                            <input type="text" placeholder="تلفن تماس" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="checkout-form-list create-acc mb-30">
+                                            <input id="cbox" type="checkbox" />
+                                            <label>ایجاد حساب کاربری؟</label>
+                                        </div>
+                                        <div id="cbox_info" class="checkout-form-list create-accounts mb-25">
+                                            <p class="mb-10">با وارد کردن اطلاعات زیر یک حساب کاربری ایجاد کنید. اگر مشتری قبلی هستید، لطفاً از بالای صفحه وارد شوید.</p>
+                                            <label>رمز عبور حساب کاربری <span class="required">*</span></label>
+                                            <input type="password" placeholder="رمز عبور" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="different-آدرس‌ها">
+                                    <div class="ship-different-title">
+                                        <h3>
+                                            <label>ارسال به آدرس دیگر؟</label>
+                                            <input id="ship-box" type="checkbox" />
+                                        </h3>
+                                    </div>
+                                    <div id="ship-box-info">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="country-select mb-30">
+                                                    <label>کشور <span class="required">*</span></label>
+                                                    <select>
+                                                        <option value="volvo">ایران</option>
+                                                        <option value="saab">ترکیه</option>
+                                                        <option value="mercedes">عراق</option>
+                                                        <option value="audi">امارات</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>نام <span class="required">*</span></label>
+                                                    <input type="text" placeholder="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>نام خانوادگی <span class="required">*</span></label>
+                                                    <input type="text" placeholder="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>نام شرکت</label>
+                                                    <input type="text" placeholder="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>آدرس <span class="required">*</span></label>
+                                                    <input type="text" placeholder="آدرس خیابان، کوچه، پلاک" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="checkout-form-list mb-30">
+                                                    <input type="text" placeholder="آپارتمان، واحد، سوئیت و غیره (اختیاری)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>شهر <span class="required">*</span></label>
+                                                    <input type="text" placeholder="شهر" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>استان <span class="required">*</span></label>
+                                                    <input type="text" placeholder="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>کد پستی <span class="required">*</span></label>
+                                                    <input type="text" placeholder="کد پستی" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>آدرس ایمیل <span class="required">*</span></label>
+                                                    <input type="email" placeholder="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="checkout-form-list mb-30">
+                                                    <label>تلفن تماس <span class="required">*</span></label>
+                                                    <input type="text" placeholder="تلفن تماس" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order-notes">
+                                        <div class="checkout-form-list">
+                                            <label>یادداشت‌های سفارش</label>
+                                            <textarea id="checkout-mess" cols="30" rows="10" placeholder="یادداشت‌ها در مورد سفارش شما، به عنوان مثال نکات ویژه برای تحویل سفارش."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="your-order">
+                                <h3>سفارش شما</h3>
+                                <div class="your-order-table table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="product-name">محصول</th>
+                                                <th class="product-مجموع">مجموع</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="cart_item">
+                                                <td class="product-name">
+                                                    نام محصول در اینجا <strong class="product-quantity"> × 1</strong>
+                                                </td>
+                                                <td class="product-مجموع">
+                                                    <span class="amount">165.00 ریال</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="cart_item">
+                                                <td class="product-name">
+                                                    نام محصول در اینجا <strong class="product-quantity"> × 1</strong>
+                                                </td>
+                                                <td class="product-مجموع">
+                                                    <span class="amount">50.00 ریال</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="cart-subtotal">
+                                                <th>جمع جزء سبد خرید</th>
+                                                <td><span class="amount">215.00 ریال</span></td>
+                                            </tr>
+                                            <tr class="order-total">
+                                                <th>جمع کل سفارش</th>
+                                                <td><strong><span class="amount">215.00 ریال</span></strong>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="payment-method">
+                                    <div class="payment-accordion">
+                                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" role="tab" id="headingOne">
+                                                    <h4 class="panel-title">
+                                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    انتقال مستقیم بانکی
+                                                    </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseOne" class="panel-collapse collapse  in show" role="tabpanel" aria-labelledby="headingOne">
+                                                    <div class="panel-body">
+                                                        <p>مبلغ خود را مستقیماً به حساب بانکی ما واریز کنید. لطفاً از شناسه سفارش خود به عنوان مرجع پرداخت استفاده کنید. سفارش شما تا زمان تسویه وجه ارسال نخواهد شد.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" role="tab" id="headingTwo">
+                                                    <h4 class="panel-title">
+                                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    پرداخت با چک
+                                                    </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                                    <div class="panel-body">
+                                                        <p>لطفاً چک خود را به آدرس فروشگاه ارسال کنید.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" role="tab" id="headingThree">
+                                                    <h4 class="panel-title">
+                                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    پی‌پال
+                                                    </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                    <div class="panel-body">
+                                                        <p>پرداخت از طریق پی‌پال؛ اگر حساب پی‌پال ندارید می‌توانید با کارت اعتباری خود پرداخت کنید.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="order-button-payment">
+                                            <input type="submit" value="ثبت سفارش" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </form>   
+            </div>
+        </div>
+        <!-- checkout-area end -->
+        <!-- Brand Logo Start -->
+        <div class="brand-area pb-60">
+            <div class="container">
+                <!-- Brand Banner Start -->
+                <div class="brand-banner owl-carousel">
+                    <div class="single-brand">
+                        <a href="#"><img class="img" src="/assets/img/brand/1.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/2.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/3.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/4.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/5.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img class="img" src="/assets/img/brand/1.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/2.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/3.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/4.png" alt="brand-image"></a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#"><img src="/assets/img/brand/5.png" alt="brand-image"></a>
+                    </div>
+                </div>
+                <!-- Brand Banner End -->                
+            </div>
+        </div>
+        <!-- Brand Logo End -->
+
+        

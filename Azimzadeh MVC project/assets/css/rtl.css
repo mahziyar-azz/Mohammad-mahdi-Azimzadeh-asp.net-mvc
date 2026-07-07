@@ -1,0 +1,285 @@
+/* FA-RTL CONVERSION: RTL layout stylesheet */
+
+/* 1. Global RTL & Font Settings */
+body, html {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+body, h1, h2, h3, h4, h5, h6, input, button, select, textarea, a, p, span, li, td, th {
+    font-family: 'Vazirmatn', sans-serif !important;
+}
+
+/* 2. Text Alignment & Float Overrides */
+.text-left {
+    text-align: right !important;
+}
+.text-right {
+    text-align: left !important;
+}
+.float-left, .f-left, .pull-left {
+    float: right !important;
+}
+.float-right, .f-right, .pull-right {
+    float: left !important;
+}
+
+/* 3. Margin & Padding Swaps */
+.mr-auto { margin-left: auto !important; margin-right: 0 !important; }
+.ml-auto { margin-right: auto !important; margin-left: 0 !important; }
+.mr-auto.ml-auto { margin-left: auto !important; margin-right: auto !important; }
+
+/* Margin values overrides */
+.mr-0 { margin-left: 0 !important; margin-right: unset !important; }
+.ml-0 { margin-right: 0 !important; margin-left: unset !important; }
+.mr-5 { margin-left: 5px !important; margin-right: unset !important; }
+.ml-5 { margin-right: 5px !important; margin-left: unset !important; }
+.mr-10 { margin-left: 10px !important; margin-right: unset !important; }
+.ml-10 { margin-right: 10px !important; margin-left: unset !important; }
+.mr-15 { margin-left: 15px !important; margin-right: unset !important; }
+.ml-15 { margin-right: 15px !important; margin-left: unset !important; }
+.mr-20 { margin-left: 20px !important; margin-right: unset !important; }
+.ml-20 { margin-right: 20px !important; margin-left: unset !important; }
+.mr-25 { margin-left: 25px !important; margin-right: unset !important; }
+.ml-25 { margin-right: 25px !important; margin-left: unset !important; }
+.mr-30 { margin-left: 30px !important; margin-right: unset !important; }
+.ml-30 { margin-right: 30px !important; margin-left: unset !important; }
+.mr-35 { margin-left: 35px !important; margin-right: unset !important; }
+.ml-35 { margin-right: 35px !important; margin-left: unset !important; }
+.mr-40 { margin-left: 40px !important; margin-right: unset !important; }
+.ml-40 { margin-right: 40px !important; margin-left: unset !important; }
+.mr-50 { margin-left: 50px !important; margin-right: unset !important; }
+.ml-50 { margin-right: 50px !important; margin-left: unset !important; }
+.mr-60 { margin-left: 60px !important; margin-right: unset !important; }
+.ml-60 { margin-right: 60px !important; margin-left: unset !important; }
+
+/* Padding values overrides */
+.pr-0 { padding-left: 0 !important; padding-right: unset !important; }
+.pl-0 { padding-right: 0 !important; padding-left: unset !important; }
+.pr-5 { padding-left: 5px !important; padding-right: unset !important; }
+.pl-5 { padding-right: 5px !important; padding-left: unset !important; }
+.pr-10 { padding-left: 10px !important; padding-right: unset !important; }
+.pl-10 { padding-right: 10px !important; padding-left: unset !important; }
+.pr-15 { padding-left: 15px !important; padding-right: unset !important; }
+.pl-15 { padding-right: 15px !important; padding-left: unset !important; }
+.pr-20 { padding-left: 20px !important; padding-right: unset !important; }
+.pl-20 { padding-right: 20px !important; padding-left: unset !important; }
+.pr-25 { padding-left: 25px !important; padding-right: unset !important; }
+.pl-25 { padding-right: 25px !important; padding-left: unset !important; }
+.pr-30 { padding-left: 30px !important; padding-right: unset !important; }
+.pl-30 { padding-right: 30px !important; padding-left: unset !important; }
+.pr-40 { padding-left: 40px !important; padding-right: unset !important; }
+.pl-40 { padding-right: 40px !important; padding-left: unset !important; }
+.pr-50 { padding-left: 50px !important; padding-right: unset !important; }
+.pl-50 { padding-right: 50px !important; padding-left: unset !important; }
+.pr-60 { padding-left: 60px !important; padding-right: unset !important; }
+.pl-60 { padding-right: 60px !important; padding-left: unset !important; }
+
+/* 4. Borders */
+.border-left {
+    border-right: 1px solid #ebebeb !important;
+    border-left: 0 !important;
+}
+.border-right {
+    border-left: 1px solid #ebebeb !important;
+    border-right: 0 !important;
+}
+
+/* 5. Header Component Adjustments */
+/* Top bar items */
+.header-list-menu > li:first-child::after {
+    left: 10px !important;
+    right: auto !important;
+}
+.header-list-menu > li > a {
+    padding: 10px 10px 10px 27px !important;
+}
+.header-list-menu > li:last-child a {
+    padding-left: 0 !important;
+    padding-right: 10px !important;
+}
+.header-list-menu.right-menu li > a:first-child {
+    padding-left: 0 !important;
+    padding-right: 27px !important;
+}
+
+/* Dropdown menus alignment */
+.ht-dropdown {
+    left: auto !important;
+    right: 0 !important;
+    text-align: right !important;
+    transform-origin: 100% 0 0 !important;
+    -webkit-transform-origin: 100% 0 0 !important;
+}
+ul.ht-dropdown.dropdown-style-two.sub-menu {
+    right: 100% !important;
+    left: auto !important;
+    top: 0 !important;
+}
+.ht-dropdown.dropdown-style-two {
+    right: auto !important;
+    left: 0 !important;
+}
+.header-list-menu li:last-child ul.ht-dropdown {
+    right: auto !important;
+    left: 0 !important;
+}
+.header-list-menu > li > ul.ht-dropdown > li > a,
+.middle-menu-list li ul.ht-dropdown li a {
+    text-align: right !important;
+}
+.header-list-menu > li > ul.ht-account {
+    right: auto !important;
+    left: 0 !important;
+}
+
+/* Search Box positioning */
+.search-box-view .email {
+    float: right !important;
+    padding: 0 20px 0 90px !important;
+}
+.search-box-view .submit {
+    left: 3px !important;
+    right: auto !important;
+    border-radius: 40px 0 0 39px !important;
+}
+
+/* Middle main menu */
+.middle-menu-list > li > a {
+    padding: 37px 30px 37px 0 !important;
+}
+.middle-menu-list > li:first-child > a {
+    padding-right: 0 !important;
+    padding-left: 30px !important;
+}
+
+/* Cart box menu adjustments */
+.cart-box > ul > li > a {
+    padding: 10px 15px 10px 0 !important;
+}
+.cart-box ul li a span {
+    left: 0px !important;
+    right: auto !important;
+}
+.cart-img {
+    float: right !important;
+    padding-left: 10px !important;
+    padding-right: 0 !important;
+}
+.cart-content {
+    float: right !important;
+    padding: 0 0 15px 15px !important;
+    text-align: right !important;
+}
+.del-icone {
+    left: 0 !important;
+    right: auto !important;
+}
+
+/* 6. Slider adjustments */
+.text-content-wrapper {
+    padding-right: 10% !important;
+    padding-left: 0 !important;
+}
+.slider-btn {
+    text-align: center !important;
+}
+
+/* 7. Product List Grid and Rating */
+.product-rating {
+    text-align: right !important;
+}
+
+/* 8. Breadcrumbs flow */
+.breadcrumb-list > li {
+    float: right !important;
+}
+.breadcrumb-list > li::after {
+    content: "\f104" !important; /* flip LTR chevron-right to RTL chevron-left */
+    margin-right: 8px !important;
+    margin-left: 8px !important;
+}
+.breadcrumb-list > li:last-child::after {
+    display: none !important;
+}
+
+/* 9. Product Details Tabs & Specs */
+.nav-tabs .nav-link {
+    margin-left: 2px !important;
+    margin-right: 0 !important;
+}
+.nav-tabs {
+    padding-right: 0 !important;
+}
+
+/* 10. Checkout & Forms flow */
+.form-check-input {
+    margin-right: -1.25rem !important;
+    margin-left: 0 !important;
+}
+.form-check {
+    padding-right: 1.25rem !important;
+    padding-left: 0 !important;
+}
+
+/* 11. Pagination */
+.pagination-box li {
+    float: right !important;
+    margin-left: 5px !important;
+    margin-right: 0 !important;
+}
+
+/* 12. Rotations of directional icons */
+.fa-angle-right, .fa-chevron-right, .fa-arrow-right {
+    transform: rotate(180deg) !important;
+    display: inline-block !important;
+}
+.fa-angle-left, .fa-chevron-left, .fa-arrow-left {
+    transform: rotate(180deg) !important;
+    display: inline-block !important;
+}
+
+/* 13. Sidebar categories list arrows */
+.cat-list li i {
+    float: left !important;
+}
+
+/* 14. Meanmenu custom styling in RTL */
+.mean-container .mean-nav ul li a.mean-expand {
+    left: 0 !important;
+    right: auto !important;
+    border-left: none !important;
+    border-right: 1px solid rgba(255,255,255,0.2) !important;
+    text-align: center !important;
+}
+.mean-container .mean-nav ul li a {
+    text-align: right !important;
+}
+
+/* 15. Shop Page RTL Overrides */
+.main-categorie #list-view .pro-img {
+    float: right !important;
+}
+.main-categorie #list-view .pro-content {
+    text-align: right !important;
+    padding: 0px 20px 5px !important;
+}
+.toolbar-sorter label, .toolbar-sorter-footer label {
+    margin-left: 5px !important;
+    margin-right: 0 !important;
+}
+.grid-item-list {
+    margin-right: 10px !important;
+    margin-left: 0 !important;
+}
+.main-shop-page .grid-list-view li {
+    margin-left: 10px !important;
+    margin-right: 0 !important;
+}
+
+/* Hide header list menu divider when there is only one item (e.g. User Profile) */
+.header-list-menu > li:only-child::after {
+    display: none !important;
+}
+
+
