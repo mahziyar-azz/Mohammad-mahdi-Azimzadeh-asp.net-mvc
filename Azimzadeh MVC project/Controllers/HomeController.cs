@@ -25,9 +25,39 @@ namespace Azimzadeh_MVC_project.Controllers
         {
             return View();
         }
-        public ActionResult Shop()
+        public ActionResult Shop(int? categoryId, int? tagId)
         {
-            var products = db.Products.Include(p => p.ProductImages).Where(p => p.IsActive).ToList();
+            var productsQuery = db.Products.Include(p => p.ProductImages).Where(p => p.IsActive);
+
+            if (categoryId.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            if (tagId.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
+            }
+
+            var products = productsQuery.ToList();
+
+            // Load categories with count of active products
+            ViewBag.Categories = db.Categories
+                .Where(c => c.IsActive && c.Products.Any(p => p.IsActive))
+                .Select(c => new {
+                    Category = c,
+                    Count = c.Products.Count(p => p.IsActive)
+                })
+                .ToList()
+                .Select(x => new KeyValuePair<Category, int>(x.Category, x.Count))
+                .ToList();
+
+            // Load tags
+            ViewBag.Tags = db.Tags.Where(t => t.Products.Any(p => p.IsActive)).ToList();
+            
+            ViewBag.SelectedCategoryId = categoryId;
+            ViewBag.SelectedTagId = tagId;
+
             return View(products);
         }
         public ActionResult Product()
