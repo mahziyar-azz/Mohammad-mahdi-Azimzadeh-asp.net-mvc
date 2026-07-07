@@ -1,4 +1,5 @@
-﻿ 
+@model Azimzadeh_MVC_project.Models.Product
+
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area ptb-60 ptb-sm-30">
             <div class="container">
@@ -6,7 +7,11 @@
                     <ul>
                         <li><a href="/">خانه</a></li>
                         <li><a href="/Home/Shop">فروشگاه</a></li>
-                        <li class="active"><a href="/Home/Product">جزئیات محصول</a></li>
+                        @if (Model.Category != null)
+                        {
+                            <li><a href="/Home/Shop?categoryId=@Model.CategoryId">@Model.Category.Title</a></li>
+                        }
+                        <li class="active"><a href="/Home/Product?id=@Model.ProductId">@Model.Title</a></li>
                     </ul>
                 </div>
             </div>
@@ -21,28 +26,33 @@
                     <div class="col-lg-5">
                         <!-- Thumbnail Large Image start -->
                         <div class="tab-content">
-                            <div id="thumb1" class="tab-pane active">
-                                <a data-fancybox="images" href="/assets/img/products/1.jpg"><img src="/assets/img/products/1.jpg" alt="product-view"></a>
-                            </div>
-                            <div id="thumb2" class="tab-pane">
-                                <a data-fancybox="images" href="/assets/img/products/2.jpg"><img src="/assets/img/products/2.jpg" alt="product-view"></a>
-                            </div>
-                            <div id="thumb3" class="tab-pane">
-                                <a data-fancybox="images" href="/assets/img/products/3.jpg"><img src="/assets/img/products/3.jpg" alt="product-view"></a>
-                            </div>
-                            <div id="thumb4" class="tab-pane">
-                                <a data-fancybox="images" href="/assets/img/products/4.jpg"><img src="/assets/img/products/4.jpg" alt="product-view"></a>
-                            </div>
+                            @{
+                                var images = Model.ProductImages.OrderBy(img => img.DisplayOrder).ToList();
+                                if (!images.Any())
+                                {
+                                    images.Add(new Azimzadeh_MVC_project.Models.ProductImage { ImagePath = "/assets/img/products/1.jpg", IsMain = true });
+                                }
+                            }
+                            @for (int i = 0; i < images.Count; i++)
+                            {
+                                var img = images[i];
+                                var activeClass = i == 0 ? "active" : "";
+                                <div id="thumb@(i + 1)" class="tab-pane @activeClass">
+                                    <a data-fancybox="images" href="@img.ImagePath"><img src="@img.ImagePath" alt="@Model.Title"></a>
+                                </div>
+                            }
                         </div>
                         <!-- Thumbnail Large Image End -->
 
                         <!-- Thumbnail Image End -->
                         <div class="product-thumbnail">
                             <div class="thumb-menu nav">
-                                    <a class="active" data-toggle="tab" href="#thumb1"> <img src="/assets/img/products/1.jpg" alt="product-thumbnail"></a>
-                                    <a data-toggle="tab" href="#thumb2"> <img src="/assets/img/products/2.jpg" alt="product-thumbnail"></a>
-                                    <a data-toggle="tab" href="#thumb3"> <img src="/assets/img/products/3.jpg" alt="product-thumbnail"></a>
-                                    <a data-toggle="tab" href="#thumb4"> <img src="/assets/img/products/4.jpg" alt="product-thumbnail"></a>
+                                @for (int i = 0; i < images.Count; i++)
+                                {
+                                    var img = images[i];
+                                    var activeClass = i == 0 ? "active" : "";
+                                    <a class="@activeClass" data-toggle="tab" href="#thumb@(i + 1)"> <img src="@img.ImagePath" alt="@Model.Title"></a>
+                                }
                             </div>
                         </div>
                         <!-- Thumbnail image end -->
@@ -51,25 +61,45 @@
                     <!-- Thumbnail Description Start -->
                     <div class="col-lg-7">
                         <div class="thubnail-desc fix">
-                            <h3 class="product-header">نام محصول در اینجا</h3>
+                            <h3 class="product-header">@Model.Title</h3>
                             <div class="rating-summary fix mtb-10">
                                 <div class="rating f-left">
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
                                 </div>
                                 <div class="rating-feedback f-left">
-                                    <a href="#">(1 دیدگاه)</a>
+                                    <a href="#">(۵ نظر)</a>
                                     <a href="#">ثبت نظر برای این محصول</a>
                                 </div>
                             </div>
                             <div class="pro-price mb-10">
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">-32.00</del></p>
+                                <p>
+                                    @if (Model.DiscountPrice.HasValue)
+                                    {
+                                        <span class="price">@Model.DiscountPrice.Value.ToString("N0") ریال</span>
+                                        <del class="prev-price">@Model.Price.ToString("N0") ریال</del>
+                                    }
+                                    else
+                                    {
+                                        <span class="price">@Model.Price.ToString("N0") ریال</span>
+                                    }
+                                </p>
                             </div>
                             <div class="pro-ref mb-15">
-                                <p><span class="in-stock">موجود در انبار</span><span class="sku">50</span></p>
+                                <p>
+                                    @if (Model.StockQuantity > 0)
+                                    {
+                                        <span class="in-stock">موجود در انبار (@Model.StockQuantity عدد)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="out-stock text-danger" style="font-weight: bold; margin-left: 10px;">ناموجود</span>
+                                    }
+                                    <span class="sku">شناسه محصول (SKU): @Model.SKU</span>
+                                </p>
                             </div>
                             <div class="box-quantity">
                                 <form action="#">
@@ -81,10 +111,21 @@
                                 <ul class="list-inline">
                                     <li><a href="/Home/Wishlist">افزودن به علاقه‌مندی‌ها</a></li>
                                     <li><a href="/Home/Compare">افزودن به مقایسه</a></li>
-                                    <li><a href="#">ایمیل</a></li>
+                                    <li><a href="#">اشتراک‌گذاری</a></li>
                                 </ul>
                             </div>
-                            <p class="ptb-20">Everything you need for a trip to the gym will fit inside this surprisingly spacious نام محصول در اینجا. Stock it with a water bottle, change of clothes, pair of shoes, and even a few beauty products. Fits inside a locker and zips shut for security.</p>
+                            <p class="ptb-20">@Model.ShortDescription</p>
+                            
+                            @if (Model.Tags != null && Model.Tags.Any())
+                            {
+                                <div class="mt-20">
+                                    <strong>برچسب‌ها: </strong>
+                                    @foreach (var tag in Model.Tags)
+                                    {
+                                        <a href="/Home/Shop?tagId=@tag.TagId" class="badge badge-secondary" style="background-color: #f8f9fa; color: #495057; padding: 5px 10px; border-radius: 4px; border: 1px solid #dee2e6; margin-left: 5px; text-decoration: none; display: inline-block;"># @tag.Title</a>
+                                    }
+                                </div>
+                            }
                         </div>
                     </div>
                     <!-- Thumbnail Description End -->
@@ -106,12 +147,7 @@
                         <!-- Product Thumbnail Tab Content Start -->
                         <div class="tab-content thumb-content border-default">
                             <div id="dtail" class="tab-pane in active">
-                                <p>هر چیزی که برای رفتن به باشگاه نیاز دارید در این نام محصول در اینجا جادار قرار می‌گیرد. دارای محفظه بطری آب، لباس‌ها، کفش‌ها و حتی لوازم بهداشتی. به راحتی در کمد قرار می‌گیرد و زیپ آن به خوبی بسته می‌شود تا امنیت آن حفظ شود.</p>
-                                <ul class="tab-list-item">
-                                    <li> جیب جلو با دسترسی سریع.</li>
-                                    <li> طراحی با دوخت ظریف.</li>
-                                    <li> جنس نایلونی با دوام و ماندگار.</li>
-                                </ul>
+                                <p>@Html.Raw(Model.Description ?? Model.ShortDescription)</p>
                             </div>
                             <div id="review" class="tab-pane">
                                 <!-- Reviews Start -->
@@ -216,175 +252,68 @@
                                 <!-- Reviews End -->
                             </div>
                         </div>
-                        <!-- Product Thumbnail Tab Content End -->
-                    </div>
-                </div>
-                <!-- Row End -->
-            </div>
-            <!-- Container End -->
-        </div>
-        <!-- Product Thumbnail Description End -->
-        <!-- Realted Product Start -->
-        <div class="related-product pb-30">
-            <div class="container">
-                <div class="related-box">
-                    <div class="group-title">
-                        <h2>محصولات مرتبط</h2>
-                    </div>
-                    <!-- Realted Product Activation Start -->                    
+                                      <!-- Realted Product Activation Start -->                    
                     <div class="new-upsell-pro owl-carousel">
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                        @if (ViewBag.RelatedProducts != null)
+                        {
+                            foreach (var related in (List<Azimzadeh_MVC_project.Models.Product>)ViewBag.RelatedProducts)
+                            {
+                                var mainImage = related.ProductImages.FirstOrDefault(img => img.IsMain) ?? related.ProductImages.FirstOrDefault();
+                                var mainImagePath = mainImage != null ? mainImage.ImagePath : "/assets/img/products/1.jpg";
+                                var hoverImage = related.ProductImages.FirstOrDefault(img => !img.IsMain) ?? mainImage;
+                                var hoverImagePath = hoverImage != null ? hoverImage.ImagePath : mainImagePath;
+
+                                <!-- Single Product Start -->                    
+                                <div class="single-product">
+                                    <!-- Product Image Start -->
+                                    <div class="pro-img">
+                                        <a href="/Home/Product?id=@related.ProductId">
+                                            <img class="primary-img" src="@mainImagePath" alt="@related.Title">
+                                            <img class="secondary-img" src="@hoverImagePath" alt="@related.Title">
+                                        </a>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-32%</span>
-                        </div>
-                        <!-- Single Product End -->  
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/1.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                                    <!-- Product Image End -->
+                                    <!-- Product Content Start -->
+                                    <div class="pro-content">
+                                        <div class="product-rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>                                
+                                        <h4><a href="/Home/Product?id=@related.ProductId">@related.Title</a></h4>
+                                        <p>
+                                            @if (related.DiscountPrice.HasValue)
+                                            {
+                                                <span class="price">@related.DiscountPrice.Value.ToString("N0") ریال</span>
+                                                <del class="prev-price">@related.Price.ToString("N0") ریال</del>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">@related.Price.ToString("N0") ریال</span>
+                                            }
+                                        </p>
+                                        <div class="pro-actions">
+                                            <div class="actions-secondary">
+                                                <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
+                                                <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
+                                                <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- Product Content End -->
+                                    @if (related.DiscountPrice.HasValue)
+                                    {
+                                        var discountPercent = (int)Math.Round((double)(related.Price - related.DiscountPrice.Value) / (double)related.Price * 100);
+                                        <span class="sticker-new">-@discountPercent%</span>
+                                    }
                                 </div>
-                            </div>
-                            <!-- Product Content End -->
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/3.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-30%</span>
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/3.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
+                                <!-- Single Product End -->
+                            }
+                        }
+                    </div>
+                    <!-- Realted Product Activation End -->ions">
                                     <div class="actions-secondary">
                                         <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
                                         <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
@@ -411,169 +340,64 @@
                     </div>
                     <!-- Upsell Product Activation Start -->
                     <div class="new-upsell-pro owl-carousel">
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                        @if (ViewBag.UpsellProducts != null)
+                        {
+                            foreach (var upsell in (List<Azimzadeh_MVC_project.Models.Product>)ViewBag.UpsellProducts)
+                            {
+                                var mainImage = upsell.ProductImages.FirstOrDefault(img => img.IsMain) ?? upsell.ProductImages.FirstOrDefault();
+                                var mainImagePath = mainImage != null ? mainImage.ImagePath : "/assets/img/products/1.jpg";
+                                var hoverImage = upsell.ProductImages.FirstOrDefault(img => !img.IsMain) ?? mainImage;
+                                var hoverImagePath = hoverImage != null ? hoverImage.ImagePath : mainImagePath;
+
+                                <!-- Single Product Start -->                    
+                                <div class="single-product">
+                                    <!-- Product Image Start -->
+                                    <div class="pro-img">
+                                        <a href="/Home/Product?id=@upsell.ProductId">
+                                            <img class="primary-img" src="@mainImagePath" alt="@upsell.Title">
+                                            <img class="secondary-img" src="@hoverImagePath" alt="@upsell.Title">
+                                        </a>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-32%</span>
-                        </div>
-                        <!-- Single Product End -->  
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/1.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                                    <!-- Product Image End -->
+                                    <!-- Product Content Start -->
+                                    <div class="pro-content">
+                                        <div class="product-rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>                                
+                                        <h4><a href="/Home/Product?id=@upsell.ProductId">@upsell.Title</a></h4>
+                                        <p>
+                                            @if (upsell.DiscountPrice.HasValue)
+                                            {
+                                                <span class="price">@upsell.DiscountPrice.Value.ToString("N0") ریال</span>
+                                                <del class="prev-price">@upsell.Price.ToString("N0") ریال</del>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">@upsell.Price.ToString("N0") ریال</span>
+                                            }
+                                        </p>
+                                        <div class="pro-actions">
+                                            <div class="actions-secondary">
+                                                <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
+                                                <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
+                                                <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- Product Content End -->
+                                    @if (upsell.DiscountPrice.HasValue)
+                                    {
+                                        var discountPercent = (int)Math.Round((double)(upsell.Price - upsell.DiscountPrice.Value) / (double)upsell.Price * 100);
+                                        <span class="sticker-new">-@discountPercent%</span>
+                                    }
                                 </div>
-                            </div>
-                            <!-- Product Content End -->
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/3.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-30%</span>
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/3.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                        </div>
-                        <!-- Single Product End -->
-                        <!-- Single Product Start -->                    
-                        <div class="single-product">
-                            <!-- Product Image Start -->
-                            <div class="pro-img">
-                                <a href="/Home/Product">
-                                    <img class="primary-img" src="/assets/img/products/4.jpg" alt="single-product">
-                                    <img class="secondary-img" src="/assets/img/products/2.jpg" alt="single-product">
-                                </a>
-                            </div>
-                            <!-- Product Image End -->
-                            <!-- Product Content Start -->
-                            <div class="pro-content">
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>                                
-                                <h4><a href="/Home/Product">نام محصول در اینجا</a></h4>
-                                <p><span class="price">30.00 ریال</span><del class="prev-price">32.00 ریال</del></p>
-                                <div class="pro-actions">
-                                    <div class="actions-secondary">
-                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                        <a href="/Home/Compare" data-toggle="tooltip" title="افزودن به مقایسه"><i class="fa fa-signal"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product Content End -->
-                            <span class="sticker-new">-32%</span>
-                        </div>
-                        <!-- Single Product End --> 
+                                <!-- Single Product End -->
+                            }
+                        }
                     </div>
                     <!-- Upsell Product Activation End -->
                 </div>

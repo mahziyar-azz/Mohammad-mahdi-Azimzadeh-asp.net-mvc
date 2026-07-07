@@ -60,9 +60,44 @@ namespace Azimzadeh_MVC_project.Controllers
 
             return View(products);
         }
-        public ActionResult Product()
+        public ActionResult Product(int? id)
         {
-            return View();
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Shop");
+            }
+
+            var product = db.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .Include(p => p.Tags)
+                .FirstOrDefault(p => p.ProductId == id.Value && p.IsActive);
+
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Increase View Count by 1
+            product.ViewCount += 1;
+            db.SaveChanges();
+
+            // Load related products (same category, excluding current product)
+            ViewBag.RelatedProducts = db.Products
+                .Include(p => p.ProductImages)
+                .Where(p => p.CategoryId == product.CategoryId && p.ProductId != product.ProductId && p.IsActive)
+                .Take(5)
+                .ToList();
+
+            // Load upsell products (top viewed active products, excluding current)
+            ViewBag.UpsellProducts = db.Products
+                .Include(p => p.ProductImages)
+                .Where(p => p.IsActive && p.ProductId != product.ProductId)
+                .OrderByDescending(p => p.ViewCount)
+                .Take(5)
+                .ToList();
+
+            return View(product);
         }
         public ActionResult Cart()
         {
