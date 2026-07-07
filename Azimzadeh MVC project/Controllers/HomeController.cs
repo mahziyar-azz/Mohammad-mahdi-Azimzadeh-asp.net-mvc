@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+using Azimzadeh_MVC_project.Models;
 
 namespace Azimzadeh_MVC_project.Controllers
 {
     public class HomeController : Controller
     {
+        private AzimzadehStoreDbEntities db = new AzimzadehStoreDbEntities();
+
         public ActionResult Index()
         {
             return View();
@@ -23,7 +27,8 @@ namespace Azimzadeh_MVC_project.Controllers
         }
         public ActionResult Shop()
         {
-            return View();
+            var products = db.Products.Include(p => p.ProductImages).Where(p => p.IsActive).ToList();
+            return View(products);
         }
         public ActionResult Product()
         {
@@ -73,6 +78,15 @@ namespace Azimzadeh_MVC_project.Controllers
         public ActionResult Account()
         {
             return View();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
