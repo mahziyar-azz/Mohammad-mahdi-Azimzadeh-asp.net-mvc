@@ -177,48 +177,58 @@
                             <div class="cart-box text-right">
                                 <ul>
                                     <li><a href="#"><i class="fa fa-user-o"></i></a>
-                                        <ul class="ht-dropdown">
-                                            <li><a href="/Home/Login">ورود</a></li>
-                                            <li><a href="/Home/Register">ثبت نام</a></li>
-                                            <li><a href="/Home/Account">حساب کاربری</a></li>                                            
+                                        <ul class="ht-dropdown" style="min-width: 140px;">
+                                            @if (Session["UserId"] == null)
+                                            {
+                                                <li><a href="/Home/Login">ورود</a></li>
+                                                <li><a href="/Home/Register">ثبت نام</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li><a href="/Home/Account">حساب کاربری</a></li>
+                                                if (Session["IsAdmin"] != null)
+                                                {
+                                                    <li><a href="/Admin" style="color: #febf14; font-weight: bold;">پنل مدیریت</a></li>
+                                                }
+                                                <li><a href="/Home/Logout">خروج</a></li>
+                                            }
                                         </ul>
                                     </li>                                    
                                     <li><a href="/Home/Wishlist"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-basket"></i><span class="cart-counter">2</span></a>
-                                        <ul class="ht-dropdown main-cart-box">
+                                    <li><a href="/Home/Cart"><i class="fa fa-shopping-basket"></i><span class="cart-counter">@(ViewBag.HeaderCartCount ?? 0)</span></a>
+                                         <ul class="ht-dropdown main-cart-box">
                                             <li>
-                                                <!-- Cart Box Start -->
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="#"><img src="/assets/img/menu/1.jpg" alt="تصویر محصول"></a>
+                                                @if (ViewBag.HeaderCartItems != null && ((List<Azimzadeh_MVC_project.Models.CartItem>)ViewBag.HeaderCartItems).Any())
+                                                {
+                                                    foreach (var item in (List<Azimzadeh_MVC_project.Models.CartItem>)ViewBag.HeaderCartItems)
+                                                    {
+                                                        var imgPath = item.Product.ProductImages.OrderBy(pi => pi.DisplayOrder).FirstOrDefault()?.ImagePath ?? "/assets/img/products/1.jpg";
+                                                        <!-- Cart Box Start -->
+                                                        <div class="single-cart-box">
+                                                            <div class="cart-img">
+                                                                <a href="/Home/Product?id=@item.ProductId"><img src="@imgPath" alt="@item.Product.Title"></a>
+                                                            </div>
+                                                            <div class="cart-content">
+                                                                <h6><a href="/Home/Product?id=@item.ProductId">@item.Product.Title</a></h6>
+                                                                <span>@item.Quantity × @item.UnitPrice.ToString("N0") ریال</span>
+                                                            </div>
+                                                            <a class="del-icone" href="/Home/RemoveFromCart?id=@item.CartItemId" onclick="return confirm('آیا از حذف این کالا اطمینان دارید؟');"><i class="fa fa-window-close-o"></i></a>
+                                                        </div>
+                                                        <!-- Cart Box End -->
+                                                    }
+                                                    <!-- Cart Footer Inner Start -->
+                                                    <div class="cart-footer fix">
+                                                        <h5>مجموع :<span class="f-right">@(((decimal)(ViewBag.HeaderCartSubtotal ?? 0)).ToString("N0")) ریال</span></h5>
+                                                        <div class="cart-actions" style="display: flex; gap: 10px;">
+                                                            <a class="checkout" href="/Home/Cart" style="flex: 1; text-align: center;">سبد خرید</a>
+                                                            <a class="checkout" href="/Home/Checkout" style="flex: 1; text-align: center; background: #febf14; color: #2d3748;">تسویه حساب</a>
+                                                        </div>
                                                     </div>
-                                                    <div class="cart-content">
-                                                        <h6><a href="/Home/Product">نام محصول</a></h6>
-                                                        <span>1 × 399.00 ریال</span>
-                                                    </div>
-                                                    <a class="del-icone" href="#"><i class="fa fa-window-close-o"></i></a>
-                                                </div>
-                                                <!-- Cart Box End -->
-                                                <!-- Cart Box Start -->
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="#"><img src="/assets/img/menu/2.jpg" alt="تصویر محصول"></a>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6><a href="/Home/Product">نام محصول</a></h6>
-                                                        <span>2 × 299.00 ریال</span>
-                                                    </div>
-                                                    <a class="del-icone" href="#"><i class="fa fa-window-close-o"></i></a>
-                                                </div>
-                                                <!-- Cart Box End -->
-                                                <!-- Cart Footer Inner Start -->
-                                                <div class="cart-footer fix">
-                                                    <h5>مجموع :<span class="f-right">698.00 ریال</span></h5>
-                                                    <div class="cart-actions">
-                                                        <a class="checkout" href="/Home/Checkout">تسویه حساب</a>
-                                                    </div>
-                                                </div>
-                                                <!-- Cart Footer Inner End -->
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-center" style="padding: 15px; color: #718096; white-space: nowrap;">سبد خرید شما خالی است.</div>
+                                                }
                                             </li>
                                         </ul>
                                     </li>

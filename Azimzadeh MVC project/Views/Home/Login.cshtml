@@ -44,6 +44,7 @@
                                 }
                                 <form action="/Home/Login" method="post">
                                     @Html.AntiForgeryToken()
+                                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                                     <div class="form-group">
                                         <label class="control-label">آدرس ایمیل</label>
                                         <input type="email" name="email" placeholder="آدرس ایمیل خود را وارد کنید..." id="input-email" class="form-control" required="required">

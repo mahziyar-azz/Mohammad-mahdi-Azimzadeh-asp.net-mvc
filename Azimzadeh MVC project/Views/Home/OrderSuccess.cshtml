@@ -1,0 +1,83 @@
+@model Azimzadeh_MVC_project.Models.Order
+@{
+    ViewBag.Title = "ثبت موفقیت‌آمیز سفارش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // Parse ItemsJson
+    var items = new List<Azimzadeh_MVC_project.Models.OrderItemViewModel>();
+    if (!string.IsNullOrEmpty(Model.ItemsJson))
+    {
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        items = serializer.Deserialize<List<Azimzadeh_MVC_project.Models.OrderItemViewModel>>(Model.ItemsJson) ?? new List<Azimzadeh_MVC_project.Models.OrderItemViewModel>();
+    }
+}
+
+<div class="container pt-60 pb-80">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center" style="background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid #38a169;">
+            <div style="width: 80px; height: 80px; background: #e6fffa; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fa fa-check" style="font-size: 40px; color: #38a169;"></i>
+            </div>
+            
+            <h2 style="color: #2d3748; font-weight: 700; margin-bottom: 10px; font-family: 'Vazirmatn', sans-serif;">با تشکر از خرید شما!</h2>
+            <p style="color: #718096; font-size: 16px; margin-bottom: 30px; font-family: 'Vazirmatn', sans-serif;">سفارش شما با موفقیت ثبت شد و در حال حاضر در دست بررسی و پردازش است.</p>
+
+            <div class="text-right" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 30px; background: #f7fafc; direction: rtl;">
+                <h4 style="border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; color: #2d3748; font-family: 'Vazirmatn', sans-serif;">اطلاعات سفارش</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-10">
+                        <strong>شماره سفارش:</strong> <span dir="ltr">@Model.OrderNumber</span>
+                    </div>
+                    <div class="col-md-6 mb-10">
+                        <strong>تاریخ ثبت:</strong> @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                    </div>
+                    <div class="col-md-6 mb-10">
+                        <strong>روش پرداخت:</strong> @Model.PaymentStatus
+                    </div>
+                    <div class="col-md-6 mb-10">
+                        <strong>وضعیت سفارش:</strong> <span class="badge badge-success" style="background: #38a169; color: #fff; padding: 5px 10px; border-radius: 4px;">@Model.OrderStatus</span>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>آدرس ارسال:</strong> @(Model.UserAddress != null ? $"{Model.UserAddress.Province}، {Model.UserAddress.City}، {Model.UserAddress.FullAddress} (کد پستی: {Model.UserAddress.PostalCode})" : "-")
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-right" style="margin-bottom: 30px; direction: rtl;">
+                <h4 style="color: #2d3748; margin-bottom: 15px; font-family: 'Vazirmatn', sans-serif;">اقلام سفارش</h4>
+                <div class="table-responsive">
+                    <table class="table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #edf2f7;">
+                                <th style="padding: 12px; border-bottom: 2px solid #cbd5e0; text-align: right;">محصول</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #cbd5e0; text-align: center;">تعداد</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #cbd5e0; text-align: left;">قیمت واحد</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #cbd5e0; text-align: left;">جمع کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in items)
+                            {
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 12px; text-align: right;">@item.Title</td>
+                                    <td style="padding: 12px; text-align: center;">@item.Quantity</td>
+                                    <td style="padding: 12px; text-align: left;">@(((decimal)item.UnitPrice).ToString("N0")) ریال</td>
+                                    <td style="padding: 12px; text-align: left;">@(((decimal)item.Total).ToString("N0")) ریال</td>
+                                </tr>
+                            }
+                            <tr style="font-weight: bold; background: #f7fafc;">
+                                <td colspan="3" style="padding: 12px; text-align: right;">مبلغ کل پرداخت:</td>
+                                <td style="padding: 12px; text-align: left; color: #e53e3e; font-size: 18px;">@Model.TotalAmount.ToString("N0") ریال</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <a href="/" class="btn-modern btn-primary-modern" style="background: #febf14; border: none; color: #2d3748; padding: 10px 24px; font-weight: bold; border-radius: 6px; text-decoration: none;">بازگشت به خانه</a>
+                <a href="/Home/Shop" class="btn-modern" style="background: #edf2f7; color: #4a5568; border: none; padding: 10px 24px; font-weight: bold; border-radius: 6px; text-decoration: none;">ادامه خرید</a>
+            </div>
+        </div>
+    </div>
+</div>

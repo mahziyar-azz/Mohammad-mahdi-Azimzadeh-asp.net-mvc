@@ -179,11 +179,177 @@ namespace Azimzadeh_MVC_project.Controllers
         }
         public ActionResult Cart()
         {
-            return View();
+            Cart cart = null;
+            if (Session["UserId"] != null)
+            {
+                int userId = (int)Session["UserId"];
+                cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+            }
+            else
+            {
+                string sessionId = Session.SessionID;
+                cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+            }
+
+            return View(cart);
         }
         public ActionResult Checkout()
         {
-            return View();
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "برای ثبت سفارش ابتدا باید وارد حساب کاربری خود شوید.";
+                return RedirectToAction("Login", new { returnUrl = "/Home/Checkout" });
+            }
+
+            int userId = (int)Session["UserId"];
+            var cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+            if (cart == null || !cart.CartItems.Any())
+            {
+                TempData["ErrorMessage"] = "سبد خرید شما خالی است.";
+                return RedirectToAction("Cart");
+            }
+
+            var address = db.UserAddresses.FirstOrDefault(a => a.UserId == userId && a.IsDefault);
+            if (address == null)
+            {
+                address = db.UserAddresses.FirstOrDefault(a => a.UserId == userId);
+            }
+            ViewBag.UserAddress = address;
+            
+            var user = db.Users.Find(userId);
+            ViewBag.User = user;
+
+            return View(cart);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitOrder(string firstName, string lastName, string email, string phone, 
+            string province, string city, string fullAddress, string postalCode)
+        {
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "برای ثبت سفارش ابتدا باید وارد حساب کاربری خود شوید.";
+                return RedirectToAction("Login");
+            }
+
+            int userId = (int)Session["UserId"];
+            var user = db.Users.Find(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+            if (cart == null || !cart.CartItems.Any())
+            {
+                TempData["ErrorMessage"] = "سبد خرید شما خالی است.";
+                return RedirectToAction("Cart");
+            }
+
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
+                string.IsNullOrWhiteSpace(province) || string.IsNullOrWhiteSpace(city) ||
+                string.IsNullOrWhiteSpace(fullAddress) || string.IsNullOrWhiteSpace(postalCode))
+            {
+                TempData["ErrorMessage"] = "لطفاً تمامی فیلدهای اجباری ستاره‌دار (*) را پر کنید.";
+                return RedirectToAction("Checkout");
+            }
+
+            var address = db.UserAddresses.FirstOrDefault(a => a.UserId == userId);
+            if (address == null)
+            {
+                address = new UserAddress
+                {
+                    UserId = userId,
+                    Title = "آدرس پیش‌فرض",
+                    Province = province.Trim(),
+                    City = city.Trim(),
+                    FullAddress = fullAddress.Trim(),
+                    PostalCode = postalCode.Trim(),
+                    IsDefault = true
+                };
+                db.UserAddresses.Add(address);
+            }
+            else
+            {
+                address.Province = province.Trim();
+                address.City = city.Trim();
+                address.FullAddress = fullAddress.Trim();
+                address.PostalCode = postalCode.Trim();
+            }
+            db.SaveChanges();
+
+            if (string.IsNullOrEmpty(user.FirstName))
+            {
+                user.FirstName = firstName.Trim();
+                user.LastName = lastName.Trim();
+                user.FullName = (firstName.Trim() + " " + lastName.Trim()).Trim();
+            }
+
+            string orderNumber = "ORD-" + DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + new Random().Next(1000, 9999);
+
+            var orderItemsList = cart.CartItems.Select(ci => new Azimzadeh_MVC_project.Models.OrderItemViewModel {
+                ProductId = ci.ProductId,
+                Title = ci.Product.Title,
+                Quantity = ci.Quantity,
+                UnitPrice = ci.UnitPrice,
+                Total = ci.Quantity * ci.UnitPrice
+            }).ToList();
+            
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            string itemsJson = serializer.Serialize(orderItemsList);
+            decimal subtotal = cart.CartItems.Sum(ci => ci.Quantity * ci.UnitPrice);
+
+            var order = new Order
+            {
+                OrderNumber = orderNumber,
+                UserId = userId,
+                AddressId = address.AddressId,
+                ItemsJson = itemsJson,
+                Subtotal = subtotal,
+                DiscountAmount = 0,
+                ShippingCost = 0,
+                TotalAmount = subtotal,
+                OrderStatus = "در حال پردازش",
+                PaymentStatus = "پرداخت در محل",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            foreach (var ci in cart.CartItems)
+            {
+                ci.Product.StockQuantity -= ci.Quantity;
+                if (ci.Product.StockQuantity < 0)
+                {
+                    ci.Product.StockQuantity = 0;
+                }
+            }
+
+            db.CartItems.RemoveRange(cart.CartItems);
+            db.Carts.Remove(cart);
+
+            db.Orders.Add(order);
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = $"سفارش شما با موفقیت ثبت شد! شماره سفارش: {orderNumber}";
+            return RedirectToAction("OrderSuccess", new { id = order.OrderId });
+        }
+
+        public ActionResult OrderSuccess(int id)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            int userId = (int)Session["UserId"];
+            var order = db.Orders.Include("UserAddress").FirstOrDefault(o => o.OrderId == id && o.UserId == userId);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(order);
         }
         public ActionResult Wishlist()
         {
@@ -283,10 +449,96 @@ namespace Azimzadeh_MVC_project.Controllers
                 // 1. Seed Admin and Test Users
                 var usersToSeed = new[]
                 {
-                    new { FullName = "مدیر سیستم", Email = "admin@site.com", PasswordHash = "SEED_ADMIN_HASH" },
-                    new { FullName = "علی محمدی", Email = "ali@gmail.com", PasswordHash = "SEED_USER_HASH" },
-                    new { FullName = "مریم احمدی", Email = "maryam@gmail.com", PasswordHash = "SEED_USER_HASH" },
-                    new { FullName = "رضا رضایی", Email = "reza@gmail.com", PasswordHash = "SEED_USER_HASH" }
+                    new { 
+                        FullName = "مدیر سیستم", 
+                        Email = "admin@site.com", 
+                        PasswordHash = "SEED_ADMIN_HASH", 
+                        FirstName = "مدیر", 
+                        LastName = "سیستم",
+                        PhoneNumber = "09121111111",
+                        HomePhoneNumber = "+98-2188888888",
+                        Address1 = "تهران، میدان ونک، خیابان ملاصدرا",
+                        Address2 = "پلاک ۲۴، واحد ۵",
+                        CardNumber = "6037991811111111",
+                        CVV = "111",
+                        ExpirationDate = "01/30",
+                        Gender = "آقا"
+                    },
+                    new { 
+                        FullName = "علی محمدی", 
+                        Email = "ali@gmail.com", 
+                        PasswordHash = "SEED_USER_HASH", 
+                        FirstName = "علی", 
+                        LastName = "محمدی",
+                        PhoneNumber = "09122222222",
+                        HomePhoneNumber = "+98-2112345678",
+                        Address1 = "تهران، خیابان آزادی، کوچه نوبهار",
+                        Address2 = "پلاک ۱۲، طبقه ۳",
+                        CardNumber = "6037991822222222",
+                        CVV = "222",
+                        ExpirationDate = "12/28",
+                        Gender = "آقا"
+                    },
+                    new { 
+                        FullName = "مریم احمدی", 
+                        Email = "maryam@gmail.com", 
+                        PasswordHash = "SEED_USER_HASH", 
+                        FirstName = "مریم", 
+                        LastName = "احمدی",
+                        PhoneNumber = "09133333333",
+                        HomePhoneNumber = "+98-3134567890",
+                        Address1 = "اصفهان، خیابان چهارباغ بالا، مجتمع باغ نظر",
+                        Address2 = "واحد 102",
+                        CardNumber = "5022291033333333",
+                        CVV = "333",
+                        ExpirationDate = "09/30",
+                        Gender = "خانم"
+                    },
+                    new { 
+                        FullName = "رضا رضایی", 
+                        Email = "reza@gmail.com", 
+                        PasswordHash = "SEED_USER_HASH", 
+                        FirstName = "رضا", 
+                        LastName = "رضایی",
+                        PhoneNumber = "09144444444",
+                        HomePhoneNumber = "+98-4133333333",
+                        Address1 = "تبریز، ولیعصر، خیابان شریعتی",
+                        Address2 = "",
+                        CardNumber = "5892101144444444",
+                        CVV = "444",
+                        ExpirationDate = "05/27",
+                        Gender = "آقا"
+                    },
+                    new { 
+                        FullName = "مدیر کل", 
+                        Email = "admin@example.com", 
+                        PasswordHash = "SEED_ADMIN_HASH", 
+                        FirstName = "مدیر", 
+                        LastName = "کل",
+                        PhoneNumber = "09120000000",
+                        HomePhoneNumber = "",
+                        Address1 = "",
+                        Address2 = "",
+                        CardNumber = "",
+                        CVV = "",
+                        ExpirationDate = "",
+                        Gender = "آقا"
+                    },
+                    new { 
+                        FullName = "مشتری نمونه", 
+                        Email = "customer@example.com", 
+                        PasswordHash = "SEED_USER_HASH", 
+                        FirstName = "مشتری", 
+                        LastName = "نمونه",
+                        PhoneNumber = "09129999999",
+                        HomePhoneNumber = "",
+                        Address1 = "",
+                        Address2 = "",
+                        CardNumber = "",
+                        CVV = "",
+                        ExpirationDate = "",
+                        Gender = "آقا"
+                    }
                 };
                 var dbUsers = new List<User>();
                 foreach (var u in usersToSeed)
@@ -296,13 +548,31 @@ namespace Azimzadeh_MVC_project.Controllers
                     {
                         dbUser = new User
                         {
-                            FullName = u.FullName,
                             Email = u.Email,
                             PasswordHash = u.PasswordHash,
                             IsActive = true,
-                            CreatedAt = DateTime.Now
+                            CreatedAt = DateTime.Now,
+                            FullName = u.FullName,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            PhoneNumber = string.IsNullOrEmpty(u.PhoneNumber) ? null : u.PhoneNumber,
+                            HomePhoneNumber = string.IsNullOrEmpty(u.HomePhoneNumber) ? null : u.HomePhoneNumber,
+                            Address1 = string.IsNullOrEmpty(u.Address1) ? null : u.Address1,
+                            Address2 = string.IsNullOrEmpty(u.Address2) ? null : u.Address2,
+                            CardNumber = string.IsNullOrEmpty(u.CardNumber) ? null : u.CardNumber,
+                            CVV = string.IsNullOrEmpty(u.CVV) ? null : u.CVV,
+                            ExpirationDate = string.IsNullOrEmpty(u.ExpirationDate) ? null : u.ExpirationDate,
+                            Gender = string.IsNullOrEmpty(u.Gender) ? null : u.Gender
                         };
                         db.Users.Add(dbUser);
+                        db.SaveChanges();
+                    }
+                    
+                    string targetRoleName = u.Email.Contains("admin") ? "Admin" : "Customer";
+                    var role = db.Roles.FirstOrDefault(r => r.RoleName == targetRoleName);
+                    if (role != null && !dbUser.Roles.Any(r => r.RoleId == role.RoleId))
+                    {
+                        dbUser.Roles.Add(role);
                         db.SaveChanges();
                     }
                     dbUsers.Add(dbUser);
@@ -485,22 +755,35 @@ namespace Azimzadeh_MVC_project.Controllers
             return HashPassword(inputPassword) == storedHash;
         }
 
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             if (Session["UserId"] != null)
             {
+                int userId = (int)Session["UserId"];
+                var user = db.Users.Find(userId);
+                if (user != null && user.IsActive && user.Roles.Any(r => r.RoleName == "Admin"))
+                {
+                    Session["IsAdmin"] = true;
+                }
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
                 return RedirectToAction("Account");
             }
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(string email, string password)
+        public ActionResult Login(string email, string password, string returnUrl)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 TempData["ErrorMessage"] = "لطفاً تمامی فیلدها را پر کنید.";
+                ViewBag.ReturnUrl = returnUrl;
                 return View();
             }
 
@@ -514,11 +797,33 @@ namespace Azimzadeh_MVC_project.Controllers
                 Session["UserId"] = user.UserId;
                 Session["FullName"] = user.FullName;
 
-                TempData["SuccessMessage"] = "خوش آمدید!";
-                return RedirectToAction("Account");
+                // Merge anonymous cart into logged-in user cart
+                MergeCarts(user.UserId, Session.SessionID);
+
+                bool isAdmin = user.Roles.Any(r => r.RoleName == "Admin");
+                if (isAdmin)
+                {
+                    Session["IsAdmin"] = true;
+                    TempData["SuccessMessage"] = "خوش آمدید به پنل مدیریت!";
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "خوش آمدید!";
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Account");
+                }
             }
 
             TempData["ErrorMessage"] = "ایمیل یا رمز عبور اشتباه است.";
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -574,6 +879,9 @@ namespace Azimzadeh_MVC_project.Controllers
 
             Session["UserId"] = newUser.UserId;
             Session["FullName"] = newUser.FullName;
+
+            // Merge anonymous cart into registered user cart
+            MergeCarts(newUser.UserId, Session.SessionID);
 
             TempData["SuccessMessage"] = "ثبت نام شما با موفقیت انجام شد!";
             return RedirectToAction("Account");
@@ -752,6 +1060,267 @@ namespace Azimzadeh_MVC_project.Controllers
 
             TempData["SuccessMessage"] = "اطلاعات حساب کاربری شما با موفقیت بروزرسانی شد.";
             return RedirectToAction("Account");
+        }
+
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            
+            int cartCount = 0;
+            decimal cartSubtotal = 0;
+            List<CartItem> cartItems = new List<CartItem>();
+            
+            try
+            {
+                Cart cart = null;
+                if (Session["UserId"] != null)
+                {
+                    int userId = (int)Session["UserId"];
+                    cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+                }
+                else
+                {
+                    string sessionId = Session.SessionID;
+                    cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+                }
+                
+                if (cart != null)
+                {
+                    cartItems = cart.CartItems.ToList();
+                    cartCount = cartItems.Sum(ci => ci.Quantity);
+                    cartSubtotal = cartItems.Sum(ci => ci.Quantity * ci.UnitPrice);
+                }
+            }
+            catch { }
+            
+            ViewBag.HeaderCartItems = cartItems;
+            ViewBag.HeaderCartCount = cartCount;
+            ViewBag.HeaderCartSubtotal = cartSubtotal;
+        }
+
+        private Cart GetOrCreateCart()
+        {
+            Cart cart = null;
+            if (Session["UserId"] != null)
+            {
+                int userId = (int)Session["UserId"];
+                cart = db.Carts.FirstOrDefault(c => c.UserId == userId);
+                if (cart == null)
+                {
+                    string sessionId = Session.SessionID;
+                    cart = db.Carts.FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+                    if (cart != null)
+                    {
+                        cart.UserId = userId;
+                        cart.UpdatedAt = DateTime.Now;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        cart = new Cart
+                        {
+                            UserId = userId,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        };
+                        db.Carts.Add(cart);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                string sessionId = Session.SessionID;
+                cart = db.Carts.FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+                if (cart == null)
+                {
+                    cart = new Cart
+                    {
+                        SessionId = sessionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+                    db.Carts.Add(cart);
+                    db.SaveChanges();
+                }
+            }
+            return cart;
+        }
+
+        private void MergeCarts(int userId, string sessionId)
+        {
+            try
+            {
+                var anonCart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+                if (anonCart != null && anonCart.CartItems.Any())
+                {
+                    var userCart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+                    if (userCart == null)
+                    {
+                        anonCart.UserId = userId;
+                        anonCart.SessionId = null;
+                        anonCart.UpdatedAt = DateTime.Now;
+                    }
+                    else
+                    {
+                        foreach (var anonItem in anonCart.CartItems.ToList())
+                        {
+                            var existingItem = userCart.CartItems.FirstOrDefault(ci => ci.ProductId == anonItem.ProductId);
+                            if (existingItem != null)
+                            {
+                                existingItem.Quantity += anonItem.Quantity;
+                                if (existingItem.Quantity > existingItem.Product.StockQuantity)
+                                {
+                                    existingItem.Quantity = existingItem.Product.StockQuantity;
+                                }
+                            }
+                            else
+                            {
+                                anonItem.CartId = userCart.CartId;
+                            }
+                        }
+                        db.Carts.Remove(anonCart);
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch { }
+        }
+
+        [HttpPost]
+        public ActionResult AddToCart(int productId, int quantity = 1)
+        {
+            var product = db.Products.Find(productId);
+            if (product == null || product.StockQuantity <= 0)
+            {
+                TempData["ErrorMessage"] = "محصول مورد نظر موجود نیست یا یافت نشد.";
+                return RedirectToAction("Product", new { id = productId });
+            }
+
+            var cart = GetOrCreateCart();
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+            
+            int targetQuantity = quantity;
+            if (cartItem != null)
+            {
+                targetQuantity += cartItem.Quantity;
+            }
+
+            if (targetQuantity > product.StockQuantity)
+            {
+                TempData["ErrorMessage"] = $"تعداد درخواستی بیشتر از موجودی انبار است. حداکثر موجودی: {product.StockQuantity}";
+                return RedirectToAction("Product", new { id = productId });
+            }
+
+            decimal priceToUse = product.DiscountPrice ?? product.Price;
+
+            if (cartItem == null)
+            {
+                cartItem = new CartItem
+                {
+                    CartId = cart.CartId,
+                    ProductId = productId,
+                    Quantity = quantity,
+                    UnitPrice = priceToUse
+                };
+                db.CartItems.Add(cartItem);
+            }
+            else
+            {
+                cartItem.Quantity = targetQuantity;
+                cartItem.UnitPrice = priceToUse;
+            }
+
+            cart.UpdatedAt = DateTime.Now;
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = "محصول با موفقیت به سبد خرید اضافه شد.";
+            return RedirectToAction("Cart");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateCart(FormCollection form)
+        {
+            Cart cart = null;
+            if (Session["UserId"] != null)
+            {
+                int userId = (int)Session["UserId"];
+                cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.UserId == userId);
+            }
+            else
+            {
+                string sessionId = Session.SessionID;
+                cart = db.Carts.Include("CartItems.Product").FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+            }
+
+            if (cart == null)
+            {
+                return RedirectToAction("Cart");
+            }
+
+            foreach (var key in form.AllKeys)
+            {
+                if (key.StartsWith("quantity["))
+                {
+                    string idStr = key.Replace("quantity[", "").Replace("]", "");
+                    if (int.TryParse(idStr, out int itemId) && int.TryParse(form[key], out int qty))
+                    {
+                        var item = cart.CartItems.FirstOrDefault(ci => ci.CartItemId == itemId);
+                        if (item != null)
+                        {
+                            if (qty <= 0)
+                            {
+                                db.CartItems.Remove(item);
+                            }
+                            else
+                            {
+                                if (qty > item.Product.StockQuantity)
+                                {
+                                    TempData["ErrorMessage"] = $"تعداد درخواستی برای '{item.Product.Title}' بیشتر از موجودی انبار است. موجودی: {item.Product.StockQuantity}";
+                                    qty = item.Product.StockQuantity;
+                                }
+                                item.Quantity = qty;
+                            }
+                        }
+                    }
+                }
+            }
+
+            cart.UpdatedAt = DateTime.Now;
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = "سبد خرید با موفقیت بروزرسانی شد.";
+            return RedirectToAction("Cart");
+        }
+
+        public ActionResult RemoveFromCart(int id)
+        {
+            Cart cart = null;
+            if (Session["UserId"] != null)
+            {
+                int userId = (int)Session["UserId"];
+                cart = db.Carts.FirstOrDefault(c => c.UserId == userId);
+            }
+            else
+            {
+                string sessionId = Session.SessionID;
+                cart = db.Carts.FirstOrDefault(c => c.SessionId == sessionId && c.UserId == null);
+            }
+
+            if (cart != null)
+            {
+                var item = db.CartItems.FirstOrDefault(ci => ci.CartItemId == id && ci.CartId == cart.CartId);
+                if (item != null)
+                {
+                    db.CartItems.Remove(item);
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = "محصول از سبد خرید حذف شد.";
+                }
+            }
+
+            return RedirectToAction("Cart");
         }
 
         protected override void Dispose(bool disposing)

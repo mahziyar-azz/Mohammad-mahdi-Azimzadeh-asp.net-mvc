@@ -1,0 +1,76 @@
+@model List<Azimzadeh_MVC_project.Models.Order>
+@{
+    ViewBag.Title = "مدیریت سفارشات";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-shopping-cart"></i> مدیریت سفارشات &nbsp;<span class="badge bg-primary">@ViewBag.Total</span>
+            </header>
+            <div class="panel-body">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="alert alert-info text-center">هیچ سفارشی یافت نشد.</div>
+                }
+                else
+                {
+                    <table class="table table-striped table-hover table-advance">
+                        <thead>
+                            <tr>
+                                <th>شماره سفارش</th>
+                                <th>مشتری</th>
+                                <th>مبلغ کل</th>
+                                <th>وضعیت سفارش</th>
+                                <th>روش پرداخت</th>
+                                <th>تاریخ ثبت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                string badgeClass = "label label-warning";
+                                if (order.OrderStatus == "تحویل شده") { badgeClass = "label label-success"; }
+                                else if (order.OrderStatus == "لغو شده") { badgeClass = "label label-danger"; }
+                                else if (order.OrderStatus == "ارسال شده") { badgeClass = "label label-info"; }
+                                
+                                <tr>
+                                    <td><strong>@order.OrderNumber</strong></td>
+                                    <td>@(order.User != null ? order.User.FullName : "کاربر ناشناس")</td>
+                                    <td>@order.TotalAmount.ToString("N0") ریال</td>
+                                    <td>
+                                        <span class="@badgeClass">@order.OrderStatus</span>
+                                    </td>
+                                    <td>@order.PaymentStatus</td>
+                                    <td>@order.CreatedAt.ToString("yyyy/MM/dd HH:mm")</td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Orders", new { area = "Admin", id = order.OrderId })" class="btn btn-primary btn-xs" title="جزئیات و تغییر وضعیت">
+                                            <i class="icon-eye-open"></i> مشاهده و ویرایش
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @* Pagination *@
+                @if (ViewBag.TotalPages != null && (int)ViewBag.TotalPages > 1)
+                {
+                    <div class="text-center">
+                        <ul class="pagination pagination-sm">
+                            @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
+                            {
+                                <li class="@(p == (int)ViewBag.CurrentPage ? "active" : "")">
+                                    <a href="@Url.Action("Index", new { page = p })">@p</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

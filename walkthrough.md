@@ -143,7 +143,8 @@ Added comprehensive profile details and credit card fields across the storefront
    - Implemented strict backend regular expression and format validations.
 3. **Admin User Profile Editing (`/Admin/Users/Edit/id`)**:
    - Added an **Edit** page using the FlatLab admin template style.
-   - Allows system administrators to view, audit, and modify any user's profile details, addresses, and payment card details, as well as change passwords.
+   - All fields (First/Last Name, Gender, Email, Phones, Addresses, Card details) are bound to the `@Model` and populate automatically with the user's existing records.
+   - Enhanced the DB Seeder (`/Home/SeedBlogs`) to overwrite corrupt Farsi characters and seed complete profile fields (addresses, billing details, phone numbers, genders) for test users to allow visual confirmation of field pre-population.
 4. **PCI-DSS Compliance warning**:
    - **Requires Legal/Security Review**: Storing raw credit card details (PAN, CVV, Expiration) in a local SQL database violates PCI-DSS security standards. In a production environment, payment card tokenization (e.g. Stripe, PayPal, Braintree) must be utilized.
 

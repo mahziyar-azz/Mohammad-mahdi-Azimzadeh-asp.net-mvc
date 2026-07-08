@@ -1,4 +1,4 @@
-﻿     
+@model Azimzadeh_MVC_project.Models.Cart
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area pt-60 pb-55 pt-sm-30 pb-sm-20">
             <div class="container">
@@ -18,84 +18,98 @@
                <h2 class="text-capitalize sub-heading">سبد خرید</h2>
                 <div class="row">
                     <div class="col-md-12">
-                        <!-- Form Start -->
-                        <form action="#">
-                            <!-- Table Content Start -->
-                            <div class="table-content table-responsive mb-50">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th class="product-thumbnail">تصویر</th>
-                                            <th class="product-name">محصول</th>
-                                            <th class="product-price">قیمت</th>
-                                            <th class="product-quantity">تعداد</th>
-                                            <th class="product-subtotal">مجموع</th>
-                                            <th class="product-remove">حذف</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img src="/assets/img/products/1.jpg" alt="cart-image" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">نام محصول در اینجا</a></td>
-                                            <td class="product-price"><span class="amount">165.00 ریال</span></td>
-                                            <td class="product-quantity"><input type="number" value="1" /></td>
-                                            <td class="product-subtotal">165.00 ریال</td>
-                                            <td class="product-remove"> <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img src="/assets/img/products/2.jpg" alt="cart-image" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">نام محصول در اینجا</a></td>
-                                            <td class="product-price"><span class="amount">50.00 ریال</span></td>
-                                            <td class="product-quantity"><input type="number" value="1" /></td>
-                                            <td class="product-subtotal">50.00 ریال</td>
-                                            <td class="product-remove"> <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        @if (Model == null || Model.CartItems == null || !Model.CartItems.Any())
+                        {
+                            <div class="alert alert-info text-center" style="padding: 30px; font-size: 18px; border-radius: 8px;">
+                                <i class="fa fa-shopping-cart" style="font-size: 36px; display: block; margin-bottom: 15px; color: #a0aec0;"></i>
+                                سبد خرید شما در حال حاضر خالی است. 
+                                <br />
+                                <a href="/Home/Shop" class="btn btn-primary" style="margin-top: 15px; background: #febf14; border: none; color: #2d3748; padding: 8px 24px; font-weight: bold; border-radius: 5px;">مشاهده فروشگاه</a>
                             </div>
-                            <!-- Table Content Start -->
-                            <div class="row">
-                               <!-- Cart Button Start -->
-                                <div class="col-lg-8 col-md-7">
-                                    <div class="buttons-cart">
-                                        <input type="submit" value="بروزرسانی سبد خرید" />
-                                        <a href="/Home/Shop">ادامه خرید</a>
-                                    </div>
-                                </div>
-                                <!-- Cart Button Start -->
-                                <!-- Cart Totals Start -->
-                                <div class="col-lg-4 col-md-12">
-                                    <div class="cart_totals">
-                                        <h2>مجموع سبد خرید</h2>
-                                        <br />
-                                        <table>
-                                            <tbody>
-                                                <tr class="cart-subtotal">
-                                                    <th>جمع جزء</th>
-                                                    <td><span class="amount">215.00 ریال</span></td>
-                                                </tr>
-                                                <tr class="order-total">
-                                                    <th>جمع کل</th>
-                                                    <td>
-                                                        <strong><span class="amount">215.00 ریال</span></strong>
+                        }
+                        else
+                        {
+                            <!-- Form Start -->
+                            <form action="/Home/UpdateCart" method="post">
+                                @Html.AntiForgeryToken()
+                                <!-- Table Content Start -->
+                                <div class="table-content table-responsive mb-50">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="product-thumbnail">تصویر</th>
+                                                <th class="product-name">محصول</th>
+                                                <th class="product-price">قیمت واحد</th>
+                                                <th class="product-quantity">تعداد</th>
+                                                <th class="product-subtotal">مجموع</th>
+                                                <th class="product-remove">حذف</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.CartItems)
+                                            {
+                                                var mainImage = item.Product.ProductImages.OrderBy(pi => pi.DisplayOrder).FirstOrDefault()?.ImagePath ?? "/assets/img/products/1.jpg";
+                                                <tr>
+                                                    <td class="product-thumbnail">
+                                                        <a href="/Home/Product?id=@item.ProductId"><img src="@mainImage" alt="@item.Product.Title" /></a>
+                                                    </td>
+                                                    <td class="product-name"><a href="/Home/Product?id=@item.ProductId">@item.Product.Title</a></td>
+                                                    <td class="product-price"><span class="amount">@item.UnitPrice.ToString("N0") ریال</span></td>
+                                                    <td class="product-quantity">
+                                                        <input type="number" name="quantity[@item.CartItemId]" value="@item.Quantity" min="1" max="@item.Product.StockQuantity" style="width: 70px; text-align: center; padding: 5px; border: 1px solid #cbd5e0; border-radius: 6px; font-weight: bold; color: #2d3748;" />
+                                                    </td>
+                                                    <td class="product-subtotal">@((item.Quantity * item.UnitPrice).ToString("N0")) ریال</td>
+                                                    <td class="product-remove"> 
+                                                        <a href="/Home/RemoveFromCart?id=@item.CartItemId" onclick="return confirm('آیا از حذف این کالا اطمینان دارید؟');"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                     </td>
                                                 </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="wc-proceed-to-checkout">
-                                            <a href="/Home/Checkout">ادامه جهت تسویه حساب</a>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Table Content Start -->
+                                <div class="row">
+                                   <!-- Cart Button Start -->
+                                    <div class="col-lg-8 col-md-7">
+                                        <div class="buttons-cart">
+                                            <input type="submit" value="بروزرسانی سبد خرید" />
+                                            <a href="/Home/Shop">ادامه خرید</a>
                                         </div>
                                     </div>
+                                    <!-- Cart Button Start -->
+                                    <!-- Cart Totals Start -->
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="cart_totals">
+                                            <h2>مجموع سبد خرید</h2>
+                                            <br />
+                                            <table>
+                                                <tbody>
+                                                    @{
+                                                        decimal subtotal = Model.CartItems.Sum(ci => ci.Quantity * ci.UnitPrice);
+                                                    }
+                                                    <tr class="cart-subtotal">
+                                                        <th>جمع جزء</th>
+                                                        <td><span class="amount">@subtotal.ToString("N0") ریال</span></td>
+                                                    </tr>
+                                                    <tr class="order-total">
+                                                        <th>جمع کل</th>
+                                                        <td>
+                                                            <strong><span class="amount">@subtotal.ToString("N0") ریال</span></strong>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="wc-proceed-to-checkout">
+                                                <a href="/Home/Checkout">ادامه جهت تسویه حساب</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Cart Totals End -->
                                 </div>
-                                <!-- Cart Totals End -->
-                            </div>
-                            <!-- Row End -->
-                        </form>
-                        <!-- Form End -->
+                                <!-- Row End -->
+                            </form>
+                            <!-- Form End -->
+                        }
                     </div>
                 </div>
                  <!-- Row End -->

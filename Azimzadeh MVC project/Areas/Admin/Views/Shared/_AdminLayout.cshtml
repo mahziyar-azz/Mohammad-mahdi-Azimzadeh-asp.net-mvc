@@ -1,4 +1,34 @@
-<!DOCTYPE html>
+@{
+    bool authorized = false;
+    if (Session["UserId"] != null)
+    {
+        int userId = (int)Session["UserId"];
+        using (var db = new Azimzadeh_MVC_project.Models.AzimzadehStoreDbEntities())
+        {
+            var user = db.Users.Find(userId);
+            if (user != null && user.IsActive && user.Roles.Any(r => r.RoleName == "Admin"))
+            {
+                authorized = true;
+                Session["IsAdmin"] = true;
+            }
+        }
+    }
+
+    if (!authorized)
+    {
+        if (Session["UserId"] == null)
+        {
+            Context.Response.Redirect("/Home/Login?returnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery));
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "شما دسترسی به پنل مدیریت ندارید.";
+            Context.Response.Redirect("/Home/Index");
+        }
+        Context.Response.End();
+        return;
+    }
+}<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8">
@@ -78,14 +108,14 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <img alt="" src="/assets/admin/img/avatar1_small.jpg">
-                            <span class="username">مدیر سیستم</span>
+                            <span class="username">@(Session["FullName"] ?? "مدیر سیستم")</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">
                             <div class="log-arrow-up"></div>
                             <li><a href="/"><i class="icon-home"></i>مشاهده فروشگاه</a></li>
                             <li><a href="#"><i class="icon-cog"></i>تنظیمات</a></li>
-                            <li><a href="/"><i class="icon-key"></i>خروج</a></li>
+                            <li><a href="/Home/Logout"><i class="icon-key"></i>خروج</a></li>
                         </ul>
                     </li>
                     <!-- user login dropdown end -->
@@ -105,7 +135,7 @@
                             <span>داشبورد اصلی</span>
                         </a>
                     </li>
-                    <li class="sub-menu @(Request.RequestContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")">
+                    <li class="sub-menu @(new[]{"Products","Orders"}.Contains(Request.RequestContext.RouteData.Values["controller"].ToString()) ? "active" : "")">
                         <a href="javascript:;" class="">
                             <i class="icon-shopping-cart"></i>
                             <span>مدیریت فروشگاه</span>
@@ -114,6 +144,9 @@
                         <ul class="sub">
                             <li class="@(Request.RequestContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")">
                                 <a href="/Admin/Products">محصولات</a>
+                            </li>
+                            <li class="@(Request.RequestContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")">
+                                <a href="/Admin/Orders">سفارشات خرید</a>
                             </li>
                         </ul>
                     </li>

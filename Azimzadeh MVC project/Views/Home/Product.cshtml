@@ -1,4 +1,4 @@
-﻿@model Azimzadeh_MVC_project.Models.Product
+@model Azimzadeh_MVC_project.Models.Product
 
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area ptb-60 ptb-sm-30">
@@ -117,9 +117,10 @@
                                 </p>
                             </div>
                              <div class="box-quantity mb-30">
-                                 <form action="#" style="display: flex; align-items: center; gap: 15px;">
-                                     <input class="form-control-modern number" id="numeric" type="number" min="1" value="1" style="width: 80px; text-align: center;">
-                                     <a class="btn-modern btn-primary-modern add-cart" href="/Home/Cart"><i class="fa fa-shopping-cart"></i> افزودن به سبد خرید</a>
+                                 <form action="/Home/AddToCart" method="post" style="display: flex; align-items: center; gap: 15px;">
+                                     <input type="hidden" name="productId" value="@Model.ProductId" />
+                                     <input class="form-control-modern number" id="numeric" name="quantity" type="number" min="1" value="1" style="width: 80px; text-align: center;">
+                                     <button type="submit" class="btn-modern btn-primary-modern add-cart" style="border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"><i class="fa fa-shopping-cart"></i> افزودن به سبد خرید</button>
                                      <a class="btn-modern" href="/Home/Wishlist" style="background: #edf2f7; color: #4a5568;" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart-o"></i></a>
                                  </form>
                              </div>
