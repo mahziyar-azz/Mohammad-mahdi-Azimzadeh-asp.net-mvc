@@ -1,0 +1,62 @@
+@model Azimzadeh_MVC_project.Models.SiteSetting
+
+@{
+    ViewBag.Title = "ویرایش تنظیم";
+}
+
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+        <section class="panel">
+            <header class="panel-heading">
+                ویرایش تنظیم: @Model.Description (@Model.SettingKey)
+            </header>
+            
+            <div class="panel-body">
+                @using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { @class = "form-horizontal tasi-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.SettingId)
+                    @Html.HiddenFor(model => model.SettingKey)
+                    @Html.HiddenFor(model => model.Description)
+                    @Html.HiddenFor(model => model.ValueType)
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">کلید تنظیم</label>
+                        <div class="col-lg-9">
+                            <p class="form-control-static"><strong>@Model.SettingKey</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">توضیح</label>
+                        <div class="col-lg-9">
+                            <p class="form-control-static text-muted">@Model.Description</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("مقدار تنظیم", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @if (Model.ValueType == "textarea" || Model.SettingKey.Contains("Address") || Model.SettingKey.Contains("Embed") || Model.SettingValue?.Length > 100)
+                            {
+                                @Html.TextArea("settingValue", Model.SettingValue, new { @class = "form-control", rows = "5", required = "required" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("settingValue", Model.SettingValue, new { @class = "form-control", required = "required" })
+                            }
+                            @Html.ValidationMessage("settingValue", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-success">ثبت تغییرات</button>
+                            @Html.ActionLink("انصراف", "Index", null, new { @class = "btn btn-default" })
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

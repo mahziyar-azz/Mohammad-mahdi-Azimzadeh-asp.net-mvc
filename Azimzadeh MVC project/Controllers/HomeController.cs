@@ -901,6 +901,7 @@ namespace Azimzadeh_MVC_project.Controllers
 
         public ActionResult Error404()
         {
+            Response.StatusCode = 404;
             return View();
         }
 

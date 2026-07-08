@@ -18,7 +18,7 @@
     {
         if (Session["UserId"] == null)
         {
-            Context.Response.Redirect("/Home/Login?returnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery));
+            Context.Response.Redirect("/Admin/Login?returnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery));
         }
         else
         {
@@ -181,6 +181,12 @@
                         <a class="" href="/Admin/Users">
                             <i class="icon-user"></i>
                             <span>کاربران سیستم</span>
+                        </a>
+                    </li>
+                    <li class="@(Request.RequestContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
+                        <a class="" href="/Admin/Settings">
+                            <i class="icon-cog"></i>
+                            <span>تنظیمات سایت</span>
                         </a>
                     </li>
                     <li>
