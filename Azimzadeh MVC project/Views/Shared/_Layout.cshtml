@@ -48,6 +48,39 @@
     <!-- Modern Product Page Redesign CSS -->
     <link rel="stylesheet" href="/assets/css/product-redesign.css">
 
+    <!-- Premium Image & Text Shadow Design Overrides -->
+    <style>
+        /* Consistent image border-radius across site */
+        .pro-img img, 
+        .single-product img, 
+        .product-thumbnail img, 
+        .single-blog img, 
+        .blog-img img, 
+        .blog-details img, 
+        .side-product-list img,
+        .single-banner img {
+            border-radius: 8px !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Twice as large border-radius for landing page hero sliders */
+        .slider-wrapper, 
+        .nivoSlider, 
+        .nivoSlider img, 
+        .nivoSlider a {
+            border-radius: 16px !important;
+            overflow: hidden !important;
+        }
+
+        /* Subtle and elegant text shadow for slider overlays to improve readability */
+        .nivo-html-caption h1, 
+        .nivo-html-caption h4, 
+        .nivo-html-caption .title1, 
+        .nivo-html-caption .title2 {
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.45) !important;
+        }
+    </style>
+
     <!-- modernizr js -->
     <script src="/assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>

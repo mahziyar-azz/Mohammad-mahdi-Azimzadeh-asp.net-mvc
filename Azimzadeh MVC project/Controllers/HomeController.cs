@@ -14,7 +14,9 @@ namespace Azimzadeh_MVC_project.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var sliders = db.Sliders.Where(s => s.IsActive).OrderBy(s => s.DisplayOrder).ToList();
+            ViewBag.GalleryItems = db.Galleries.Where(g => g.IsActive).OrderBy(g => g.DisplayOrder).ToList();
+            return View(sliders);
         }
     
         public ActionResult About()
@@ -335,15 +337,21 @@ namespace Azimzadeh_MVC_project.Controllers
             return RedirectToAction("OrderSuccess", new { id = order.OrderId });
         }
 
-        public ActionResult OrderSuccess(int id)
+        public ActionResult OrderSuccess(int? id, int? orderId)
         {
             if (Session["UserId"] == null)
             {
                 return RedirectToAction("Login");
             }
 
+            int actualId = id ?? orderId ?? 0;
+            if (actualId == 0)
+            {
+                return HttpNotFound();
+            }
+
             int userId = (int)Session["UserId"];
-            var order = db.Orders.Include("UserAddress").FirstOrDefault(o => o.OrderId == id && o.UserId == userId);
+            var order = db.Orders.Include("UserAddress").FirstOrDefault(o => o.OrderId == actualId && o.UserId == userId);
             if (order == null)
             {
                 return HttpNotFound();
@@ -693,9 +701,59 @@ namespace Azimzadeh_MVC_project.Controllers
                     db.Comments.Add(comm);
                     commIdx++;
                 }
+
+                // 6. Seed Sliders if empty
+                if (!db.Sliders.Any())
+                {
+                    db.Sliders.Add(new Slider
+                    {
+                        Title = "ابزارآلات دستی\nاره برقی قدرتمند",
+                        Subtitle = "فروش ویژه",
+                        ButtonText = "هم‌اکنون خرید کنید",
+                        ButtonLink = "/Home/Shop",
+                        ImagePath = "/assets/img/slider/5.jpg",
+                        DisplayOrder = 1,
+                        IsActive = true
+                    });
+                    db.Sliders.Add(new Slider
+                    {
+                        Title = "ابزارآلات برقی\nبا کیفیت و دوام صنعتی",
+                        Subtitle = "تخفیف ویژه",
+                        ButtonText = "هم‌اکنون خرید کنید",
+                        ButtonLink = "/Home/Shop",
+                        ImagePath = "/assets/img/slider/6.jpg",
+                        DisplayOrder = 2,
+                        IsActive = true
+                    });
+                }
+
+                // 7. Seed Gallery if empty
+                if (!db.Galleries.Any())
+                {
+                    db.Galleries.Add(new Gallery
+                    {
+                        Title = "شلوار جین مردانه",
+                        Description = "شلوار جین مردانه با کیفیت ممتاز",
+                        ImagePath = "/assets/img/banner/men_jeans_banner.png",
+                        DisplayOrder = 1,
+                        IsActive = true,
+                        CreatedAt = DateTime.Now
+                    });
+                    db.Galleries.Add(new Gallery
+                    {
+                        Title = "کلاه زنانه",
+                        Description = "کلاه زنانه شیک و مجلسی",
+                        ImagePath = "/assets/img/banner/woman_hats_banner.png",
+                        DisplayOrder = 2,
+                        IsActive = true,
+                        CreatedAt = DateTime.Now
+                    });
+                }
                 db.SaveChanges();
 
-                return Content($"Successfully seeded {dbUsers.Count} Users, {seededPosts.Count} Blog Posts, and {commIdx - 1} Comments (Blogs/Products).");
+                int sliderCount = db.Sliders.Count();
+                int galleryCount = db.Galleries.Count();
+                return Content($"Successfully seeded {dbUsers.Count} Users, {seededPosts.Count} Blog Posts, {commIdx - 1} Comments, {sliderCount} Sliders, and {galleryCount} Gallery Items.");
             }
             catch (Exception ex)
             {
@@ -914,7 +972,10 @@ namespace Azimzadeh_MVC_project.Controllers
             }
 
             int userId = (int)Session["UserId"];
-            var user = db.Users.Find(userId);
+            var user = db.Users
+                .Include(u => u.Orders)
+                .Include(u => u.Roles)
+                .FirstOrDefault(u => u.UserId == userId);
             if (user == null || !user.IsActive)
             {
                 Session.Clear();

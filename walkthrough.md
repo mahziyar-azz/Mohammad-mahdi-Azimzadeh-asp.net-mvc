@@ -131,6 +131,35 @@ Connected the storefront's login, registration, and user account/profile pages t
    - Shows user's real name, email, phone number, and custom information dynamically loaded from the database.
    - Supports editing profile information (name, phone, and optional password changes verifying current password) via standard POST operations with anti-forgery protection.
 
+### 6. Global 404 (Not Found) Error Handler
+- **`Global.asax.cs`**
+  - Added the `Application_Error` exception handler to capture all HTTP 404 exceptions at the MVC pipeline level and execute the `Error404` action of `HomeController` dynamically.
+- **`HomeController.cs`**
+  - Updated the `Error404` action to set `Response.StatusCode = 404` directly, ensuring the correct HTTP status code is returned to the user instead of a 200 OK.
+- **`Web.config`**
+  - Added a `<system.webServer>/<httpErrors>` block configured to map IIS-level HTTP 404 status codes (e.g. invalid static files or non-MVC directories) directly to `/Home/Error404` using the `ExecuteURL` response mode.
+
+### 7. Dynamic Landing Page Slider
+- **`HomeController.cs` (Seeder & Index Action)**
+  - Updated the database seeder `SeedBlogs()` to insert default active slider items into the `Sliders` table if the table is empty.
+  - Modified the home page `Index` action to query all active sliders from the database ordered by their display order.
+- **`Index.cshtml` (Storefront Home View)**
+  - Updated the view model definition to accept a collection of `Slider` models.
+  - Integrated a dynamic loop to render slider background images and HTML caption overlays, with a graceful hardcoded layout fallback in case no database records are found.
+  - Wrapped the dynamic banner grid inside a premium **"Summer Offers" (پیشنهادهای تابستانه)** themed container, featuring a warm border, hover-lift transitions, soft shadows, and a floating badge with a rotating sun icon.
+- **`_Layout.cshtml` (Storefront Master Layout)**
+  - Added a global style overrides block to consistently round all site content images (products, blog posts, banners, list thumbnails) with a modern `8px` border-radius.
+  - Double-rounded the landing page sliders and hero banners with a `16px` border-radius for an ultra-premium layout.
+  - Applied subtle, elegant text shadows (`text-shadow`) to the slider text overlays, greatly enhancing readability against dynamic background graphics.
+- **`Account.cshtml` (User Dashboard View)**
+  - Linked the static dashboard text blocks to trigger their respective tab navigations dynamically via Javascript bootstrap tabs on click.
+  - Replaced the hardcoded static address display placeholders with dynamic values mapped to the logged-in user (`Address1`, `Address2`, `FullName`, `PhoneNumber`, and `HomePhoneNumber`).
+  - Rewrote the Orders tab to fetch and display the user's real purchase orders directly from the database with active status labels and invoice links.
+
+## Verification
+- Verified compilation and build success with 0 warnings or errors using MSBuild.
+- Configured clean redirection paths and confirmed correct routing maps.
+
 ---
 
 ## 10. Extended User Profile & Payment card Information

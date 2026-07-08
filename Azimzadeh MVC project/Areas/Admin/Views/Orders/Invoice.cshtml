@@ -1,0 +1,172 @@
+@model Azimzadeh_MVC_project.Models.Order
+@{
+    ViewBag.Title = "فاکتور رسمی سفارش " + Model.OrderNumber;
+    
+    var items = new List<Azimzadeh_MVC_project.Models.OrderItemViewModel>();
+    if (!string.IsNullOrEmpty(Model.ItemsJson))
+    {
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        items = serializer.Deserialize<List<Azimzadeh_MVC_project.Models.OrderItemViewModel>>(Model.ItemsJson) ?? new List<Azimzadeh_MVC_project.Models.OrderItemViewModel>();
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <div class="panel-body">
+                <!-- Print area start -->
+                <div id="invoice-print-area">
+                    <div class="row invoice-list" style="margin-bottom: 30px;">
+                        <div class="text-center corporate-id" style="margin-bottom: 20px;">
+                            <h2 style="font-family: 'yekan', sans-serif; color: #ff9800; font-weight: bold; margin: 10px 0;">فروشگاه اینترنتی ابزارآلات عظیم‌زاده</h2>
+                            <p style="color: #718096; font-size: 13px;">ارائه دهنده برترین برندهای ابزارآلات صنعتی و کارگاهی</p>
+                        </div>
+                        <hr style="border-top: 2px solid #ff9800; margin-top: 10px; margin-bottom: 30px;" />
+                        
+                        <div class="col-md-4 col-sm-4 text-right">
+                            <h4 style="color: #ff9800; font-family: 'yekan', sans-serif; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">اطلاعات پرداخت‌کننده</h4>
+                            <p style="line-height: 1.8; font-size: 13px;">
+                                <strong>نام مشتری:</strong> @(Model.User != null ? Model.User.FullName : "کاربر ناشناس")
+                                <br>
+                                <strong>ایمیل:</strong> @(Model.User != null ? Model.User.Email : "-")
+                                <br>
+                                <strong>تلفن همراه:</strong> @(Model.User != null ? Model.User.PhoneNumber : "-")
+                            </p>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-4 text-right">
+                            <h4 style="color: #ff9800; font-family: 'yekan', sans-serif; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">آدرس و مشخصات ارسال</h4>
+                            <p style="line-height: 1.8; font-size: 13px;">
+                                @if (Model.UserAddress != null)
+                                {
+                                    <span><strong>استان / شهر:</strong> @Model.UserAddress.Province / @Model.UserAddress.City</span><br>
+                                    <span><strong>آدرس پستی:</strong> @Model.UserAddress.FullAddress</span><br>
+                                    <span><strong>کد پستی:</strong> @Model.UserAddress.PostalCode</span>
+                                }
+                                else
+                                {
+                                    <span>مشخصات آدرس ثبت نشده است.</span>
+                                }
+                            </p>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-4 text-right">
+                            <h4 style="color: #ff9800; font-family: 'yekan', sans-serif; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">اطلاعات فاکتور</h4>
+                            <ul class="unstyled" style="list-style: none; padding-right: 0; line-height: 1.8; font-size: 13px;">
+                                <li>شماره فاکتور: <strong>@Model.OrderNumber</strong></li>
+                                <li>تاریخ ثبت فاکتور: @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</li>
+                                <li>روش پرداخت: @Model.PaymentStatus</li>
+                                <li>وضعیت سفارش: 
+                                    @{
+                                        string statusColor = "#f0ad4e";
+                                        if (Model.OrderStatus == "تحویل شده" || Model.OrderStatus == "تکمیل شده") { statusColor = "#5cb85c"; }
+                                        else if (Model.OrderStatus == "لغو شده") { statusColor = "#d9534f"; }
+                                    }
+                                    <strong style="color: @statusColor;">@Model.OrderStatus</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped table-hover table-bordered" style="direction: rtl;">
+                        <thead>
+                            <tr style="background-color: #f7f9fa;">
+                                <th style="text-align: center; width: 8%;">#</th>
+                                <th style="text-align: right;">نام محصول / کالا</th>
+                                <th style="text-align: center; width: 12%;">تعداد</th>
+                                <th style="text-align: left; width: 18%;">قیمت واحد</th>
+                                <th style="text-align: left; width: 20%;">جمع جزء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int idx = 1; }
+                            @foreach (var item in items)
+                            {
+                                <tr>
+                                    <td style="text-align: center;">@idx</td>
+                                    <td style="text-align: right;"><strong>@item.Title</strong></td>
+                                    <td style="text-align: center;">@item.Quantity</td>
+                                    <td style="text-align: left;">@(((decimal)item.UnitPrice).ToString("N0")) ریال</td>
+                                    <td style="text-align: left;">@(((decimal)item.Total).ToString("N0")) ریال</td>
+                                </tr>
+                                idx++;
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5 pull-right" style="margin-top: 15px;">
+                            <table class="table table-bordered text-left" style="font-size: 14px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: right; width: 50%;"><strong>جمع کل اقلام:</strong></td>
+                                        <td style="text-align: left;">@Model.Subtotal.ToString("N0") ریال</td>
+                                    </tr>
+                                    @if (Model.DiscountAmount > 0)
+                                    {
+                                        <tr>
+                                            <td style="text-align: right; color: #d9534f;"><strong>تخفیف:</strong></td>
+                                            <td style="text-align: left; color: #d9534f;">@Model.DiscountAmount.ToString("N0") ریال</td>
+                                        </tr>
+                                    }
+                                    @if (Model.ShippingCost > 0)
+                                    {
+                                        <tr>
+                                            <td style="text-align: right;"><strong>هزینه ارسال:</strong></td>
+                                            <td style="text-align: left;">@Model.ShippingCost.ToString("N0") ریال</td>
+                                        </tr>
+                                    }
+                                    <tr style="background-color: #f7fafc; font-size: 16px;">
+                                        <td style="text-align: right; color: #e53e3e;"><strong>مبلغ قابل پرداخت:</strong></td>
+                                        <td style="text-align: left; color: #e53e3e; font-weight: bold;">@Model.TotalAmount.ToString("N0") ریال</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Print area end -->
+
+                <div class="text-center invoice-btn" style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                    <button class="btn btn-info btn-lg" onclick="printInvoice();"><i class="icon-print"></i> چاپ و پرینت فاکتور</button>
+                    <a href="@Url.Action("Details", new { id = Model.OrderId })" class="btn btn-default btn-lg"><i class="icon-arrow-left"></i> بازگشت به جزئیات سفارش</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function printInvoice() {
+            var printContents = document.getElementById('invoice-print-area').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            // Simple clean print style
+            var style = '<style>' +
+                        'body { font-family: "yekan", "Tahoma", sans-serif; direction: rtl; padding: 20px; }' +
+                        '.table { width: 100%; border-collapse: collapse; margin-top: 20px; }' +
+                        '.table th, .table td { border: 1px solid #cbd5e0; padding: 8px; font-size: 13px; }' +
+                        '.table th { background-color: #f7f9fa; }' +
+                        '.text-center { text-align: center; }' +
+                        '.text-right { text-align: right; }' +
+                        '.text-left { text-align: left; }' +
+                        '.pull-right { float: left; }' + // for printed format we want amounts summary align well
+                        'hr { border-top: 2px solid #ff9800; }' +
+                        '</style>';
+
+            var printWindow = window.open('', '_blank', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>چاپ فاکتور @Model.OrderNumber</title>');
+            printWindow.document.write(style);
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(printContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            
+            // Wait for resources to load, then print
+            setTimeout(function() {
+                printWindow.print();
+            }, 500);
+        }
+    </script>
+}

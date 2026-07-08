@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<Azimzadeh_MVC_project.Models.Slider>
+
         <!-- Slider Area Start -->
         <div class="slider-area slider-style-three">
             <div class="container">
@@ -7,32 +8,64 @@
                         <div class="slider-wrapper theme-default">
                             <!-- Slider Background  Image Start-->
                             <div id="slider" class="nivoSlider">
-                                <a href="shop.html"> <img src="/assets/img/slider/5.jpg" data-thumb="img/slider/5.jpg" alt="" title="#slider-1-caption1"/></a>
-                                <a href="shop.html"><img src="/assets/img/slider/6.jpg" data-thumb="img/slider/6.jpg" alt="" title="#slider-1-caption2"/></a>
+                                @if (Model != null && Model.Any())
+                                {
+                                    foreach (var slider in Model)
+                                    {
+                                        <a href="@slider.ButtonLink">
+                                            <img src="@slider.ImagePath" data-thumb="@slider.ImagePath" alt="@slider.Title" title="#slider-caption-@slider.SliderId"/>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="/Home/Shop"> <img src="/assets/img/slider/5.jpg" data-thumb="img/slider/5.jpg" alt="" title="#slider-caption-default1"/></a>
+                                    <a href="/Home/Shop"><img src="/assets/img/slider/6.jpg" data-thumb="img/slider/6.jpg" alt="" title="#slider-caption-default2"/></a>
+                                }
                             </div>
                             <!-- Slider Background  Image Start-->
-                            <div id="slider-1-caption1" class="nivo-html-caption nivo-caption">
-                                <div class="text-content-wrapper">
-                                    <div class="text-content">
-                                        <h4 class="title2 wow bounceInLeft text-white mb-16" data-wow-duration="2s" data-wow-delay="0s">فروش ویژه</h4>
-                                        <h1 class="title1 wow bounceInRight text-white mb-16" data-wow-duration="2s" data-wow-delay="1s">ابزارآلات دستی <br>اره برقی قدرتمند</h1>
-                                        <div class="banner-readmore wow bounceInUp mt-35" data-wow-duration="2s" data-wow-delay="2s">
-                                            <a class="button slider-btn" href="shop.html">هم‌اکنون خرید کنید</a>                    
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var slider in Model)
+                                {
+                                    <div id="slider-caption-@slider.SliderId" class="nivo-html-caption nivo-caption">
+                                        <div class="text-content-wrapper">
+                                            <div class="text-content">
+                                                <h4 class="title2 wow bounceInLeft text-white mb-16" data-wow-duration="2s" data-wow-delay="0s">@slider.Subtitle</h4>
+                                                <h1 class="title1 wow bounceInRight text-white mb-16" data-wow-duration="2s" data-wow-delay="1s">@Html.Raw(slider.Title.Replace("\n", "<br>").Replace("\r", ""))</h1>
+                                                <div class="banner-readmore wow bounceInUp mt-35" data-wow-duration="2s" data-wow-delay="2s">
+                                                    <a class="button slider-btn" href="@slider.ButtonLink">@slider.ButtonText</a>                    
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>  
-                            <div id="slider-1-caption2" class="nivo-html-caption nivo-caption">
-                                <div class="text-content-wrapper">
-                                    <div class="text-content slide-2">
-                                        <h4 class="title2 wow bounceInLeft text-white mb-16" data-wow-duration="1s" data-wow-delay="1s">فروش ویژه</h4>
-                                        <h1 class="title1 wow flipInX text-white mb-16" data-wow-duration="1s" data-wow-delay="2s">ابزارآلات دستی <br>اره برقی قدرتمند</h1>
-                                        <div class="banner-readmore wow bounceInUp mt-35" data-wow-duration="1s" data-wow-delay="3s">
-                                            <a class="button slider-btn" href="shop.html">هم‌اکنون خرید کنید</a>                    
+                                }
+                            }
+                            else
+                            {
+                                <div id="slider-caption-default1" class="nivo-html-caption nivo-caption">
+                                    <div class="text-content-wrapper">
+                                        <div class="text-content">
+                                            <h4 class="title2 wow bounceInLeft text-white mb-16" data-wow-duration="2s" data-wow-delay="0s">فروش ویژه</h4>
+                                            <h1 class="title1 wow bounceInRight text-white mb-16" data-wow-duration="2s" data-wow-delay="1s">ابزارآلات دستی <br>اره برقی قدرتمند</h1>
+                                            <div class="banner-readmore wow bounceInUp mt-35" data-wow-duration="2s" data-wow-delay="2s">
+                                                <a class="button slider-btn" href="/Home/Shop">هم‌اکنون خرید کنید</a>                    
+                                            </div>
                                         </div>
-                                    </div>       
+                                    </div>
+                                </div>  
+                                <div id="slider-caption-default2" class="nivo-html-caption nivo-caption">
+                                    <div class="text-content-wrapper">
+                                        <div class="text-content slide-2">
+                                            <h4 class="title2 wow bounceInLeft text-white mb-16" data-wow-duration="1s" data-wow-delay="1s">فروش ویژه</h4>
+                                            <h1 class="title1 wow flipInX text-white mb-16" data-wow-duration="1s" data-wow-delay="2s">ابزارآلات دستی <br>اره برقی قدرتمند</h1>
+                                            <div class="banner-readmore wow bounceInUp mt-35" data-wow-duration="1s" data-wow-delay="3s">
+                                                <a class="button slider-btn" href="/Home/Shop">هم‌اکنون خرید کنید</a>                    
+                                            </div>
+                                        </div>       
+                                    </div>
                                 </div>
-                            </div>   
+                            }
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -200,26 +233,69 @@
         <!-- Banner Start -->
         <div class="upper-banner banner pb-60">
             <div class="container">
-               <div class="row">
-                   <!-- Single Banner Start -->
-                   <div class="col-sm-6">
-                        <div class="single-banner zoom">
-                            <a href="#"><img src="/assets/img/banner/1.png" alt="بنر تبلیغاتی"></a>
-                        </div>
+                <div class="summer-offers-container" style="border: 2px solid #ff9800; border-radius: 12px; padding: 35px 20px 20px 20px; position: relative; background: #fffaf0; box-shadow: 0 6px 20px rgba(255,152,0,0.06); margin-top: 15px;">
+                    <div class="summer-offers-header" style="position: absolute; top: -18px; right: 30px; background: linear-gradient(135deg, #ff9800, #e65100); color: #fff; padding: 6px 25px; border-radius: 20px; font-size: 15px; font-weight: bold; box-shadow: 0 4px 12px rgba(255, 152, 0, 0.35); display: flex; align-items: center; gap: 8px;">
+                        <i class="fa fa-sun-o" style="font-size: 18px; animation: spin 8s linear infinite;"></i>
+                        <span style="font-family: 'yekan', sans-serif;">پیشنهادهای تابستانه</span>
                     </div>
-                   <!-- Single Banner End -->
-                    <!-- Single Banner Start -->
-                   <div class="col-sm-6">
-                        <div class="single-banner zoom">
-                            <a href="#"><img src="/assets/img/banner/2.png" alt="بنر تبلیغاتی"></a>
-                        </div>
+                    <div class="row">
+                        @{
+                            var galleryItems = ViewBag.GalleryItems as List<Azimzadeh_MVC_project.Models.Gallery>;
+                            if (galleryItems != null && galleryItems.Count >= 2)
+                            {
+                                <!-- Single Banner Start -->
+                                <div class="col-sm-6">
+                                     <div class="single-banner zoom">
+                                         <a href="#"><img src="@galleryItems[0].ImagePath" alt="@galleryItems[0].Title"></a>
+                                     </div>
+                                 </div>
+                                <!-- Single Banner End -->
+                                 <!-- Single Banner Start -->
+                                <div class="col-sm-6">
+                                     <div class="single-banner zoom">
+                                         <a href="#"><img src="@galleryItems[1].ImagePath" alt="@galleryItems[1].Title"></a>
+                                     </div>
+                                 </div>
+                                <!-- Single Banner End -->
+                            }
+                            else
+                            {
+                                <!-- Single Banner Start -->
+                                <div class="col-sm-6">
+                                     <div class="single-banner zoom">
+                                         <a href="#"><img src="/assets/img/banner/1.png" alt="Ø¨Ù†Ø± ØªØ¨Ù„ÛŒØºØ§ØªÛŒ"></a>
+                                     </div>
+                                 </div>
+                                <!-- Single Banner End -->
+                                 <!-- Single Banner Start -->
+                                <div class="col-sm-6">
+                                     <div class="single-banner zoom">
+                                         <a href="#"><img src="/assets/img/banner/2.png" alt="Ø¨Ù†Ø± ØªØ¨Ù„ÛŒØºØ§ØªÛŒ"></a>
+                                     </div>
+                                 </div>
+                                <!-- Single Banner End -->
+                            }
+                        }
                     </div>
-                   <!-- Single Banner End -->
-               </div>
-               <!-- Row End -->
+                    <!-- Row End -->
+                </div>
             </div>
-            <!-- Container End -->
-        </div>                                
+        </div>
+        
+        <style>
+            @@keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .summer-offers-container .single-banner img {
+                border-radius: 8px;
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+            }
+            .summer-offers-container .single-banner:hover img {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 25px rgba(230, 81, 0, 0.2);
+            }
+        </style>
         <!-- Banner End -->
         <!-- New Products Start -->
         <div class="new-products pb-60">

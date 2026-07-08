@@ -49,6 +49,22 @@ namespace Azimzadeh_MVC_project.Areas.Admin.Controllers
             return View(order);
         }
 
+        // GET: Admin/Orders/Invoice/5
+        public ActionResult Invoice(int id)
+        {
+            var order = db.Orders
+                .Include(o => o.User)
+                .Include(o => o.UserAddress)
+                .FirstOrDefault(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(order);
+        }
+
         // POST: Admin/Orders/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
