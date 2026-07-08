@@ -1,0 +1,209 @@
+/* ==========================================================================
+   Product Detail Page Modernization & Redesign
+   Fonts: Vazirmatn or IRANSans
+   ========================================================================== */
+
+/* Typography & Globals */
+body {
+    font-family: 'Vazirmatn', 'IRANSans', sans-serif !important;
+}
+
+/* Modern Card Layouts */
+.modern-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #f0f0f0;
+}
+
+/* Visual Hierarchy & Product Info */
+.product-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.price-discounted {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e53e3e; /* Brand/Discount Color */
+}
+
+.price-original {
+    font-size: 1.25rem;
+    color: #a0aec0;
+    text-decoration: line-through;
+}
+
+.stock-sku {
+    font-size: 0.875rem;
+    color: #718096;
+    margin-bottom: 24px;
+}
+
+/* Image Gallery Hover Zoom */
+.product-image-container {
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.product-image-container img {
+    transition: transform 0.4s ease;
+    width: 100%;
+    display: block;
+}
+
+.product-image-container:hover img {
+    transform: scale(1.05);
+}
+
+/* Modernizing Buttons & CTAs */
+.btn-modern {
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.btn-primary-modern {
+    background-color: #3182ce;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
+}
+
+.btn-primary-modern:hover, .btn-primary-modern:focus {
+    background-color: #2b6cb0;
+    box-shadow: 0 6px 14px rgba(49, 130, 206, 0.4);
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+.btn-primary-modern:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(49, 130, 206, 0.3);
+}
+
+/* Review Form Modernization */
+.form-control-modern {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: all 0.2s ease-in-out;
+    background-color: #f7fafc;
+}
+
+.form-control-modern:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+    background-color: #ffffff;
+    outline: none;
+}
+
+.form-label-modern {
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.form-helper-text {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-top: 4px;
+}
+
+/* Star Rating Redesign */
+.rating-grid {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.star-rating-input {
+    display: flex;
+    flex-direction: row-reverse; /* RTL support for stars */
+    gap: 4px;
+}
+
+.star-rating-input input {
+    display: none;
+}
+
+.star-rating-input label {
+    cursor: pointer;
+    color: #cbd5e0;
+    font-size: 1.5rem;
+    transition: color 0.2s;
+}
+
+.star-rating-input input:checked ~ label,
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label {
+    color: #ecc94b; /* Gold */
+}
+
+/* Tags & Badges - Pill Shapes */
+.modern-badge {
+    border-radius: 50px;
+    padding: 6px 16px;
+    background-color: #edf2f7;
+    color: #4a5568;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+    border: none;
+    margin-left: 8px; /* RTL Margin */
+    margin-bottom: 8px;
+}
+
+.modern-badge:hover {
+    background-color: #e2e8f0;
+    color: #2d3748;
+    text-decoration: none;
+}
+
+/* Mobile Sticky CTA Bar */
+.sticky-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    padding: 12px 24px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.sticky-cta-bar.show {
+    transform: translateY(0);
+}
+
+/* Spacing Rhythm Helpers */
+.gap-sm { gap: 8px; }
+.gap-md { gap: 16px; }
+.gap-lg { gap: 24px; }

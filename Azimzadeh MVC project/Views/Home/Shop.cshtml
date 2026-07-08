@@ -300,25 +300,22 @@
                     <!-- Product Categorie List Start -->
                     <div class="col-lg-9 order-1 order-lg-2">
                         <!-- Grid & List View Start -->
-                        <div class="grid-list-top border-default universal-padding fix mb-30">
-                            <div class="grid-list-view f-left">
-                                <ul class="list-inline nav">
-                                    <li><a data-toggle="tab" href="#grid-view"><i class="fa fa-th"></i></a></li>
-                                    <li><a  class="active" data-toggle="tab" href="#list-view"><i class="fa fa-list-ul"></i></a></li>
-                                    <li><span class="grid-item-list"> نمایش @Model.Count() از @Model.Count() آیتم</span></li>
-                                </ul>
+                        <div class="shop-toolbar">
+                            <div class="shop-toolbar-nav">
+                                <div class="shop-view-toggle">
+                                    <a data-toggle="tab" href="#grid-view" class="active"><i class="fa fa-th"></i></a>
+                                    <a data-toggle="tab" href="#list-view"><i class="fa fa-list-ul"></i></a>
+                                </div>
+                                <span class="grid-item-list text-muted"> نمایش @Model.Count() از @Model.Count() آیتم</span>
                             </div>
                             <!-- Toolbar Short Area Start -->
-                            <div class="main-toolbar-sorter f-right">
-                                <div class="toolbar-sorter">
-                                    <label>مرتب‌سازی بر اساس</label>
-                                    <select class="sorter" name="sorter">
-                                        <option value="Position" selected="selected">موقعیت</option>
-                                        <option value="Product Name">نام محصول</option>
-                                        <option value="Price">قیمت</option>
-                                    </select>
-                                    <span><a href="#"><i class="fa fa-arrow-up"></i></a></span>
-                                </div>
+                            <div class="shop-toolbar-sort">
+                                <label>مرتب‌سازی:</label>
+                                <select name="sorter">
+                                    <option value="Position" selected="selected">پیش‌فرض</option>
+                                    <option value="Product Name">نام محصول</option>
+                                    <option value="Price">قیمت</option>
+                                </select>
                             </div>
                             <!-- Toolbar Short Area End -->
                         </div>
@@ -326,117 +323,21 @@
                         <div class="main-categorie">
                             <!-- Grid & List Main Area End -->
                             <div class="tab-content fix">
-                                <div id="grid-view" class="tab-pane ">
+                                <div id="grid-view" class="tab-pane active">
                                     <div class="row">
                                         @foreach (var product in Model)
                                         {
-                                            var mainImage = product.ProductImages.FirstOrDefault(img => img.IsMain) ?? product.ProductImages.FirstOrDefault();
-                                            var mainImagePath = mainImage != null ? mainImage.ImagePath : "/assets/img/products/1.jpg";
-                                            var hoverImage = product.ProductImages.FirstOrDefault(img => !img.IsMain) ?? mainImage;
-                                            var hoverImagePath = hoverImage != null ? hoverImage.ImagePath : mainImagePath;
-
-                                            <!-- Single Product Start -->
-                                            <div class="col-lg-4 col-sm-6">
-                                                <div class="single-product">
-                                                    <!-- Product Image Start -->
-                                                    <div class="pro-img">
-                                                        <a href="/Home/Product?id=@product.ProductId">
-                                                            <img class="primary-img" src="@mainImagePath" alt="@product.Title">
-                                                            <img class="secondary-img" src="@hoverImagePath" alt="@product.Title">
-                                                        </a>
-                                                    </div>
-                                                    <!-- Product Image End -->
-                                                    <!-- Product Content Start -->
-                                                    <div class="pro-content">
-                                                        <div class="product-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>                                
-                                                        <h4><a href="/Home/Product?id=@product.ProductId">@product.Title</a></h4>
-                                                        <p>
-                                                            @if (product.DiscountPrice.HasValue)
-                                                            {
-                                                                <span class="price">@product.DiscountPrice.Value.ToString("N0") ریال</span>
-                                                                <del class="prev-price">@product.Price.ToString("N0") ریال</del>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="price">@product.Price.ToString("N0") ریال</span>
-                                                            }
-                                                        </p>
-                                                        <div class="pro-actions">
-                                                            <div class="actions-secondary">
-                                                                <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart"></i></a>
-                                                                <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Product Content End -->
-                                                    @if (product.DiscountPrice.HasValue)
-                                                    {
-                                                        var discountPercent = (int)Math.Round((double)(product.Price - product.DiscountPrice.Value) / (double)product.Price * 100);
-                                                        <span class="sticker-new">-@discountPercent%</span>
-                                                    }
-                                                </div>
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                                @Html.Partial("_ProductCard", product)
                                             </div>
-                                            <!-- Single Product End -->
                                         }
                                     </div>                                    
                                 </div>
                                  <!-- #grid view End -->
-                                <div id="list-view" class="tab-pane active">
+                                <div id="list-view" class="tab-pane">
                                     @foreach (var product in Model)
                                     {
-                                        var mainImage = product.ProductImages.FirstOrDefault(img => img.IsMain) ?? product.ProductImages.FirstOrDefault();
-                                        var mainImagePath = mainImage != null ? mainImage.ImagePath : "/assets/img/products/1.jpg";
-                                        var hoverImage = product.ProductImages.FirstOrDefault(img => !img.IsMain) ?? mainImage;
-                                        var hoverImagePath = hoverImage != null ? hoverImage.ImagePath : mainImagePath;
-
-                                        <!-- Single Product Start -->
-                                        <div class="single-product" style="display: flex; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 30px;">
-                                            <!-- Product Image Start -->
-                                            <div class="pro-img" style="flex: 0 0 250px; margin-left: 20px;">
-                                                <a href="/Home/Product?id=@product.ProductId">
-                                                    <img class="primary-img" src="@mainImagePath" alt="@product.Title" style="max-width: 100%;">
-                                                    <img class="secondary-img" src="@hoverImagePath" alt="@product.Title" style="max-width: 100%;">
-                                                </a>
-                                            </div>
-                                            <!-- Product Image End -->
-                                            <!-- Product Content Start -->
-                                            <div class="pro-content" style="flex: 1;">
-                                                <div class="product-rating">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>                                
-                                                <h4><a href="/Home/Product?id=@product.ProductId" style="font-size: 18px; font-weight: bold;">@product.Title</a></h4>
-                                                <p style="margin-top: 10px;">
-                                                    @if (product.DiscountPrice.HasValue)
-                                                    {
-                                                        <span class="price" style="font-size: 16px; font-weight: bold; color: #ff5e14; margin-left: 10px;">@product.DiscountPrice.Value.ToString("N0") ریال</span>
-                                                        <del class="prev-price" style="color: #999;">@product.Price.ToString("N0") ریال</del>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="price" style="font-size: 16px; font-weight: bold; color: #222;">@product.Price.ToString("N0") ریال</span>
-                                                    }
-                                                </p>
-                                                <p style="margin-top: 15px; color: #666; line-height: 1.8;">@product.ShortDescription</p>
-                                                <div class="pro-actions" style="margin-top: 20px;">
-                                                    <div class="actions-secondary">
-                                                        <a href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها" style="margin-left: 10px;"><i class="fa fa-heart"></i></a>
-                                                        <a class="add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید" style="background: #333; color: #fff; padding: 8px 15px; border-radius: 4px; text-decoration: none;">افزودن به سبد خرید</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Product Content End -->
-                                        </div>
-                                        <!-- Single Product End -->
+                                        @Html.Partial("_ProductListItem", product)
                                     }
                                 </div>
                                  <!-- #list view End -->
@@ -444,21 +345,13 @@
                             <!-- Grid & List Main Area End -->
                         </div>
                         <!--Breadcrumb and Page Show Start -->
-                        <div class="pagination-box fix">
-                            <ul class="blog-pagination ">
-                                <li><a href="#">1</a></li>
-                                <li class="active"><a href="#">2</a></li>
+                        <div class="shop-pagination-wrap mb-40">
+                            <ul class="shop-pagination">
                                 <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
                             </ul>
-                            <div class="toolbar-sorter-footer">
-                                <label>show</label>
-                                <select class="sorter" name="sorter">
-                                    <option value="Position" selected="selected">12</option>
-                                    <option value="Product Name">15</option>
-                                    <option value="Price">30</option>
-                                </select>
-                                <span>per page</span>
-                            </div>
                         </div>
                         <!--Breadcrumb and Page Show End -->
                     </div>

@@ -1,4 +1,4 @@
-﻿ 
+@model Azimzadeh_MVC_project.Models.User
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area ptb-60 ptb-sm-30">
             <div class="container">
@@ -20,20 +20,20 @@
                        <div class="row no-gutters align-items-center">
                            <div class="col-lg-3 col-md-6">
                                <div class="d-single-info">
-                                   <p class="user-name">سلام <span>yourmail@info</span></p>
-                                   <p>(شما نیستید؟ <a href="/Home/Login">خروج</a>)</p>
+                                   <p class="user-name">سلام <span>@(Model != null ? Model.FullName : "کاربر")</span></p>
+                                   <p>(شما نیستید؟ <a href="/Home/Logout">خروج</a>)</p>
                                </div>
                            </div>
                            <div class="col-lg-3 col-md-6">
                                <div class="d-single-info">
                                    <p>نیاز به راهنمایی دارید؟ پشتیبانی مشتریان:</p>
-                                   <p>admin@example.com</p>
+                                   <p>admin@site.com</p>
                                </div>
                            </div>
                            <div class="col-lg-3 col-md-6">
                                <div class="d-single-info">
                                    <p>پشتیبانی ایمیل:</p>
-                                   <p>support@example.com</p>
+                                   <p>support@site.com</p>
                                </div>
                            </div>
                            <div class="col-lg-3 col-md-6">
@@ -52,12 +52,20 @@
                                 <li><a data-toggle="tab" href="#downloads">دانلودها</a></li>
                                 <li><a data-toggle="tab" href="#addresses">آدرس‌ها</a></li>
                                 <li><a data-toggle="tab" href="#account-details">جزئیات حساب کاربری</a></li>
-                                <li><a href="/Home/Login">خروج</a></li>
+                                <li><a href="/Home/Logout">خروج</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-10">
                             <!-- Tab panes -->
                             <div class="tab-content dashboard-content mt-all-40">
+                                @if (TempData["ErrorMessage"] != null)
+                                {
+                                    <div class="alert alert-danger" style="margin-bottom: 20px;">@TempData["ErrorMessage"]</div>
+                                }
+                                @if (TempData["SuccessMessage"] != null)
+                                {
+                                    <div class="alert alert-success" style="margin-bottom: 20px;">@TempData["SuccessMessage"]</div>
+                                }
                                 <div id="dashboard" class="tab-pane active">
                                     <h3>داشبورد </h3>
                                     <p>از طریق داشبورد حساب کاربری خود می‌توانید به راحتی <a href="#">سفارش‌های اخیر</a> را بررسی و مشاهده کنید، <a href="#">آدرس‌های ارسال و پرداخت</a> خود را مدیریت کنید و <a href="#">رمز عبور و جزئیات حساب خود را ویرایش کنید</a>.</p>
@@ -131,78 +139,127 @@
                                     <p>استرالیا</p>   
                                 </div>
                                 <div id="account-details" class="tab-pane fade">
-                                    <h3>جزئیات حساب کاربری </h3>
-                                    <div class="register-form login-form clearfix">
-                                        <form action="#">
-                                            <div class="form-group row align-items-center">
-                                                <label class="col-lg-3 col-md-4 col-form-label">عنوان</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <span class="custom-radio"><input name="id_gender" value="1" type="radio"> آقای.</span>
-                                                    <span class="custom-radio"><input name="id_gender" value="1" type="radio"> خانم.</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="f-name" class="col-lg-3 col-md-4 col-form-label">نام</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="text" class="form-control" id="f-name">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="l-name" class="col-lg-3 col-md-4 col-form-label">نام خانوادگی</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="text" class="form-control" id="l-name">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="email" class="col-lg-3 col-md-4 col-form-label">آدرس ایمیل</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="text" class="form-control" id="email">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="inputpassword" class="col-lg-3 col-md-4 col-form-label">رمز عبور فعلی</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="password" class="form-control" id="inputpassword">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="newpassword" class="col-lg-3 col-md-4 col-form-label">رمز عبور جدید</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="password" class="form-control" id="newpassword">
-                                                    <button class="btn show-btn" type="button">نمایش</button>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="v-password" class="col-lg-3 col-md-4 col-form-label">تکرار رمز عبور</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="password" class="form-control" id="c-password">
-                                                    <button class="btn show-btn" type="button">نمایش</button>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="birth" class="col-lg-3 col-md-4 col-form-label">تاریخ تولد</label>
-                                                <div class="col-lg-6 col-md-8">
-                                                    <input type="text" class="form-control" id="birth" placeholder="روز/ماه/سال">
-                                                </div>
-                                            </div>
-                                            <div class="form-check row p-0 mt-20">
-                                                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-4">
-                                                    <input class="form-check-input" value="#" id="offer" type="checkbox">
-                                                    <label class="form-check-label" for="offer">دریافت پیشنهادات ویژه از همکاران تجاری ما</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-check row p-0 mt-20">
-                                                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-4">
-                                                    <input class="form-check-input" value="#" id="subscribe" type="checkbox">
-                                                    <label class="form-check-label" for="subscribe">عضویت در خبرنامه ما<br>با عضویت در خبرنامه ما، از جدیدترین محصولات، تخفیف‌ها و پیشنهادات انحصاری باخبر شوید.</label>
-                                                </div>
-                                            </div>
-                                            <div class="register-box mt-40">
-                                                <button type="submit" class="return-customer-btn f-right">ذخیره تغییرات</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                     <h3>جزئیات حساب کاربری </h3>
+                                     @{
+                                         string homePhoneCountry = "";
+                                         string homePhoneBody = "";
+                                         if (Model != null && !string.IsNullOrEmpty(Model.HomePhoneNumber))
+                                         {
+                                             var parts = Model.HomePhoneNumber.Split('-');
+                                             if (parts.Length == 2)
+                                             {
+                                                 homePhoneCountry = parts[0].Replace("+", "").Trim();
+                                                 homePhoneBody = parts[1].Trim();
+                                             }
+                                         }
+                                     }
+                                     <div class="register-form login-form clearfix">
+                                         <form action="/Home/UpdateProfile" method="post">
+                                             @Html.AntiForgeryToken()
+                                             <div class="form-group row">
+                                                 <label for="gender" class="col-lg-3 col-md-4 col-form-label">جنسیت</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <select name="gender" id="gender" class="form-control" style="height: auto; padding: 10px;">
+                                                         <option value="آقا" @(Model != null && Model.Gender == "آقا" ? "selected" : "")>آقای.</option>
+                                                         <option value="خانم" @(Model != null && Model.Gender == "خانم" ? "selected" : "")>خانم.</option>
+                                                         <option value="سایر" @(Model != null && Model.Gender == "سایر" ? "selected" : "")>سایر</option>
+                                                     </select>
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="firstName" class="col-lg-3 col-md-4 col-form-label">نام</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="firstName" class="form-control" id="firstName" value="@(Model != null ? Model.FirstName : "")" required="required">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="lastName" class="col-lg-3 col-md-4 col-form-label">نام خانوادگی</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="lastName" class="form-control" id="lastName" value="@(Model != null ? Model.LastName : "")" required="required">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="email" class="col-lg-3 col-md-4 col-form-label">آدرس ایمیل</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="email" name="email" class="form-control" id="email" value="@(Model != null ? Model.Email : "")" readonly="readonly">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="phone" class="col-lg-3 col-md-4 col-form-label">شماره همراه</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="phone" class="form-control" id="phone" value="@(Model != null ? Model.PhoneNumber : "")">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="homePhoneCountry" class="col-lg-3 col-md-4 col-form-label">تلفن ثابت</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <div style="display: flex; align-items: center; direction: ltr;">
+                                                         <span style="margin-right: 5px; font-weight: bold;">+</span>
+                                                         <input type="text" name="homePhoneCountry" class="form-control" style="width: 70px; text-align: center;" placeholder="98" maxlength="3" value="@homePhoneCountry">
+                                                         <span style="margin: 0 10px;">-</span>
+                                                         <input type="text" name="homePhoneBody" class="form-control" style="flex: 1;" placeholder="12345678" maxlength="8" value="@homePhoneBody">
+                                                     </div>
+                                                     <small class="form-text text-muted" style="margin-top: 5px; direction: rtl; text-align: right;">فرمت: {+کد کشور - شماره ۸ رقمی}</small>
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="address1" class="col-lg-3 col-md-4 col-form-label">آدرس ۱</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="address1" class="form-control" id="address1" value="@(Model != null ? Model.Address1 : "")" placeholder="آدرس اصلی خود را وارد کنید...">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="address2" class="col-lg-3 col-md-4 col-form-label">آدرس ۲</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="address2" class="form-control" id="address2" value="@(Model != null ? Model.Address2 : "")" placeholder="آدرس فرعی (اختیاری)">
+                                                 </div>
+                                             </div>
+                                             <hr style="margin: 30px 0; border-top: 1px dashed #e2e8f0;" />
+                                             <h4 class="mb-20">اطلاعات پرداخت و بانکی</h4>
+                                             <div class="form-group row">
+                                                 <label for="cardNumber" class="col-lg-3 col-md-4 col-form-label">شماره کارت بانکی (۱۶ رقمی)</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="cardNumber" class="form-control" id="cardNumber" placeholder="1234567812345678" value="@(Model != null ? Model.CardNumber : "")" maxlength="16">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="cvv" class="col-lg-3 col-md-4 col-form-label">کد CVV2</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="cvv" class="form-control" id="cvv" placeholder="123" value="@(Model != null ? Model.CVV : "")" maxlength="4">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="expirationDate" class="col-lg-3 col-md-4 col-form-label">تاریخ انقضا (MM/YY)</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="text" name="expirationDate" class="form-control" id="expirationDate" placeholder="08/29" value="@(Model != null ? Model.ExpirationDate : "")" maxlength="5">
+                                                 </div>
+                                             </div>
+                                             <hr style="margin: 30px 0; border-top: 1px dashed #e2e8f0;" />
+                                             <h4 class="mb-20">تغییر رمز عبور (اختیاری)</h4>
+                                             <div class="form-group row">
+                                                 <label for="inputpassword" class="col-lg-3 col-md-4 col-form-label">رمز عبور فعلی</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="password" name="currentPassword" class="form-control" id="inputpassword" placeholder="برای تغییر رمز عبور الزامی است">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="newpassword" class="col-lg-3 col-md-4 col-form-label">رمز عبور جدید</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="password" name="newPassword" class="form-control" id="newpassword" placeholder="رمز عبور جدید">
+                                                 </div>
+                                             </div>
+                                             <div class="form-group row">
+                                                 <label for="c-password" class="col-lg-3 col-md-4 col-form-label">تکرار رمز عبور</label>
+                                                 <div class="col-lg-6 col-md-8">
+                                                     <input type="password" name="confirmPassword" class="form-control" id="c-password" placeholder="تکرار رمز عبور جدید">
+                                                 </div>
+                                             </div>
+                                             <div class="register-box mt-40">
+                                                 <button type="submit" class="return-customer-btn f-right">ذخیره تغییرات</button>
+                                             </div>
+                                         </form>
+                                     </div>
+                                 </div>
                             </div>
                         </div>
                     </div>

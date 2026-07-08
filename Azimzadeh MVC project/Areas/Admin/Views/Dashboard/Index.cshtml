@@ -1,0 +1,191 @@
+@{
+    ViewBag.Title = "داشبورد مدیریت";
+}
+
+<!--state overview start-->
+<div class="row state-overview">
+    <div class="col-lg-3 col-sm-6">
+        <section class="panel">
+            <div class="symbol terques">
+                <i class="icon-user"></i>
+            </div>
+            <div class="value">
+                <h1>@ViewBag.UsersCount</h1>
+                <p>کاربران ثبت‌نامی</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <section class="panel">
+            <div class="symbol red">
+                <i class="icon-tags"></i>
+            </div>
+            <div class="value">
+                <h1>@ViewBag.ProductsCount</h1>
+                <p>تعداد کل محصولات</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <section class="panel">
+            <div class="symbol yellow">
+                <i class="icon-comments"></i>
+            </div>
+            <div class="value">
+                <h1>@ViewBag.ReviewsCount</h1>
+                <p>نظرات ثبت‌شده</p>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <section class="panel">
+            <div class="symbol blue">
+                <i class="icon-book"></i>
+            </div>
+            <div class="value">
+                <h1>@ViewBag.BlogsCount</h1>
+                <p>مقالات وبلاگ</p>
+            </div>
+        </section>
+    </div>
+</div>
+<!--state overview end-->
+
+<div class="row">
+    <!-- Latest Comments Section -->
+    <div class="col-lg-6">
+        <section class="panel">
+            <header class="panel-heading">
+                آخرین دیدگاه‌های ثبت‌شده (پرسش و پاسخ)
+            </header>
+            <div class="panel-body">
+                <table class="table table-hover personal-task">
+                    <thead>
+                        <tr>
+                            <th>فرستنده</th>
+                            <th>متن دیدگاه</th>
+                            <th>تاریخ ثبت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.LatestComments != null)
+                        {
+                            foreach (var comm in (List<Azimzadeh_MVC_project.Models.Comment>)ViewBag.LatestComments)
+                            {
+                                string commUserName = "کاربر مهمان";
+                                if (comm.User != null)
+                                {
+                                    commUserName = comm.User.FullName;
+                                }
+                                <tr>
+                                    <td>@commUserName</td>
+                                    <td>
+                                        <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            @comm.Content
+                                        </div>
+                                    </td>
+                                    <td>@comm.CreatedAt.ToString("yyyy/MM/dd")</td>
+                                    <td style="white-space:nowrap;">
+                                        @using (Html.BeginForm("Approve", "Comments", new { area = "Admin", id = comm.CommentId }, FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="/Admin" />
+                                            if (comm.IsApproved)
+                                            {
+                                                <button type="submit" class="btn btn-warning btn-xs" title="رد کردن"><i class="icon-remove"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-success btn-xs" title="تأیید"><i class="icon-ok"></i></button>
+                                            }
+                                        }
+                                        @using (Html.BeginForm("Delete", "Comments", new { area = "Admin", id = comm.CommentId }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('آیا از حذف مطمئن هستید؟');" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="/Admin" />
+                                            <button type="submit" class="btn btn-danger btn-xs" title="حذف"><i class="icon-trash"></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Latest Reviews Section -->
+    <div class="col-lg-6">
+        <section class="panel">
+            <header class="panel-heading">
+                آخرین نظرات و رتبه‌بندی‌های کالا
+            </header>
+            <div class="panel-body">
+                <table class="table table-hover personal-task">
+                    <thead>
+                        <tr>
+                            <th>کاربر</th>
+                            <th>محصول</th>
+                            <th>امتیاز</th>
+                            <th>تاریخ ثبت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.LatestReviews != null)
+                        {
+                            foreach (var rev in (List<Azimzadeh_MVC_project.Models.Review>)ViewBag.LatestReviews)
+                            {
+                                string revUserName = "مهمان";
+                                if (rev.User != null)
+                                {
+                                    revUserName = rev.User.FullName;
+                                }
+                                string revProductName = "ناشناس";
+                                if (rev.Product != null)
+                                {
+                                    revProductName = rev.Product.Title;
+                                }
+                                <tr>
+                                    <td>@revUserName</td>
+                                    <td>
+                                        <div style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            @revProductName
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning">@rev.Rating ★</span>
+                                    </td>
+                                    <td>@rev.CreatedAt.ToString("yyyy/MM/dd")</td>
+                                    <td style="white-space:nowrap;">
+                                        @using (Html.BeginForm("Approve", "Reviews", new { area = "Admin", id = rev.ReviewId }, FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="/Admin" />
+                                            if (rev.IsApproved)
+                                            {
+                                                <button type="submit" class="btn btn-warning btn-xs" title="رد کردن"><i class="icon-remove"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-success btn-xs" title="تأیید"><i class="icon-ok"></i></button>
+                                            }
+                                        }
+                                        @using (Html.BeginForm("Delete", "Reviews", new { area = "Admin", id = rev.ReviewId }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('آیا از حذف مطمئن هستید؟');" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="/Admin" />
+                                            <button type="submit" class="btn btn-danger btn-xs" title="حذف"><i class="icon-trash"></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>

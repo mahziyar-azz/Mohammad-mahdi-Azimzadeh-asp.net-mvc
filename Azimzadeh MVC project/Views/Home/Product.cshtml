@@ -1,4 +1,4 @@
-@model Azimzadeh_MVC_project.Models.Product
+﻿@model Azimzadeh_MVC_project.Models.Product
 
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area ptb-60 ptb-sm-30">
@@ -23,110 +23,115 @@
             <div class="container">
                 <div class="row">
                     <!-- Main Thumbnail Image Start -->
-                    <div class="col-lg-5" style="position: relative;">
-                        <!-- Thumbnail Large Image start -->
-                        <div class="tab-content">
-                            @{
-                                var images = Model.ProductImages.OrderBy(img => img.DisplayOrder).ToList();
-                                if (!images.Any())
-                                {
-                                    images.Add(new Azimzadeh_MVC_project.Models.ProductImage { ImagePath = "/assets/img/products/1.jpg", IsMain = true });
+                    <div class="col-lg-5 mb-4">
+                        <div class="modern-card">
+                            <!-- Thumbnail Large Image start -->
+                            <div class="tab-content product-image-container">
+                                @{
+                                    var images = Model.ProductImages.OrderBy(img => img.DisplayOrder).ToList();
+                                    if (!images.Any())
+                                    {
+                                        images.Add(new Azimzadeh_MVC_project.Models.ProductImage { ImagePath = "/assets/img/products/1.jpg", IsMain = true });
+                                    }
                                 }
-                            }
-                            @for (int i = 0; i < images.Count; i++)
-                            {
-                                var img = images[i];
-                                var activeClass = i == 0 ? "active" : "";
-                                <div id="thumb@(i + 1)" class="tab-pane @activeClass">
-                                    <a data-fancybox="images" href="@img.ImagePath"><img src="@img.ImagePath" alt="@Model.Title"></a>
-                                </div>
-                            }
-                        </div>
-                        <!-- Thumbnail Large Image End -->
-                        @if (Model.DiscountPrice.HasValue)
-                        {
-                            var discountPercent = (int)Math.Round((double)(Model.Price - Model.DiscountPrice.Value) / (double)Model.Price * 100);
-                            <span class="sticker-new" style="position: absolute; top: 15px; right: 25px; background: #ff5e14; color: #fff; padding: 5px 10px; font-weight: bold; border-radius: 4px; z-index: 10; font-size: 13px;">-@discountPercent%</span>
-                        }
-
-                        <!-- Thumbnail Image End -->
-                        <div class="product-thumbnail">
-                            <div class="thumb-menu nav">
                                 @for (int i = 0; i < images.Count; i++)
                                 {
                                     var img = images[i];
                                     var activeClass = i == 0 ? "active" : "";
-                                    <a class="@activeClass" data-toggle="tab" href="#thumb@(i + 1)"> <img src="@img.ImagePath" alt="@Model.Title"></a>
+                                    <div id="thumb@(i + 1)" class="tab-pane @activeClass">
+                                        <a data-fancybox="images" href="@img.ImagePath"><img src="@img.ImagePath" alt="@Model.Title"></a>
+                                    </div>
                                 }
                             </div>
+                            <!-- Thumbnail Large Image End -->
+                            @if (Model.DiscountPrice.HasValue)
+                            {
+                                var discountPercent = (int)Math.Round((double)(Model.Price - Model.DiscountPrice.Value) / (double)Model.Price * 100);
+                                <span class="sticker-new" style="position: absolute; top: 35px; right: 45px; background: #e53e3e; color: #fff; padding: 5px 12px; font-weight: bold; border-radius: 6px; z-index: 10; font-size: 14px; box-shadow: 0 2px 6px rgba(229, 62, 62, 0.4);">-@discountPercent%</span>
+                            }
+
+                            <!-- Thumbnail Image End -->
+                            <div class="product-thumbnail mt-20">
+                                <div class="thumb-menu nav gap-sm">
+                                    @for (int i = 0; i < images.Count; i++)
+                                    {
+                                        var img = images[i];
+                                        var activeClass = i == 0 ? "active" : "";
+                                        <a class="@activeClass" data-toggle="tab" href="#thumb@(i + 1)" style="border-radius: 8px; overflow: hidden;"> <img src="@img.ImagePath" alt="@Model.Title"></a>
+                                    }
+                                </div>
+                            </div>
+                            <!-- Thumbnail image end -->
                         </div>
-                        <!-- Thumbnail image end -->
                     </div>
                     <!-- Main Thumbnail Image End -->
                     <!-- Thumbnail Description Start -->
                     <div class="col-lg-7">
-                        <div class="thubnail-desc fix">
-                            <h3 class="product-header">@Model.Title</h3>
-                            <div class="rating-summary fix mtb-10">
-                                <div class="rating f-left">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                        <div class="modern-card thubnail-desc fix">
+                            <h3 class="product-title">@Model.Title</h3>
+                            <div class="rating-summary fix mb-20">
+                                @{
+                                    var approvedReviews = Model.Reviews != null ? Model.Reviews.Where(r => r.IsApproved).ToList() : new List<Azimzadeh_MVC_project.Models.Review>();
+                                    var avgRating = approvedReviews.Any() ? approvedReviews.Average(r => r.Rating) : 5.0;
+                                    var ratingInt = (int)Math.Round(avgRating);
+                                }
+                                <div class="rating f-left" style="color: #ecc94b;">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= ratingInt)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-star-o" style="color: #cbd5e0;"></i>
+                                        }
+                                    }
                                 </div>
-                                <div class="rating-feedback f-left">
-                                    <a href="#">(۵ نظر)</a>
-                                    <a href="#">ثبت نظر برای این محصول</a>
+                                <div class="rating-feedback f-left ml-20" style="margin-right: 15px;">
+                                    <a href="#review" style="color: #718096; text-decoration: underline;">(@approvedReviews.Count نظر)</a>
                                 </div>
                             </div>
-                            <div class="pro-price mb-10">
-                                <p>
-                                    @if (Model.DiscountPrice.HasValue)
-                                    {
-                                        <span class="price">@Model.DiscountPrice.Value.ToString("N0") ریال</span>
-                                        <del class="prev-price">@Model.Price.ToString("N0") ریال</del>
-                                    }
-                                    else
-                                    {
-                                        <span class="price">@Model.Price.ToString("N0") ریال</span>
-                                    }
-                                </p>
+                            <div class="price-container">
+                                @if (Model.DiscountPrice.HasValue)
+                                {
+                                    <span class="price-discounted">@Model.DiscountPrice.Value.ToString("N0") ریال</span>
+                                    <del class="price-original">@Model.Price.ToString("N0") ریال</del>
+                                }
+                                else
+                                {
+                                    <span class="price-discounted">@Model.Price.ToString("N0") ریال</span>
+                                }
                             </div>
-                            <div class="pro-ref mb-15">
+                            <div class="stock-sku">
                                 <p>
                                     @if (Model.StockQuantity > 0)
                                     {
-                                        <span class="in-stock">موجود در انبار (@Model.StockQuantity عدد)</span>
+                                        <span class="in-stock" style="color: #38a169; font-weight: 600;"><i class="fa fa-check-circle-o"></i> موجود در انبار (@Model.StockQuantity عدد)</span>
                                     }
                                     else
                                     {
-                                        <span class="out-stock text-danger" style="font-weight: bold; margin-left: 10px;">ناموجود</span>
+                                        <span class="out-stock" style="color: #e53e3e; font-weight: 600;"><i class="fa fa-times-circle-o"></i> ناموجود</span>
                                     }
-                                    <span class="sku">شناسه محصول (SKU): @Model.SKU</span>
+                                    <span class="sku" style="margin-right: 15px;"><i class="fa fa-barcode"></i> شناسه (SKU): @Model.SKU</span>
                                 </p>
                             </div>
-                             <div class="box-quantity">
+                             <div class="box-quantity mb-30">
                                  <form action="#" style="display: flex; align-items: center; gap: 15px;">
-                                     <input class="number" id="numeric" type="number" min="1" value="1" style="margin: 0;">
-                                     <a class="add-cart" href="/Home/Cart" style="margin: 0; float: none; display: inline-block; vertical-align: middle;">افزودن به سبد خرید</a>
+                                     <input class="form-control-modern number" id="numeric" type="number" min="1" value="1" style="width: 80px; text-align: center;">
+                                     <a class="btn-modern btn-primary-modern add-cart" href="/Home/Cart"><i class="fa fa-shopping-cart"></i> افزودن به سبد خرید</a>
+                                     <a class="btn-modern" href="/Home/Wishlist" style="background: #edf2f7; color: #4a5568;" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart-o"></i></a>
                                  </form>
                              </div>
-                             <div class="product-link">
-                                 <ul class="list-inline">
-                                     <li><a href="/Home/Wishlist">افزودن به علاقه‌مندی‌ها</a></li>
-                                     <li><a href="#">اشتراک‌گذاری</a></li>
-                                 </ul>
-                             </div>
-                            <p class="ptb-20">@Model.ShortDescription</p>
+                            <p class="ptb-20" style="border-top: 1px solid #e2e8f0; color: #4a5568; line-height: 1.6;">@Model.ShortDescription</p>
                             
                             @if (Model.Tags != null && Model.Tags.Any())
                             {
                                 <div class="mt-20">
-                                    <strong>برچسب‌ها: </strong>
+                                    <strong style="color: #2d3748;">برچسب‌ها: </strong>
                                     @foreach (var tag in Model.Tags)
                                     {
-                                        <a href="/Home/Shop?tagId=@tag.TagId" class="badge badge-secondary" style="background-color: #f8f9fa; color: #495057; padding: 5px 10px; border-radius: 4px; border: 1px solid #dee2e6; margin-left: 5px; text-decoration: none; display: inline-block;"># @tag.Title</a>
+                                        <a href="/Home/Shop?tagId=@tag.TagId" class="modern-badge"># @tag.Title</a>
                                     }
                                 </div>
                             }
@@ -144,116 +149,189 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <ul class="main-thumb-desc nav">
-                            <li><a class="active" data-toggle="tab" href="#dtail">توضیحات</a></li>
-                            <li><a data-toggle="tab" href="#review">نظرات (1)</a></li>
-                        </ul>
-                        <!-- Product Thumbnail Tab Content Start -->
-                        <div class="tab-content thumb-content border-default">
-                            <div id="dtail" class="tab-pane in active">
-                                <p>@Html.Raw(Model.Description ?? Model.ShortDescription)</p>
-                            </div>
-                            <div id="review" class="tab-pane">
-                                <!-- Reviews Start -->
-                                <div class="review">
-                                    <div class="group-title">
-                                        <h2>نظرات مشتریان</h2>
-                                    </div>
-                                    <h4 class="review-mini-title">جانتریک</h4>
-                                    <ul class="review-list">
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>کیفیت</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <label>جانتریک</label>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>قیمت</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <label>دیدگاه توسط <a href="https://themeforest.net/user/Jantrik">جانتریک</a></label>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>ارزش خرید</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <label>ارسال شده در 7/20/18</label>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                    </ul>
+                        <div class="modern-card">
+                            <ul class="main-thumb-desc nav mb-30" style="border-bottom: 2px solid #edf2f7; padding-bottom: 15px;">
+                                <li><a class="active" data-toggle="tab" href="#dtail" style="font-weight: 700; color: #2d3748; padding: 10px 20px;">توضیحات</a></li>
+                                <li><a data-toggle="tab" href="#review" style="font-weight: 700; color: #718096; padding: 10px 20px;">نظرات (@approvedReviews.Count)</a></li>
+                                <li><a data-toggle="tab" href="#comments-tab" style="font-weight: 700; color: #718096; padding: 10px 20px;">پرسش و پاسخ (@(((List<Azimzadeh_MVC_project.Models.Comment>)ViewBag.Comments)?.Count ?? 0))</a></li>
+                            </ul>
+                            <!-- Product Thumbnail Tab Content Start -->
+                            <div class="tab-content thumb-content">
+                                <div id="dtail" class="tab-pane in active" style="color: #4a5568; line-height: 1.8;">
+                                    <p>@Html.Raw(Model.Description ?? Model.ShortDescription)</p>
                                 </div>
-                                <!-- Reviews End -->
-                                <!-- Reviews Start -->
-                                <div class="review border-default universal-padding mt-30">
-                                    <h2 class="review-title mb-30">دیدگاه خود را بنویسید برای: <br><span> Go-Get'r Pushup Grips</span></h2>
-                                    <p class="review-mini-title">امتیاز شما</p>
-                                    <ul class="review-list">
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>کیفیت</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>قیمت</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                        <!-- Single Review List Start -->
-                                        <li>
-                                            <span>ارزش خرید</span>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-o"></i>
-                                        </li>
-                                        <!-- Single Review List End -->
-                                    </ul>
-                                    <!-- Reviews Field Start -->
-                                    <div class="riview-field mt-40">
-                                        <form autocomplete="off" action="#">
-                                            <div class="form-group">
-                                                <label class="req" for="sure-name">نام مستعار</label>
-                                                <input type="text" class="form-control" id="sure-name" required="required">
+                                <div id="review" class="tab-pane">
+                                    <!-- Reviews Start -->
+                                    <div class="review">
+                                        <div class="group-title mb-20">
+                                            <h3 style="font-weight: 700; color: #2d3748;">نظرات مشتریان</h3>
+                                        </div>
+                                        @if (approvedReviews.Any())
+                                        {
+                                            foreach (var rev in approvedReviews)
+                                            {
+                                                <div class="single-review mb-30" style="border-bottom: 1px solid #edf2f7; padding-bottom: 15px;">
+                                                    <div class="review-header d-flex justify-content-between align-items-center mb-10">
+                                                        <div class="d-flex align-items-center gap-md">
+                                                            <strong style="color: #2d3748;">@(rev.User != null ? rev.User.FullName : "کاربر مهمان")</strong>
+                                                            <span style="color: #a0aec0; font-size: 0.85rem; margin-right: 15px;">@rev.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                                        </div>
+                                                        <div class="rating" style="color: #ecc94b;">
+                                                            @for (int i = 1; i <= 5; i++)
+                                                            {
+                                                                if (i <= rev.Rating)
+                                                                {
+                                                                    <i class="fa fa-star"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="fa fa-star-o" style="color: #cbd5e0;"></i>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <p style="color: #4a5568; line-height: 1.6; white-space: pre-line;">@rev.Comment</p>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p style="color: #718096; margin-bottom: 30px;">هنوز هیچ نظری برای این محصول ثبت نشده است. اولین نفری باشید که دیدگاه خود را می‌نویسید!</p>
+                                        }
+                                    </div>
+                                    <!-- Reviews End -->
+                                    <!-- Reviews Start -->
+                                    <div class="review mt-40 pt-40" style="border-top: 1px solid #e2e8f0;">
+                                        <h3 class="review-title mb-30" style="font-weight: 700; color: #2d3748;">دیدگاه خود را بنویسید</h3>
+                                        
+                                        <form autocomplete="off" action="/Home/SubmitReview" method="post">
+                                         @Html.AntiForgeryToken()
+                                         <input type="hidden" name="productId" value="@Model.ProductId" />
+
+                                         <!-- Modern Star Rating Form -->
+                                        <div class="rating-grid">
+                                            <div style="font-weight: 600; color: #4a5568;">امتیاز شما:</div>
+                                            <div class="star-rating-input">
+                                                <input type="radio" id="star5" name="rating" value="5" checked="checked" />
+                                                <label for="star5" title="۵ ستاره"><i class="fa fa-star"></i></label>
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label for="star4" title="۴ ستاره"><i class="fa fa-star"></i></label>
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label for="star3" title="۳ ستاره"><i class="fa fa-star"></i></label>
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label for="star2" title="۲ ستاره"><i class="fa fa-star"></i></label>
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label for="star1" title="۱ ستاره"><i class="fa fa-star"></i></label>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="req" for="subject">خلاصه نظر</label>
-                                                <input type="text" class="form-control" id="subject" required="required">
+                                        </div>
+
+                                        <!-- Reviews Field Start -->
+                                        <div class="riview-field">
+                                            @if (TempData["SuccessMessage"] != null)
+                                            {
+                                                <div class="alert alert-success mb-20">@TempData["SuccessMessage"]</div>
+                                            }
+                                            @if (TempData["ErrorMessage"] != null)
+                                            {
+                                                <div class="alert alert-danger mb-20">@TempData["ErrorMessage"]</div>
+                                            }
+                                            <div class="row">
+                                                    <div class="col-md-6 form-group mb-4">
+                                                        <label class="form-label-modern req" for="user-id-select-review">ارسال به عنوان کاربر:</label>
+                                                        <select name="userId" id="user-id-select-review" class="form-control-modern w-100" style="padding: 10px; height: auto;">
+                                                            <option value="0">-- کاربر مهمان (نام دلخواه زیر) --</option>
+                                                            @foreach (var u in (List<Azimzadeh_MVC_project.Models.User>)ViewBag.Users)
+                                                            {
+                                                                <option value="@u.UserId">@u.FullName</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 form-group mb-4">
+                                                        <label class="form-label-modern" for="sure-name">نام مستعار (مخصوص کاربر مهمان)</label>
+                                                        <input type="text" name="sureName" class="form-control-modern w-100" id="sure-name" placeholder="نام خود را وارد کنید">
+                                                    </div>
+                                                    <div class="col-md-12 form-group mb-4">
+                                                        <label class="form-label-modern" for="subject">خلاصه نظر</label>
+                                                        <input type="text" name="subject" class="form-control-modern w-100" id="subject" placeholder="در یک جمله خلاصه کنید (اختیاری)">
+                                                    </div>
+                                                    <div class="col-md-12 form-group mb-4">
+                                                        <label class="form-label-modern req" for="comments">متن نظر</label>
+                                                        <textarea name="comments" class="form-control-modern w-100" rows="5" id="comments" required="required" placeholder="نقطه نظرات خود را با دیگران به اشتراک بگذارید..."></textarea>
+                                                        <div class="form-helper-text">حداقل ۲۰ کاراکتر</div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn-modern btn-primary-modern"><i class="fa fa-paper-plane"></i> ثبت نظر</button>
+                                                    </div>
+                                                </div>
+                                            
+                                        </div>
+                                        <!-- Reviews Field Start -->`r`n                                         </form>
+                                    </div>
+                                    <!-- Reviews End -->
+                                </div>
+                                <div id="comments-tab" class="tab-pane">
+                                    <!-- Comments Start -->
+                                    <div class="review">
+                                        <div class="group-title mb-20">
+                                            <h3 style="font-weight: 700; color: #2d3748;">پرسش‌ها و نظرات عمومی</h3>
+                                        </div>
+                                        
+                                        @{
+                                            var prodComments = (List<Azimzadeh_MVC_project.Models.Comment>)ViewBag.Comments;
+                                        }
+
+                                        @if (prodComments != null && prodComments.Any())
+                                        {
+                                            foreach (var comm in prodComments)
+                                            {
+                                                <div class="single-review mb-30" style="border-bottom: 1px solid #edf2f7; padding-bottom: 15px;">
+                                                    <div class="review-header d-flex justify-content-between align-items-center mb-10">
+                                                        <div class="d-flex align-items-center gap-md">
+                                                            <strong style="color: #2d3748;">@(comm.User != null ? comm.User.FullName : "کاربر مهمان")</strong>
+                                                            <span style="color: #a0aec0; font-size: 0.85rem; margin-right: 15px;">@comm.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
+                                                        </div>
+                                                    </div>
+                                                    <p style="color: #4a5568; line-height: 1.6; white-space: pre-line;">@comm.Content</p>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p style="color: #718096; margin-bottom: 30px;">هنوز هیچ پرسشی برای این محصول ثبت نشده است. اولین سوال خود را بپرسید!</p>
+                                        }
+                                    </div>
+                                    
+                                    <!-- Submit Comment Start -->
+                                    <div class="review mt-40 pt-40" style="border-top: 1px solid #e2e8f0;">
+                                        <h3 class="review-title mb-30" style="font-weight: 700; color: #2d3748;">ارسال پرسش یا دیدگاه جدید</h3>
+                                        
+                                        <form autocomplete="off" action="/Home/SubmitComment" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="targetType" value="Product" />
+                                            <input type="hidden" name="targetId" value="@Model.ProductId" />
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6 form-group mb-4">
+                                                    <label class="form-label-modern req" for="user-id-select-comment">ارسال به عنوان کاربر:</label>
+                                                    <select name="userId" id="user-id-select-comment" class="form-control-modern w-100" style="padding: 10px; height: auto;" required>
+                                                        @foreach (var u in (List<Azimzadeh_MVC_project.Models.User>)ViewBag.Users)
+                                                        {
+                                                            <option value="@u.UserId">@u.FullName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12 form-group mb-4">
+                                                    <label class="form-label-modern req" for="comment-content">متن دیدگاه</label>
+                                                    <textarea name="content" class="form-control-modern w-100" rows="5" id="comment-content" required="required" placeholder="پرسش یا دیدگاه خود را مطرح کنید..."></textarea>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn-modern btn-primary-modern"><i class="fa fa-paper-plane"></i> ارسال دیدگاه</button>
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="req" for="comments">متن نظر</label>
-                                                <textarea class="form-control" rows="5" id="comments" required="required"></textarea>
-                                            </div>
-                                            <button type="submit" class="btn-submit">ثبت نظر</button>
                                         </form>
                                     </div>
-                                    <!-- Reviews Field Start -->
+                                    <!-- Submit Comment End -->
                                 </div>
-                                <!-- Reviews End -->
                             </div>
                         </div>
                     </div>
@@ -446,4 +524,34 @@
         </div>
         <!-- Brand Logo End -->
 
-        
+        <!-- Sticky Mobile CTA Bar -->
+        <div class="sticky-cta-bar d-lg-none" id="stickyCtaBar">
+            <div class="sticky-price-info">
+                <div style="font-size: 0.85rem; color: #718096; font-weight: 600;">@Model.Title</div>
+                @if (Model.DiscountPrice.HasValue)
+                {
+                    <div style="font-weight: 800; color: #e53e3e; font-size: 1.1rem;">@Model.DiscountPrice.Value.ToString("N0") ریال</div>
+                }
+                else
+                {
+                    <div style="font-weight: 800; color: #e53e3e; font-size: 1.1rem;">@Model.Price.ToString("N0") ریال</div>
+                }
+            </div>
+            <a class="btn-modern btn-primary-modern" href="/Home/Cart" style="padding: 8px 16px;"><i class="fa fa-shopping-cart"></i> افزودن</a>
+        </div>
+
+        <script>
+            // Sticky CTA Bar logic for mobile
+            document.addEventListener("DOMContentLoaded", function() {
+                var stickyBar = document.getElementById("stickyCtaBar");
+                var triggerPoint = 400; // Adjust scroll threshold as needed
+                
+                window.addEventListener("scroll", function() {
+                    if (window.scrollY > triggerPoint) {
+                        stickyBar.classList.add("show");
+                    } else {
+                        stickyBar.classList.remove("show");
+                    }
+                });
+            });
+        </script>

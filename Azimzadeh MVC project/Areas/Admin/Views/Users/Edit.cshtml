@@ -1,0 +1,144 @@
+@model Azimzadeh_MVC_project.Models.User
+@{
+    ViewBag.Title = "ویرایش کاربر";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    string homePhoneCountry = "";
+    string homePhoneBody = "";
+    if (Model != null && !string.IsNullOrEmpty(Model.HomePhoneNumber))
+    {
+        var parts = Model.HomePhoneNumber.Split('-');
+        if (parts.Length == 2)
+        {
+            homePhoneCountry = parts[0].Replace("+", "").Trim();
+            homePhoneBody = parts[1].Trim();
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-edit"></i> ویرایش اطلاعات کاربر: <strong>@Model.FullName</strong>
+            </header>
+            <div class="panel-body">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary(false, "خطاهای زیر رخ داده است:")
+                    </div>
+                }
+
+                <form class="form-horizontal tasi-form" method="post" action="@Url.Action("Edit", "Users", new { area = "Admin", id = Model.UserId })">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">جنسیت</label>
+                        <div class="col-sm-6">
+                            <select name="gender" class="form-control">
+                                <option value="آقا" @(Model.Gender == "آقا" ? "selected" : "")>آقای.</option>
+                                <option value="خانم" @(Model.Gender == "خانم" ? "selected" : "")>خانم.</option>
+                                <option value="سایر" @(Model.Gender == "سایر" ? "selected" : "")>سایر</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">نام</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="firstName" class="form-control" value="@Model.FirstName" required="required" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">نام خانوادگی</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="lastName" class="form-control" value="@Model.LastName" required="required" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">آدرس ایمیل</label>
+                        <div class="col-sm-6">
+                            <input type="email" name="email" class="form-control" value="@Model.Email" required="required" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">شماره همراه</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="phone" class="form-control" value="@Model.PhoneNumber" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">تلفن ثابت</label>
+                        <div class="col-sm-6">
+                            <div style="display: flex; align-items: center; direction: ltr;">
+                                <span style="margin-right: 5px; font-weight: bold;">+</span>
+                                <input type="text" name="homePhoneCountry" class="form-control" style="width: 70px; text-align: center;" placeholder="98" maxlength="3" value="@homePhoneCountry" />
+                                <span style="margin: 0 10px;">-</span>
+                                <input type="text" name="homePhoneBody" class="form-control" style="flex: 1;" placeholder="12345678" maxlength="8" value="@homePhoneBody" />
+                            </div>
+                            <span class="help-block" style="direction: rtl; text-align: right;">کد کشور (۲ یا ۳ رقم) و شماره ثابت (۸ رقم)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">آدرس ۱</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="address1" class="form-control" value="@Model.Address1" placeholder="آدرس اصلی" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">آدرس ۲</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="address2" class="form-control" value="@Model.Address2" placeholder="آدرس فرعی (اختیاری)" />
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning" style="margin: 20px 0;">
+                        <strong><i class="icon-warning-sign"></i> نیازمند بررسی امنیتی/حقوقی:</strong> اطلاعات پرداخت به صورت محلی ذخیره می‌شود. طبق استانداردهای امنیتی، از ذخیره‌سازی داده‌های حساس مانند CVV خودداری شود.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">شماره کارت بانکی</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="cardNumber" class="form-control" value="@Model.CardNumber" placeholder="۱۶ رقم بدون فاصله" maxlength="16" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">CVV2</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="cvv" class="form-control" value="@Model.CVV" placeholder="۳ یا ۴ رقم" maxlength="4" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">تاریخ انقضا</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="expirationDate" class="form-control" value="@Model.ExpirationDate" placeholder="MM/YY (مانند 08/29)" maxlength="5" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">تغییر رمز عبور (اختیاری)</label>
+                        <div class="col-sm-6">
+                            <input type="password" name="newPassword" class="form-control" placeholder="تنها در صورت نیاز به تغییر رمز عبور وارد کنید" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success"><i class="icon-save"></i> ذخیره تغییرات</button>
+                            <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="btn btn-default"><i class="icon-remove"></i> انصراف</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>

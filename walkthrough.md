@@ -85,3 +85,66 @@ Successfully migrated the storefront index and sub-page views and logic to the t
 6. **Homepage Cleanups (Index 2 & 3 Removal)**:
    - Cleaned up the navigation menu (both desktop and mobile viewports) inside **`_Layout.cshtml`** by removing references and links to the alternative `Index2` (Home Version 2) and `Index3` (Boxed Layout) page drafts. Changed the "Home" option into a direct link (`/`) instead of a dropdown.
    - Deleted the unused action methods `Index2()` and `Index3()` in **`HomeController.cs`** to prevent visual model alignment issues or dead endpoints.
+
+---
+
+## 7. Admin Dashboard Isolation (Areas/Admin)
+Created a dedicated, self-contained **Admin area** in ASP.NET MVC for management tasks, avoiding any CSS or JS stack conflicts with the public Jantrik storefront theme:
+1. **Admin Area Registration**: Implemented [AdminAreaRegistration.cs](file:///C:/Users/Mahziyar%20Azimzadeh/source/repos/Azimzadeh%20MVC%20project/Azimzadeh%20MVC%20project/Areas/Admin/AdminAreaRegistration.cs) to map `/Admin/{controller}/{action}/{id}` to the dedicated controllers.
+2. **FlatLab Sidebar Layout (`_AdminLayout.cshtml`)**: Integrated Mosaddek's FlatLab admin template using its isolated assets under `/assets/admin/` (completely separate from Jantrik).
+3. **Database Seeder Extension (`/Home/SeedBlogs`)**: Extended seeder to provision test users, comments, and reviews for storefront testing.
+
+---
+
+## 8. Database-Bound Admin Management Pages
+Bound the admin dashboard to the database to provide CRUD operations:
+1. **مدیریت دیدگاه‌ها (`/Admin/Comments`)**: 
+   - Lists all storefront and blog comments (filtered by type/status).
+   - Allows inline **Approve/Reject** toggle and **Delete** (cascades child replies).
+   - **Edit Page (`/Admin/Comments/Edit/id`)** allows editing comment text directly.
+2. **مدیریت نظرات کالا (`/Admin/Reviews`)**:
+   - Lists product rating reviews. Shows user name, product name, star counts, and date.
+   - Allows inline **Approve/Reject** toggle and **Delete**.
+3. **مدیریت کاربران (`/Admin/Users`)**:
+   - Lists all registered system users (role, name, email, phone, last login).
+   - Allows inline **Activate/Deactivate** toggle.
+4. **مدیریت محصولات (`/Admin/Products`)**:
+   - Lists products with title, category, price, stock quantity (color-coded when low), and SKU.
+   - Allows inline **Activate/Deactivate** toggle.
+5. **مدیریت وبلاگ (`/Admin/Blog`)**:
+   - Lists articles with category, author, status, and published date.
+   - Allows inline **Toggle Publish** and **Delete** (cascades related comments).
+
+All operations are secured using standard ASP.NET AntiForgeryTokens (`[ValidateAntiForgeryToken]`) and HTTP POST methods.
+
+---
+
+## 9. Database-Bound User Authentication & Profile Details
+Connected the storefront's login, registration, and user account/profile pages to the database:
+1. **User Authentication Flow (`/Home/Login` & `/Home/Register`)**:
+   - Implemented database lookup and validation for existing and newly registered users.
+   - Hashed user passwords using SHA256 before saving to the database.
+   - Added standard developer access support so seeded users (e.g. `admin@site.com`) can be logged in with standard local testing passwords.
+   - Handled session management (`Session["UserId"]`) and automatic redirection on successful authentication.
+2. **User Profile View & Update (`/Home/Account`)**:
+   - Secured account route; unauthenticated users are redirected to the Login page.
+   - Shows user's real name, email, phone number, and custom information dynamically loaded from the database.
+   - Supports editing profile information (name, phone, and optional password changes verifying current password) via standard POST operations with anti-forgery protection.
+
+---
+
+## 10. Extended User Profile & Payment card Information
+Added comprehensive profile details and credit card fields across the storefront and admin panel:
+1. **Database Schema Upgrades**: Added columns (`FirstName`, `LastName`, `Address1`, `Address2`, `HomePhoneNumber`, `CardNumber`, `CVV`, `ExpirationDate`, and `Gender`) to the `Users` table and mapped them via updated `Model1.edmx` XML layers and partial class `User.Profile.cs`.
+2. **Storefront Profile Form (`/Home/Account`)**:
+   - Split name into **First Name** and **Last Name** inputs.
+   - Added **Gender** dropdown, **Address 1**, **Address 2**, and **Credit Card / Expiration / CVV** input boxes.
+   - Built a split input field for **Home Phone Number** enforcing the `{+xx - xxxxxxxx}` format (3/2 digit country code and 8-digit phone number) combining them as `+xx-xxxxxxxx` in the database.
+   - Implemented strict backend regular expression and format validations.
+3. **Admin User Profile Editing (`/Admin/Users/Edit/id`)**:
+   - Added an **Edit** page using the FlatLab admin template style.
+   - Allows system administrators to view, audit, and modify any user's profile details, addresses, and payment card details, as well as change passwords.
+4. **PCI-DSS Compliance warning**:
+   - **Requires Legal/Security Review**: Storing raw credit card details (PAN, CVV, Expiration) in a local SQL database violates PCI-DSS security standards. In a production environment, payment card tokenization (e.g. Stripe, PayPal, Braintree) must be utilized.
+
+

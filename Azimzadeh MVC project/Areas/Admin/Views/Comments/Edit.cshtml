@@ -1,0 +1,44 @@
+@model Azimzadeh_MVC_project.Models.Comment
+@{
+    ViewBag.Title = "ویرایش دیدگاه";
+}
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-pencil"></i> ویرایش دیدگاه
+            </header>
+            <div class="panel-body">
+                <div class="alert alert-info">
+                    <strong>فرستنده:</strong>
+                    @{
+                        string userName = "مهمان";
+                        if (Model.User != null) { userName = Model.User.FullName; }
+                    }
+                    @userName &nbsp;&nbsp;
+                    <strong>نوع:</strong> @Model.TargetType &nbsp;&nbsp;
+                    <strong>تاریخ:</strong> @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                </div>
+
+                @using (Html.BeginForm("Edit", "Comments", new { area = "Admin", id = Model.CommentId }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label>متن دیدگاه</label>
+                        <textarea name="content" class="form-control" rows="6" required>@Model.Content</textarea>
+                        @Html.ValidationMessage("content", new { @class = "text-danger" })
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="icon-ok"></i> ذخیره تغییرات
+                        </button>
+                        <a href="@Url.Action("Index", "Comments", new { area = "Admin" })" class="btn btn-default">
+                            <i class="icon-arrow-right"></i> بازگشت
+                        </a>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

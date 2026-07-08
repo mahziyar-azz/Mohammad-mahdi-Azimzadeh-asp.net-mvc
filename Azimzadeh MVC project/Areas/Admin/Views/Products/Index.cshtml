@@ -1,0 +1,110 @@
+@model List<Azimzadeh_MVC_project.Models.Product>
+@{
+    ViewBag.Title = "مدیریت محصولات";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-tags"></i> مدیریت محصولات &nbsp;<span class="badge bg-primary">@ViewBag.Total</span>
+            </header>
+            <div class="panel-body">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="alert alert-info text-center">هیچ محصولی یافت نشد.</div>
+                }
+                else
+                {
+                    <table class="table table-striped table-hover table-advance">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>عنوان</th>
+                                <th>دسته‌بندی</th>
+                                <th>قیمت (ریال)</th>
+                                <th>موجودی</th>
+                                <th>SKU</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNum = 1;}
+                            @foreach (var prod in Model)
+                            {
+                                string catName = "-";
+                                if (prod.Category != null) { catName = prod.Category.Title; }
+                                <tr>
+                                    <td>@rowNum</td>
+                                    <td>
+                                        <div style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="@prod.Title">
+                                            <a href="/Home/Product?id=@prod.ProductId" target="_blank">@prod.Title</a>
+                                        </div>
+                                    </td>
+                                    <td>@catName</td>
+                                    <td>@prod.Price.ToString("N0")</td>
+                                    <td>
+                                        @if (prod.StockQuantity <= 5)
+                                        {
+                                            <span class="label label-danger label-mini">@prod.StockQuantity</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success label-mini">@prod.StockQuantity</span>
+                                        }
+                                    </td>
+                                    <td><code>@prod.SKU</code></td>
+                                    <td>
+                                        @if (prod.IsActive)
+                                        {
+                                            <span class="label label-success label-mini">فعال</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger label-mini">غیرفعال</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @using (Html.BeginForm("ToggleActive", "Products", new { area = "Admin", id = prod.ProductId }, FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            if (prod.IsActive)
+                                            {
+                                                <button type="submit" class="btn btn-warning btn-xs" title="غیرفعال کردن">
+                                                    <i class="icon-ban-circle"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-success btn-xs" title="فعال کردن">
+                                                    <i class="icon-ok"></i>
+                                                </button>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                rowNum++;
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @* Pagination *@
+                @if (ViewBag.TotalPages != null && (int)ViewBag.TotalPages > 1)
+                {
+                    <div class="text-center">
+                        <ul class="pagination pagination-sm">
+                            @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
+                            {
+                                <li class="@(p == (int)ViewBag.CurrentPage ? "active" : "")">
+                                    <a href="@Url.Action("Index", new { page = p })">@p</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+@model Azimzadeh_MVC_project.Models.Product
+
+@{
+    var mainImage = Model.ProductImages.FirstOrDefault(img => img.IsMain) ?? Model.ProductImages.FirstOrDefault();
+    var mainImagePath = mainImage != null ? mainImage.ImagePath : "/assets/img/products/1.jpg";
+    var hoverImage = Model.ProductImages.FirstOrDefault(img => !img.IsMain) ?? mainImage;
+    var hoverImagePath = hoverImage != null ? hoverImage.ImagePath : mainImagePath;
+}
+
+<div class="shop-list-card">
+    <!-- Product Image Start -->
+    <div class="pro-img">
+        <a href="/Home/Product?id=@Model.ProductId">
+            <img class="primary-img" src="@mainImagePath" alt="@Model.Title">
+            <img class="secondary-img" src="@hoverImagePath" alt="@Model.Title">
+        </a>
+        @if (Model.DiscountPrice.HasValue)
+        {
+            var discountPercent = (int)Math.Round((double)(Model.Price - Model.DiscountPrice.Value) / (double)Model.Price * 100);
+            <span class="shop-badge-discount">-@discountPercent%</span>
+        }
+    </div>
+    <!-- Product Image End -->
+    
+    <!-- Product Content Start -->
+    <div class="pro-content">
+        <div class="product-rating">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+        </div>                                
+        
+        <h4><a href="/Home/Product?id=@Model.ProductId">@Model.Title</a></h4>
+        
+        <div class="price-box">
+            @if (Model.DiscountPrice.HasValue)
+            {
+                <span class="price">@Model.DiscountPrice.Value.ToString("N0") ریال</span>
+                <del class="prev-price">@Model.Price.ToString("N0") ریال</del>
+            }
+            else
+            {
+                <span class="price">@Model.Price.ToString("N0") ریال</span>
+            }
+        </div>
+        
+        <div class="pro-desc">
+            @Model.ShortDescription
+        </div>
+
+        <div class="pro-actions">
+            <a class="btn-add-cart" href="/Home/Cart" data-toggle="tooltip" title="افزودن به سبد خرید">افزودن به سبد خرید</a>
+            <a class="btn-wishlist" href="/Home/Wishlist" data-toggle="tooltip" title="افزودن به علاقه‌مندی‌ها"><i class="fa fa-heart-o"></i></a>
+        </div>
+    </div>
+    <!-- Product Content End -->
+</div>

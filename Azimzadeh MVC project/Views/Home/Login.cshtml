@@ -1,4 +1,4 @@
-﻿ 
+ 
         <!-- Breadcrumb Start -->
         <div class="breadcrumb-area ptb-60 ptb-sm-30">
             <div class="container">
@@ -34,14 +34,23 @@
                             <div class="return-customer">
                                 <h3 class="mb-10">مشتری قبلی</h3>
                                 <p class="mb-10"><strong>من یک مشتری ثبت‌نام‌شده هستم</strong></p>
-                                <form action="#">
+                                @if (TempData["ErrorMessage"] != null)
+                                {
+                                    <div class="alert alert-danger" style="margin-top: 10px;">@TempData["ErrorMessage"]</div>
+                                }
+                                @if (TempData["SuccessMessage"] != null)
+                                {
+                                    <div class="alert alert-success" style="margin-top: 10px;">@TempData["SuccessMessage"]</div>
+                                }
+                                <form action="/Home/Login" method="post">
+                                    @Html.AntiForgeryToken()
                                     <div class="form-group">
                                         <label class="control-label">آدرس ایمیل</label>
-                                        <input type="text" name="email" placeholder="آدرس ایمیل خود را وارد کنید..." id="input-email" class="form-control">
+                                        <input type="email" name="email" placeholder="آدرس ایمیل خود را وارد کنید..." id="input-email" class="form-control" required="required">
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">رمز عبور</label>
-                                        <input type="password" name="pass" placeholder="رمز عبور" id="input-password" class="form-control">
+                                        <input type="password" name="password" placeholder="رمز عبور" id="input-password" class="form-control" required="required">
                                     </div>
                                     <p class="lost-password"><a href="/Home/ForgotPassword">رمز عبور خود را فراموش کرده‌اید؟</a></p>
                                     <input type="submit" value="ورود" class="return-customer-btn">

@@ -1,0 +1,128 @@
+@model List<Azimzadeh_MVC_project.Models.Review>
+@{
+    ViewBag.Title = "مدیریت نظرات محصولات";
+    string returnUrl = Request.Url.PathAndQuery;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                    <span><i class="icon-star"></i> نظرات محصولات &nbsp;<span class="badge bg-primary">@ViewBag.Total</span></span>
+                    <div>
+                        <a href="@Url.Action("Index", new { filter = "all" })" class="btn btn-xs @(ViewBag.Filter == "all" ? "btn-primary" : "btn-default")">همه</a>
+                        <a href="@Url.Action("Index", new { filter = "pending" })" class="btn btn-xs @(ViewBag.Filter == "pending" ? "btn-warning" : "btn-default")">در انتظار</a>
+                        <a href="@Url.Action("Index", new { filter = "approved" })" class="btn btn-xs @(ViewBag.Filter == "approved" ? "btn-success" : "btn-default")">تأیید شده</a>
+                    </div>
+                </div>
+            </header>
+            <div class="panel-body">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div class="alert alert-info text-center">هیچ نظری یافت نشد.</div>
+                }
+                else
+                {
+                    <table class="table table-striped table-hover table-advance">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>کاربر</th>
+                                <th>محصول</th>
+                                <th>امتیاز</th>
+                                <th>متن نظر</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rowNum = 1;}
+                            @foreach (var rev in Model)
+                            {
+                                string userName = "مهمان";
+                                if (rev.User != null) { userName = rev.User.FullName; }
+                                string productTitle = "ناشناس";
+                                if (rev.Product != null) { productTitle = rev.Product.Title; }
+
+                                string stars = "";
+                                for (int s = 1; s <= 5; s++)
+                                {
+                                    if (s <= rev.Rating) { stars += "★"; } else { stars += "☆"; }
+                                }
+                                <tr>
+                                    <td>@rowNum</td>
+                                    <td><strong>@userName</strong></td>
+                                    <td>
+                                        <div style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="@productTitle">
+                                            @productTitle
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning" style="letter-spacing:1px;">@stars</span>
+                                    </td>
+                                    <td>
+                                        <div style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="@rev.Comment">
+                                            @rev.Comment
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (rev.IsApproved)
+                                        {
+                                            <span class="label label-success label-mini">تأیید شده</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-warning label-mini">در انتظار</span>
+                                        }
+                                    </td>
+                                    <td style="white-space:nowrap;">@rev.CreatedAt.ToString("yyyy/MM/dd")</td>
+                                    <td style="white-space:nowrap;">
+                                        @* Approve Toggle *@
+                                        @using (Html.BeginForm("Approve", "Reviews", new { area = "Admin", id = rev.ReviewId }, FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                            if (rev.IsApproved)
+                                            {
+                                                <button type="submit" class="btn btn-warning btn-xs" title="رد کردن"><i class="icon-remove"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-success btn-xs" title="تأیید"><i class="icon-ok"></i></button>
+                                            }
+                                        }
+                                        @* Delete *@
+                                        @using (Html.BeginForm("Delete", "Reviews", new { area = "Admin", id = rev.ReviewId }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('آیا از حذف این نظر مطمئن هستید؟');" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                            <button type="submit" class="btn btn-danger btn-xs" title="حذف"><i class="icon-trash"></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                                rowNum++;
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @* Pagination *@
+                @if (ViewBag.TotalPages != null && (int)ViewBag.TotalPages > 1)
+                {
+                    <div class="text-center">
+                        <ul class="pagination pagination-sm">
+                            @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
+                            {
+                                <li class="@(p == (int)ViewBag.CurrentPage ? "active" : "")">
+                                    <a href="@Url.Action("Index", new { filter = ViewBag.Filter, page = p })">@p</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
