@@ -1,0 +1,84 @@
+@model Azimzadeh_MVC_project.Models.Gallery
+@{
+    ViewBag.Title = "ویرایش تصویر گالری";
+}
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-pencil"></i> ویرایش تصویر گالری: @Model.Title
+            </header>
+            
+            <div class="panel-body">
+                @using (Html.BeginForm("Edit", "Gallery", FormMethod.Post, new { @class = "form-horizontal tasi-form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.GalleryId)
+                    @Html.HiddenFor(model => model.ImagePath)
+                    @Html.HiddenFor(model => model.CreatedAt)
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, "عنوان تصویر", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "مثال: مته گیر برقی رونیکس", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, "توضیحات کوتاه", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "3", placeholder = "مثال: مشخصات فنی یا تصویر با کیفیت از محصول" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">تصویر فعلی</label>
+                        <div class="col-lg-9">
+                            <img src="@Model.ImagePath" alt="تصویر گالری" style="max-height: 100px; max-width: 250px; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 10px; display: block;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">تغییر فایل تصویر</label>
+                        <div class="col-lg-9">
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                            @Html.ValidationMessage("ImagePath", "", new { @class = "text-danger" })
+                            <span class="help-block text-muted">در صورت عدم تمایل به تغییر تصویر، این فیلد را خالی بگذارید.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DisplayOrder, "ترتیب نمایش", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, "وضعیت فعال بودن", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsActive) فعال باشد
+                                </label>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-success">ثبت تغییرات</button>
+                            <a href="@Url.Action("Index", "Gallery", new { area = "Admin" })" class="btn btn-default">انصراف</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

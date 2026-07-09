@@ -1,0 +1,91 @@
+@model Azimzadeh_MVC_project.Models.Slider
+@{
+    ViewBag.Title = "ایجاد اسلایدر جدید";
+}
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-plus"></i> ایجاد اسلایدر جدید
+            </header>
+            
+            <div class="panel-body">
+                @using (Html.BeginForm("Create", "Sliders", FormMethod.Post, new { @class = "form-horizontal tasi-form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, "عنوان اصلی (Title)", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "مثال: ابزارآلات دستی" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            <span class="help-block text-muted">می‌توانید برای شکستن خط در نمایش اسلایدر از کلید Enter استفاده کنید.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Subtitle, "عنوان فرعی (Subtitle)", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.Subtitle, new { @class = "form-control", placeholder = "مثال: فروش ویژه" })
+                            @Html.ValidationMessageFor(model => model.Subtitle, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ButtonText, "متن دکمه (Button Text)", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.ButtonText, new { @class = "form-control", placeholder = "مثال: هم‌اکنون خرید کنید" })
+                            @Html.ValidationMessageFor(model => model.ButtonText, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ButtonLink, "لینک دکمه (Button Link)", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.ButtonLink, new { @class = "form-control", placeholder = "مثال: /Home/Shop" })
+                            @Html.ValidationMessageFor(model => model.ButtonLink, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">تصویر اسلایدر (Image)*</label>
+                        <div class="col-lg-9">
+                            <input type="file" name="imageFile" class="form-control" required="required" accept="image/*" />
+                            @Html.ValidationMessage("ImagePath", "", new { @class = "text-danger" })
+                            <span class="help-block text-muted">تصویری با ابعاد مناسب اسلایدر (مانند ۱۹۲۰ در ۹۰۰ پیکسل) آپلود کنید.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DisplayOrder, "ترتیب نمایش", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control", type = "number" })
+                            @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, "وضعیت فعال بودن", new { @class = "col-lg-3 control-label" })
+                        <div class="col-lg-9">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsActive) فعال باشد
+                                </label>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-success">ایجاد اسلایدر</button>
+                            <a href="@Url.Action("Index", "Sliders", new { area = "Admin" })" class="btn btn-default">انصراف</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

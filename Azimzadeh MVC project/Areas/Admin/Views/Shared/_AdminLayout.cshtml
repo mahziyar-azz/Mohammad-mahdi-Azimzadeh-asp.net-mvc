@@ -183,6 +183,12 @@
                             <span>کاربران سیستم</span>
                         </a>
                     </li>
+                    <li class="@(Request.RequestContext.RouteData.Values["controller"].ToString() == "Gallery" ? "active" : "")">
+                        <a class="" href="/Admin/Gallery">
+                            <i class="icon-picture"></i>
+                            <span>مدیریت گالری تصاویر</span>
+                        </a>
+                    </li>
                     <li class="@(Request.RequestContext.RouteData.Values["controller"].ToString() == "Settings" ? "active" : "")">
                         <a class="" href="/Admin/Settings">
                             <i class="icon-cog"></i>
