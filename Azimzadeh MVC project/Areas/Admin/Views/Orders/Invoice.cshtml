@@ -58,7 +58,7 @@
                                 <li>روش پرداخت: @Model.PaymentStatus</li>
                                 <li>وضعیت سفارش: 
                                     @{
-                                        string statusColor = "#f0ad4e";
+                                        string statusColor = "#000000";
                                         if (Model.OrderStatus == "تحویل شده" || Model.OrderStatus == "تکمیل شده") { statusColor = "#5cb85c"; }
                                         else if (Model.OrderStatus == "لغو شده") { statusColor = "#d9534f"; }
                                     }

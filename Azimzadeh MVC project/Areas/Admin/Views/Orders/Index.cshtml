@@ -32,16 +32,18 @@
                             @foreach (var order in Model)
                             {
                                 string badgeClass = "label label-warning";
-                                if (order.OrderStatus == "تحویل شده") { badgeClass = "label label-success"; }
+                                string badgeStyle = "";
+                                if (order.OrderStatus == "تحویل شده" || order.OrderStatus == "تکمیل شده") { badgeClass = "label label-success"; }
                                 else if (order.OrderStatus == "لغو شده") { badgeClass = "label label-danger"; }
                                 else if (order.OrderStatus == "ارسال شده") { badgeClass = "label label-info"; }
+                                else { badgeStyle = "color: #000;"; }
                                 
                                 <tr>
                                     <td><strong>@order.OrderNumber</strong></td>
                                     <td>@(order.User != null ? order.User.FullName : "کاربر ناشناس")</td>
                                     <td>@order.TotalAmount.ToString("N0") ریال</td>
                                     <td>
-                                        <span class="@badgeClass">@order.OrderStatus</span>
+                                        <span class="@badgeClass" style="@badgeStyle">@order.OrderStatus</span>
                                     </td>
                                     <td>@order.PaymentStatus</td>
                                     <td>@order.CreatedAt.ToString("yyyy/MM/dd HH:mm")</td>

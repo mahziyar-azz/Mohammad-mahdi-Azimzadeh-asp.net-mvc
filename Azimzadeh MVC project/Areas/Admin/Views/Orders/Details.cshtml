@@ -48,11 +48,13 @@
                             <td>
                                 @{
                                     string badgeClass = "label label-warning";
-                                    if (Model.OrderStatus == "تحویل شده") { badgeClass = "label label-success"; }
+                                    string badgeStyle = "";
+                                    if (Model.OrderStatus == "تحویل شده" || Model.OrderStatus == "تکمیل شده") { badgeClass = "label label-success"; }
                                     else if (Model.OrderStatus == "لغو شده") { badgeClass = "label label-danger"; }
                                     else if (Model.OrderStatus == "ارسال شده") { badgeClass = "label label-info"; }
+                                    else { badgeStyle = "color: #000;"; }
                                 }
-                                <span class="@badgeClass">@Model.OrderStatus</span>
+                                <span class="@badgeClass" style="@badgeStyle">@Model.OrderStatus</span>
                             </td>
                         </tr>
                     </tbody>

@@ -35,7 +35,22 @@
                         <strong>روش پرداخت:</strong> @Model.PaymentStatus
                     </div>
                     <div class="col-md-6 mb-10">
-                        <strong>وضعیت سفارش:</strong> <span class="badge badge-success" style="background: #38a169; color: #fff; padding: 5px 10px; border-radius: 4px;">@Model.OrderStatus</span>
+                        <strong>وضعیت سفارش:</strong> 
+                        @{
+                            string bgSuccessColor = "#febf14";
+                            string textSuccessColor = "#000000";
+                            if (Model.OrderStatus == "تحویل شده" || Model.OrderStatus == "تکمیل شده" || Model.OrderStatus == "Completed" || Model.OrderStatus == "تحویل داده شده")
+                            {
+                                bgSuccessColor = "#38a169";
+                                textSuccessColor = "#ffffff";
+                            }
+                            else if (Model.OrderStatus == "لغو شده" || Model.OrderStatus == "Cancelled")
+                            {
+                                bgSuccessColor = "#e53e3e";
+                                textSuccessColor = "#ffffff";
+                            }
+                        }
+                        <span class="badge" style="background: @bgSuccessColor; color: @textSuccessColor; padding: 5px 10px; border-radius: 4px;">@Model.OrderStatus</span>
                     </div>
                     <div class="col-md-12">
                         <strong>آدرس ارسال:</strong> @(Model.UserAddress != null ? $"{Model.UserAddress.Province}، {Model.UserAddress.City}، {Model.UserAddress.FullAddress} (کد پستی: {Model.UserAddress.PostalCode})" : "-")
