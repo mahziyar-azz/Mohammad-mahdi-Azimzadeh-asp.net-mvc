@@ -279,7 +279,19 @@ namespace Azimzadeh_MVC_project.Controllers
                 address.FullAddress = fullAddress.Trim();
                 address.PostalCode = postalCode.Trim();
             }
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                var errorMessages = ex.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => x.PropertyName + ": " + x.ErrorMessage);
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                throw new System.Data.Entity.Validation.DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
 
             if (string.IsNullOrEmpty(user.FirstName))
             {
@@ -331,7 +343,19 @@ namespace Azimzadeh_MVC_project.Controllers
             db.Carts.Remove(cart);
 
             db.Orders.Add(order);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                var errorMessages = ex.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => x.PropertyName + ": " + x.ErrorMessage);
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                throw new System.Data.Entity.Validation.DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
 
             TempData["SuccessMessage"] = $"سفارش شما با موفقیت ثبت شد! شماره سفارش: {orderNumber}";
             return RedirectToAction("OrderSuccess", new { id = order.OrderId });

@@ -1,0 +1,106 @@
+@model Azimzadeh_MVC_project.Models.Product
+@{
+    ViewBag.Title = "افزودن محصول جدید";
+}
+
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-plus"></i> افزودن محصول جدید
+            </header>
+            
+            <div class="panel-body">
+                @using (Html.BeginForm("Create", "Products", FormMethod.Post, new { @class = "form-horizontal tasi-form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, "عنوان محصول *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "عنوان محصول به فارسی (مثال: دریل بتن کن رونیکس مدل 2701)", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryId, "دسته‌بندی محصول *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            @Html.DropDownList("CategoryId", null, "انتخاب کنید...", new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.SKU, "کد محصول (SKU)", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            @Html.TextBoxFor(model => model.SKU, new { @class = "form-control", placeholder = "مثال: RX-2701" })
+                            @Html.ValidationMessageFor(model => model.SKU, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Price, "قیمت پایه (ریال) *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            @Html.TextBoxFor(model => model.Price, new { @class = "form-control", type = "number", required = "required", min = "0" })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.DiscountPrice, "قیمت با تخفیف (ریال)", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            @Html.TextBoxFor(model => model.DiscountPrice, new { @class = "form-control", type = "number", min = "0" })
+                            @Html.ValidationMessageFor(model => model.DiscountPrice, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StockQuantity, "موجودی انبار *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            @Html.TextBoxFor(model => model.StockQuantity, new { @class = "form-control", type = "number", required = "required", min = "0" })
+                            @Html.ValidationMessageFor(model => model.StockQuantity, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.IsActive, "وضعیت فعال بودن", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-4">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsActive) فعال باشد (نمایش در سایت)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ShortDescription, "توضیحات کوتاه (کارت محصول)", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(model => model.ShortDescription, new { @class = "form-control", rows = "2", placeholder = "خلاصه‌ای کوتاه در مورد محصول جهت نمایش در بخش سرچ و لیست‌ها" })
+                            @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, "توضیحات کامل محصول", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "8", placeholder = "توضیحات کامل فنی، نقد و بررسی محصول و ویژگی‌های کلیدی" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">تصویر شاخص محصول</label>
+                        <div class="col-lg-10">
+                            <input type="file" name="mainImageFile" class="form-control" accept="image/*" />
+                            <span class="help-block text-muted">فرمت‌های مجاز: jpg, jpeg, png. حداکثر حجم ۲ مگابایت.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success"><i class="icon-save"></i> ذخیره محصول</button>
+                            <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="btn btn-default">انصراف</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

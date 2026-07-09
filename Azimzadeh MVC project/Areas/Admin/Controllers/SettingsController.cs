@@ -33,6 +33,7 @@ namespace Azimzadeh_MVC_project.Areas.Admin.Controllers
         // POST: Admin/Settings/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Edit(int id, string settingValue)
         {
             var setting = db.SiteSettings.Find(id);
