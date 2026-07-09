@@ -29,7 +29,16 @@ CREATE TABLE Users (
     IsActive        BIT NOT NULL DEFAULT 1,
     LastLoginAt     DATETIME2 NULL,
     CreatedAt       DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-    UpdatedAt       DATETIME2 NULL
+    UpdatedAt       DATETIME2 NULL,
+    FirstName       NVARCHAR(100) NULL,
+    LastName        NVARCHAR(100) NULL,
+    Address1        NVARCHAR(500) NULL,
+    Address2        NVARCHAR(500) NULL,
+    HomePhoneNumber NVARCHAR(50)  NULL,
+    CardNumber      NVARCHAR(50)  NULL,
+    CVV             NVARCHAR(10)  NULL,
+    ExpirationDate  NVARCHAR(20)  NULL,
+    Gender          NVARCHAR(20)  NULL
 );
 
 CREATE TABLE UserRoles (
