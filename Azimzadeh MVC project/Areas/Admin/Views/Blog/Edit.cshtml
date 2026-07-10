@@ -1,0 +1,93 @@
+@model Azimzadeh_MVC_project.Models.BlogPost
+@{
+    ViewBag.Title = "ویرایش مقاله";
+    string coverImg = !string.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "/assets/img/blog/default.jpg";
+}
+
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+        <section class="panel">
+            <header class="panel-heading">
+                <i class="icon-pencil"></i> ویرایش مقاله: @Model.Title
+            </header>
+            
+            <div class="panel-body">
+                @using (Html.BeginForm("Edit", "Blog", FormMethod.Post, new { @class = "form-horizontal tasi-form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.PostId)
+                    @Html.HiddenFor(model => model.Slug)
+                    @Html.HiddenFor(model => model.UserId)
+                    @Html.HiddenFor(model => model.ImagePath)
+                    @Html.HiddenFor(model => model.CreatedAt)
+                    @Html.HiddenFor(model => model.ViewCount)
+                    @Html.HiddenFor(model => model.PublishedAt)
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, "عنوان مقاله *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "عنوان مقاله را وارد کنید", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BlogCategoryId, "دسته‌بندی مقاله", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-5">
+                            @Html.DropDownList("BlogCategoryId", null, "انتخاب دسته‌بندی...", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BlogCategoryId, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.IsPublished, "وضعیت انتشار", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-3">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.IsPublished) منتشر شده باشد
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ShortDescription, "خلاصه مقاله (توضیح کوتاه)", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(model => model.ShortDescription, new { @class = "form-control", rows = "2", placeholder = "توضیح کوتاه مقاله" })
+                            @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Content, "محتوای مقاله (HTML) *", new { @class = "col-lg-2 control-label" })
+                        <div class="col-lg-10">
+                            @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = "12", placeholder = "محتوای کامل مقاله", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">تصویر شاخص فعلی</label>
+                        <div class="col-lg-10">
+                            <img src="@coverImg" alt="تصویر شاخص" style="max-height: 100px; max-width: 150px; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 10px; display: block;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">تغییر تصویر شاخص</label>
+                        <div class="col-lg-10">
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                            <span class="help-block text-muted">در صورت عدم تمایل به تغییر تصویر شاخص، این فیلد را خالی بگذارید.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-success"><i class="icon-save"></i> ذخیره تغییرات مقاله</button>
+                            <a href="@Url.Action("Index", "Blog", new { area = "Admin" })" class="btn btn-default">انصراف</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

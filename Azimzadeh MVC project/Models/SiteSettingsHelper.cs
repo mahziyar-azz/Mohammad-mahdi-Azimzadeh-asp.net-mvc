@@ -76,5 +76,6 @@ namespace Azimzadeh_MVC_project.Models
         public static string FooterEmail => Get("FooterEmail", "info@example.com");
         public static string FooterPhone => Get("FooterPhone", "۰۲۱-۱۲۳۴۵۶۷۸");
         public static string CopyrightText => Get("CopyrightText", "حقوق کپی رایت © محفوظ است.");
+        public static string AboutImage => Get("AboutImage", "/assets/img/banner/about.jpg");
     }
 }
